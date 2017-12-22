@@ -1,0 +1,106 @@
+@import 'node_modules/primer-support/lib/variables/colors';
+
+$color-blue: $blue-500;
+$color-green: $green-500;
+$color-red: $red-500;
+$color-orange: $orange-500;
+$color-purple: $purple-500;
+$color-gray-light: $gray-400;
+$color-gray: $gray-500;
+$color-gray-dark: $gray-800;
+$color-white: $white;
+
+
+.masthead {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  background-color: $color-blue;
+
+  a {
+    color: rgba($color-white, .5);
+
+    &.btn {
+      color: $color-gray-dark;
+
+      &:hover {
+        color: $color-gray-dark;
+      }
+
+      .octicons {
+        margin-left: 5px;
+
+        path {
+          fill: $color-gray-dark;
+        }
+      }
+    }
+
+    &:hover {
+      color: $color-white;
+      text-decoration: none;
+    }
+  }
+
+  .masthead-logo {
+    display: inline-block;
+    font-size: 1.7rem;
+    color: $color-white;
+
+    .mega-octicon {
+      float: left;
+      margin-right: .5rem;
+    }
+  }
+}
+
+@media (min-width: 34em) {
+  .masthead {
+    text-align: left;
+  }
+
+  .masthead .masthead-logo {
+    float: left;
+  }
+}
+
+.masthead-nav {
+  margin-top: 1rem;
+  font-size: 1rem;
+
+  a {
+    display: inline-block;
+
+    &:not(:last-child) {
+      margin-right: 1.25rem;
+    }
+  }
+
+  .active {
+    font-weight: 500;
+    color: $color-white;
+  }
+}
+
+@media (max-width: 34em) {
+  .masthead-nav {
+    padding-top: 1rem;
+    border-top: .075rem solid rgba($color-white, .25);
+  }
+}
+
+@media (min-width: 34em) {
+  .masthead-nav {
+    float: right;
+    margin-top: .5rem;
+
+    .btn {
+      margin-top: -.4rem;
+    }
+
+    img {
+      margin-top: -.5rem;
+    }
+  }
+}

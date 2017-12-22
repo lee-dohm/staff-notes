@@ -1,0 +1,50 @@
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta content="IE=edge" http-equiv="X-UA-Compatible"
+    meta content="width=device-width, initial-scale=1" name="viewport"
+    meta content="" name="description"
+    meta content="" name="author"
+
+    title = gettext "Staff Notes"
+    link rel="stylesheet" href="#{static_path(@conn, "/css/app.css")}"
+
+  body
+    header.masthead
+      .container
+        a.masthead-logo href="/"
+          = mega_octicon(:"file-text")
+          = gettext "Staff Notes"
+
+        / nav.masthead-nav
+        /   = render("login_button.html", assigns)
+
+    .container
+      = if get_flash(@conn, :info) do
+        p.flash role="alert" = get_flash(@conn, :info)
+
+      = if get_flash(@conn, :error) do
+        p.flash.flash-error role="alert" = get_flash(@conn, :error)
+
+      main role="main"
+        = render @view_module, @view_template, assigns
+
+    footer.container.mt-5
+      .columns
+        .two-fifths.column.centered
+          .border-top.text-center.small.pt-2
+            a#about-link href="#{page_path(@conn, :about)}"
+              = gettext "About"
+            span.px-3
+            a#github-link.link-gray-dark href="https://github.com/lee-dohm/staff-notes"
+              = octicon("mark-github")
+          .text-center.small.pt-2
+            = octicon("code")
+            = gettext " with "
+            = octicon("heart")
+            = gettext " by "
+            a.link-gray-dark href="http://www.lee-dohm.com"
+              = gettext " Lee Dohm"
+
+    script src="#{static_path(@conn, "/js/app.js")}"
