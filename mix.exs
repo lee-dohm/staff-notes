@@ -40,8 +40,7 @@ defmodule StaffNotes.Mixfile do
   defp aliases do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      "ecto.reset": ["ecto.drop", "ecto.setup"]
     ]
   end
 
@@ -50,6 +49,7 @@ defmodule StaffNotes.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:cmark, "~> 0.7"},
       {:cowboy, "~> 1.0"},
       {:gettext, "~> 0.11"},
       {:phoenix_ecto, "~> 3.2"},
@@ -59,7 +59,6 @@ defmodule StaffNotes.Mixfile do
       {:phoenix_octicons, "~> 0.2.0"},
       {:phoenix_slime, "~> 0.9"},
       {:postgrex, ">= 0.0.0"},
-      {:cmark, "~> 0.7", only: :dev},
       {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:espec_phoenix, "~> 0.6", only: :test}

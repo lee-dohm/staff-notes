@@ -1,0 +1,7 @@
+.columns
+  .five-fifths.column.about-text
+    markdown:
+      # About Staff Notes
+
+      Staff Notes is a web application for the storing and sharing of information between the
+      moderation staff of a website or community.
