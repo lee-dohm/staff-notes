@@ -82,7 +82,8 @@ defmodule StaffNotes.Mixfile do
           filename: "license",
           title: "License"
         ]
-      ]
+      ],
+      markdown_processor: ExDoc.Markdown.Cmark
     ]
   end
 
