@@ -4,9 +4,7 @@ defmodule StaffNotesWeb.MarkdownEngine do
   """
   @behaviour Slime.Parser.EmbeddedEngine
 
-  require Logger
+  alias StaffNotes.Markdown
 
-  def render(text, _options) do
-    Cmark.to_html(text, [:safe, :smart])
-  end
+  def render(text, _options), do: Markdown.to_html(text)
 end
