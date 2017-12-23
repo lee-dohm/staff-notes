@@ -18,6 +18,4 @@ services:
 install:
   - mix local.rebar --force
   - mix local.hex --force
-before_script:
-  - cp config/travis.exs config/test.exs
 script: ./script/cibuild
