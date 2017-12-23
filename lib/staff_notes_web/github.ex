@@ -1,4 +1,7 @@
 defmodule StaffNotesWeb.GitHub do
+  @moduledoc """
+  The OAuth2 strategy for interacting with GitHub credentials.
+  """
   use OAuth2.Strategy
 
   # Public API

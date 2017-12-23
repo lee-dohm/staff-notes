@@ -26,8 +26,7 @@ defmodule StaffNotesWeb.AuthController do
   def index(conn, _) do
     Logger.debug(fn -> "Authorize user and return to home page" end)
 
-    conn
-    |> redirect(external: GitHub.authorize_url!)
+    redirect(conn, external: GitHub.authorize_url!)
   end
 
   @doc """
