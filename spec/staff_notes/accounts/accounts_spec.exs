@@ -6,9 +6,9 @@ defmodule StaffNotes.AccountsSpec do
   describe "users" do
     alias StaffNotes.Accounts.User
 
-    let :valid_attrs, do: %{avatar_url: "some avatar_url", github_id: 42, name: "some name", site_admin: true}
-    let :update_attrs, do: %{avatar_url: "some updated avatar_url", github_id: 43, name: "some updated name", site_admin: false}
-    let :invalid_attrs, do: %{avatar_url: nil, github_id: nil, name: nil, site_admin: nil}
+    let :valid_attrs, do: %{avatar_url: "some avatar_url", id: 42, name: "some name", site_admin: true}
+    let :update_attrs, do: %{avatar_url: "some updated avatar_url", id: 43, name: "some updated name", site_admin: false}
+    let :invalid_attrs, do: %{avatar_url: nil, id: nil, name: nil, site_admin: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -33,6 +33,12 @@ defmodule StaffNotes.AccountsSpec do
 
         expect(Accounts.get_user!(user.id)).to eq(user)
       end
+
+      it "returns the user with the given user name" do
+        user = user_fixture()
+
+        expect(Accounts.get_user!(user.name)).to eq(user)
+      end
     end
 
     describe "create_user/1" do
@@ -40,7 +46,7 @@ defmodule StaffNotes.AccountsSpec do
         {:ok, %User{} = user} = Accounts.create_user(valid_attrs())
 
         expect(user.avatar_url).to eq("some avatar_url")
-        expect(user.github_id).to eq(42)
+        expect(user.id).to eq(42)
         expect(user.name).to eq("some name")
         expect(user.site_admin).to be_true()
       end
@@ -59,7 +65,7 @@ defmodule StaffNotes.AccountsSpec do
 
         expect(user).to be_struct(User)
         expect(user.avatar_url).to eq("some updated avatar_url")
-        expect(user.github_id).to eq(43)
+        expect(user.id).to eq(43)
         expect(user.name).to eq("some updated name")
         expect(user.site_admin).to be_false()
       end

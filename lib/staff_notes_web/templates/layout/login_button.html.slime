@@ -2,7 +2,7 @@
   a href="#{auth_path(@conn, :delete)}"
     = octicon("sign-out")
     = gettext " Sign Out"
-  a href="#"
+  a href="#{user_path(@conn, :show, @current_user)}"
     = @current_user.name
     = avatar(@current_user, size: 36)
 - else

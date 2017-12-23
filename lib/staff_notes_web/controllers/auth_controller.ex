@@ -58,9 +58,13 @@ defmodule StaffNotesWeb.AuthController do
   end
 
   defp create_user(github_user) do
-    case Repo.get_by(User, name: github_user.name, github_id: github_user.github_id) do
-      nil -> Repo.insert!(User.changeset(%User{}, github_user))
-      user -> Map.merge(user, github_user)
+    case Repo.get_by(User, name: github_user.name, id: github_user.github_id) do
+      nil ->
+        user = Map.put(github_user, :id, github_user.github_id)
+        Repo.insert!(User.changeset(%User{}, user))
+
+      user ->
+        Map.merge(user, github_user)
     end
   end
 

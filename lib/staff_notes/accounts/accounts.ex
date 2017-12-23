@@ -30,18 +30,29 @@ defmodule StaffNotes.Accounts do
 
   ## Examples
 
+  Get a user by user ID:
+
   ```
   iex> get_user!(123)
   %User{}
   ```
 
+  Get a user by their user name:
+
+  ```
+  iex> get_user!("username")
+  %User{}
+  ```
+
+  Attempt to get a non-existent user:
+
   ```
   iex> get_user!(456)
   ** (Ecto.NoResultsError)
   ```
-
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(binary) when is_binary(binary), do: Repo.get_by!(User, name: binary)
+  def get_user!(id) when is_integer(id), do: Repo.get!(User, id)
 
   @doc """
   Creates a user.
