@@ -1,4 +1,7 @@
 defmodule StaffNotes.Application do
+  @moduledoc """
+  The StaffNotes OTP `Application` definition.
+  """
   use Application
 
   # See https://hexdocs.pm/elixir/Application.html
