@@ -16,7 +16,7 @@ mix ecto.ci
 echo "==> App is now ready to go!"
 
 if [ -n "$TRAVIS" ]; then
-  mix coveralls.travis
+  mix espec
 else
-  mix test
+  mix espec
 fi
