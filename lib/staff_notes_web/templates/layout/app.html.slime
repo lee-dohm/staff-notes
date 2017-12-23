@@ -17,8 +17,8 @@ html lang="en"
           = mega_octicon(:"file-text")
           = gettext "Staff Notes"
 
-        / nav.masthead-nav
-        /   = render("login_button.html", assigns)
+        nav.masthead-nav
+          = render("login_button.html", assigns)
 
     .container
       = if get_flash(@conn, :info) do

@@ -37,12 +37,15 @@ defmodule StaffNotesWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      # Project-specific view helpers
-      import PhoenixOcticons
-
+      # Built-in view helpers
       import StaffNotesWeb.Router.Helpers
       import StaffNotesWeb.ErrorHelpers
       import StaffNotesWeb.Gettext
+
+      # Project-specific view helpers
+      import PhoenixOcticons
+
+      import StaffNotesWeb.AvatarHelpers
     end
   end
 

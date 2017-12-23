@@ -54,6 +54,7 @@ defmodule StaffNotes.Mixfile do
       {:cmark, "~> 0.7"},
       {:cowboy, "~> 1.0"},
       {:gettext, "~> 0.11"},
+      {:oauth2, "~> 0.9"},
       {:phoenix_ecto, "~> 3.2"},
       {:phoenix_html, "~> 2.10"},
       {:phoenix_pubsub, "~> 1.0"},
@@ -61,6 +62,7 @@ defmodule StaffNotes.Mixfile do
       {:phoenix_octicons, "~> 0.2.0"},
       {:phoenix_slime, "~> 0.9"},
       {:postgrex, ">= 0.0.0"},
+      {:dotenv, "~> 2.0", only: :dev},
       {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:espec_phoenix, "~> 0.6", only: :test}
