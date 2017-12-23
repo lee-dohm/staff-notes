@@ -81,9 +81,12 @@ defmodule StaffNotes.Mixfile do
           StaffNotes.Accounts.User
         ],
         "Controllers": [
-          StaffNotesWeb.PageController
+          StaffNotesWeb.AuthController,
+          StaffNotesWeb.PageController,
+          StaffNotesWeb.UserController
         ],
         "Helpers": [
+          StaffNotesWeb.AvatarHelpers,
           StaffNotesWeb.ErrorHelpers,
           StaffNotesWeb.Router.Helpers
         ],
@@ -95,13 +98,17 @@ defmodule StaffNotes.Mixfile do
           StaffNotes.Markdown.Ecto,
           StaffNotesWeb.MarkdownEngine
         ],
+        "OAuth": [
+          StaffNotesWeb.GitHub
+        ],
         "Sockets": [
           StaffNotesWeb.UserSocket
         ],
         "Views": [
           StaffNotesWeb.ErrorView,
           StaffNotesWeb.LayoutView,
-          StaffNotesWeb.PageView
+          StaffNotesWeb.PageView,
+          StaffNotesWeb.UserView
         ]
       ],
       extras: [
