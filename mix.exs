@@ -1,10 +1,12 @@
 defmodule StaffNotes.Mixfile do
   use Mix.Project
 
+  @version "0.0.1"
+
   def project do
     [
       app: :staff_notes,
-      version: "0.0.1",
+      version: @version,
 
       name: "Staff Notes",
       homepage_url: "https://www.staffnotes.io",
@@ -68,6 +70,37 @@ defmodule StaffNotes.Mixfile do
   defp docs do
     [
       main: "readme",
+      source_url: "https://github.com/lee-dohm/staff-notes",
+      markdown_processor: ExDoc.Markdown.Cmark,
+      groups_for_modules: [
+        "Accounts": [
+          StaffNotes.Accounts,
+          StaffNotes.Accounts.User
+        ],
+        "Controllers": [
+          StaffNotesWeb.PageController
+        ],
+        "Helpers": [
+          StaffNotesWeb.ErrorHelpers,
+          StaffNotesWeb.Router.Helpers
+        ],
+        "Localization": [
+          StaffNotesWeb.Gettext
+        ],
+        "Markdown": [
+          StaffNotes.Markdown,
+          StaffNotes.Markdown.Ecto,
+          StaffNotesWeb.MarkdownEngine
+        ],
+        "Sockets": [
+          StaffNotesWeb.UserSocket
+        ],
+        "Views": [
+          StaffNotesWeb.ErrorView,
+          StaffNotesWeb.LayoutView,
+          StaffNotesWeb.PageView
+        ]
+      ],
       extras: [
         "CONTRIBUTING.md",
         "CODE_OF_CONDUCT.md": [
@@ -83,11 +116,10 @@ defmodule StaffNotes.Mixfile do
           title: "License"
         ]
       ],
-      markdown_processor: ExDoc.Markdown.Cmark
     ]
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "spec/support"]
   defp elixirc_paths(_),     do: ["lib"]
 end

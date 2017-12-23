@@ -31,6 +31,10 @@ Other scripts that are available but not intended to be used directly by develop
 * `script/bootstrap` &mdash; Used to do a one-time install of all prerequisites for a development machine
 * `script/cibuild` &mdash; Used to run automated tests in the CI environment
 
+## Documentation
+
+* **DO** use fenced code blocks rather than indented blocks for examples
+
 ## Writing Tests
 
 * Controller specs should verify:

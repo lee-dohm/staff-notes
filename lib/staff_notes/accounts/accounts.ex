@@ -13,8 +13,10 @@ defmodule StaffNotes.Accounts do
 
   ## Examples
 
-      iex> list_users()
-      [%User{}, ...]
+  ```
+  iex> list_users()
+  [%User{}, ...]
+  ```
 
   """
   def list_users do
@@ -28,11 +30,15 @@ defmodule StaffNotes.Accounts do
 
   ## Examples
 
-      iex> get_user!(123)
-      %User{}
+  ```
+  iex> get_user!(123)
+  %User{}
+  ```
 
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
+  ```
+  iex> get_user!(456)
+  ** (Ecto.NoResultsError)
+  ```
 
   """
   def get_user!(id), do: Repo.get!(User, id)
@@ -42,11 +48,15 @@ defmodule StaffNotes.Accounts do
 
   ## Examples
 
-      iex> create_user(%{field: value})
-      {:ok, %User{}}
+  ```
+  iex> create_user(%{field: value})
+  {:ok, %User{}}
+  ```
 
-      iex> create_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+  ```
+  iex> create_user(%{field: bad_value})
+  {:error, %Ecto.Changeset{}}
+  ```
 
   """
   def create_user(attrs \\ %{}) do
@@ -60,11 +70,15 @@ defmodule StaffNotes.Accounts do
 
   ## Examples
 
-      iex> update_user(user, %{field: new_value})
-      {:ok, %User{}}
+  ```
+  iex> update_user(user, %{field: new_value})
+  {:ok, %User{}}
+  ```
 
-      iex> update_user(user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+  ```
+  iex> update_user(user, %{field: bad_value})
+  {:error, %Ecto.Changeset{}}
+  ```
 
   """
   def update_user(%User{} = user, attrs) do
@@ -74,15 +88,19 @@ defmodule StaffNotes.Accounts do
   end
 
   @doc """
-  Deletes a User.
+  Deletes a user.
 
   ## Examples
 
-      iex> delete_user(user)
-      {:ok, %User{}}
+  ```
+  iex> delete_user(user)
+  {:ok, %User{}}
+  ```
 
-      iex> delete_user(user)
-      {:error, %Ecto.Changeset{}}
+  ```
+  iex> delete_user(user)
+  {:error, %Ecto.Changeset{}}
+  ```
 
   """
   def delete_user(%User{} = user) do
@@ -94,8 +112,10 @@ defmodule StaffNotes.Accounts do
 
   ## Examples
 
-      iex> change_user(user)
-      %Ecto.Changeset{source: %User{}}
+  ```
+  iex> change_user(user)
+  %Ecto.Changeset{source: %User{}}
+  ```
 
   """
   def change_user(%User{} = user) do
