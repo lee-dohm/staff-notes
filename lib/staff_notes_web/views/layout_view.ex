@@ -4,6 +4,8 @@ defmodule StaffNotesWeb.LayoutView do
   """
   use StaffNotesWeb, :view
 
+  @type maybe_user :: StaffNotes.Accounts.User.t | nil
+
   @doc """
   Renders the GitHub-style "<> with ♥ by [author link]" footer item.
   """
@@ -33,6 +35,39 @@ defmodule StaffNotesWeb.LayoutView do
     options = Keyword.merge([to: repo_url], options)
 
     link(octicon("mark-github"), options)
+  end
+
+  @doc """
+  Renders the appropriate login buttons depending on whether the user is signed in.
+  """
+  @spec login_button(Plug.Conn.t, maybe_user) :: Phoenix.HTML.safe
+  def login_button(conn, current_user)
+
+  def login_button(conn, nil) do
+    link(to: auth_path(conn, :index, from: conn.request_path), class: "btn") do
+      [
+        gettext("Sign in with"),
+        octicon("mark-github")
+      ]
+    end
+  end
+
+  def login_button(conn, current_user) do
+    [
+      link(to: auth_path(conn, :delete)) do
+        [
+          octicon("sign-out"),
+          " ",
+          gettext("Sign Out")
+        ]
+      end,
+      link(to: user_path(conn, :show, current_user)) do
+        [
+          current_user.name,
+          avatar(current_user, size: 36)
+        ]
+      end
+    ]
   end
 
   @doc """

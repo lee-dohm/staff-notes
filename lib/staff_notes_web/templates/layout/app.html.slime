@@ -18,7 +18,7 @@ html lang="en"
           = gettext "Staff Notes"
 
         nav.masthead-nav
-          = render("login_button.html", assigns)
+          = login_button(@conn, @current_user)
 
     .container
       = render_flash(get_flash(@conn))
