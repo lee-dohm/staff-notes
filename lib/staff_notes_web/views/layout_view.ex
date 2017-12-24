@@ -46,7 +46,7 @@ defmodule StaffNotesWeb.LayoutView do
 
   def code_with_heart({name, location} = tuple, options) when is_tuple(tuple) do
     {link_options, options} = Keyword.pop(options, :link_options)
-    link_options = Keyword.merge([to: location], link_options)
+    link_options = Keyword.merge(link_options, to: location)
 
     content_tag(:div, options) do
       [
@@ -60,16 +60,37 @@ defmodule StaffNotesWeb.LayoutView do
   end
 
   @doc """
-  Renders the link to the source repository using the GitHub mark octicon.
+  Renders the link to the source repository.
 
-  All options are passed to `Phoenix.HTML.Link.link/2`.
+  ## Options
+
+  * `:text` -- If `:text` is true, use `GitHub` as the link text; otherwise use the [GitHub mark
+    octicon][mark-github] _(defaults to `false`)_
+  * All other options are passed to `Phoenix.HTML.Link.link/2`
+
+  [mark-github]: https://octicons.github.com/icon/mark-github/
   """
-  @spec github_link(String.t, Keyword.t) :: Phoenix.HTML.safe
-  def github_link(repo_url, options) do
-    options = Keyword.merge([to: repo_url], options)
+  @spec github_link(atom | String.t, Keyword.t) :: Phoenix.HTML.safe
+  def github_link(url, options \\ [])
 
-    link(octicon("mark-github"), options)
+  def github_link(app_name, options) when is_atom(app_name) do
+    repo_url = Application.get_env(app_name, :github_url)
+
+    github_link(repo_url, options)
   end
+
+  def github_link(repo_url, options) when is_binary(repo_url) do
+    options = Keyword.merge(options, to: repo_url)
+
+    link(github_link_text(options), options)
+  end
+
+  defp github_link_text(options) do
+    do_github_link_text(Keyword.get(options, :text))
+  end
+
+  defp do_github_link_text(true), do: "GitHub"
+  defp do_github_link_text(_), do: octicon("mark-github")
 
   @doc """
   Renders the appropriate login buttons depending on whether the user is signed in.
