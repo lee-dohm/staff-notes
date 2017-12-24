@@ -7,8 +7,11 @@ use Mix.Config
 
 # General application configuration
 config :staff_notes,
+  author_name: "Lee Dohm",
+  author_url: "http://www.lee-dohm.com",
   ecto_repos: [StaffNotes.Repo],
-  generators: [binary_id: true]
+  generators: [binary_id: true],
+  github_url: "https://github.com/lee-dohm/staff-notes"
 
 # Configures the endpoint
 config :staff_notes, StaffNotesWeb.Endpoint,

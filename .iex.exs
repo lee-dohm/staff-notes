@@ -13,4 +13,4 @@ alias StaffNotesWeb.LayoutView
 alias StaffNotesWeb.PageView
 alias StaffNotesWeb.UserView
 
-import IExHelpers
+import StaffNotes.IEx.Helpers

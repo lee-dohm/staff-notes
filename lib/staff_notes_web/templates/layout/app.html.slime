@@ -21,7 +21,7 @@ html lang="en"
           = login_button(@conn, @current_user)
 
     .container
-      = render_flash(get_flash(@conn))
+      = render_flash(@conn)
 
       main role="main"
         = render(@view_module, @view_template, assigns)
@@ -32,7 +32,7 @@ html lang="en"
           .border-top.text-center.small.pt-2
             = link(gettext("About"), to: page_path(@conn, :about), id: "about-link")
             span.px-3
-            = github_link("https://github.com/lee-dohm/staff-notes", id: "github-link", class: "link-gray-dark")
-          = code_with_heart("Lee Dohm", "http://www.lee-dohm.com", class: "text-center small pt-2", link_options: [class: "link-gray-dark"])
+            = github_link(:staff_notes, id: "github-link", class: "link-gray-dark")
+          = code_with_heart(:staff_notes, class: "text-center small pt-2", link_options: [class: "link-gray-dark"])
 
     script src="#{static_path(@conn, "/js/app.js")}"

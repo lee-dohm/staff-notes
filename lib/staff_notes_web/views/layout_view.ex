@@ -4,10 +4,23 @@ defmodule StaffNotesWeb.LayoutView do
   """
   use StaffNotesWeb, :view
 
-  @type maybe_user :: StaffNotes.Accounts.User.t | nil
+  alias StaffNotes.Accounts.User
+
+  @type maybe_user :: User.t | nil
 
   @doc """
   Renders the GitHub-style `<> with ♥ by [author link]` footer item.
+
+  This function can read the author link information from the `Application` environment. You can set
+  the author link information by adding the following to your `config.exs`:
+
+  ```
+  config :app_name,
+    author_name: "Author's name",
+    author_url: "https://example.com"
+  ```
+
+  Or you can supply the author link information as a `{name, url}` tuple as the first argument.
 
   ## Options
 
@@ -15,11 +28,27 @@ defmodule StaffNotesWeb.LayoutView do
 
   * `:link_options` -- passed as attributes to the author link `a` tag
   * All other options are applied as attributes to the containing `div` element
+
+  ## Examples
+
+  ```
+  Phoenix.HTML.safe_to_string(LayoutView.code_with_heart(:app_name))
+  #=> "<div><svg .../> with <svg .../> by <a href=\"https://example.com\">Author's Name</a></div>"
+  ```
   """
-  @spec code_with_heart(String.t, String.t, Keyword.t) :: Phoenix.HTML.safe
-  def code_with_heart(name, location, options \\ []) do
+  @spec code_with_heart(atom | {String.t, String.t}, Keyword.t) :: Phoenix.HTML.safe
+  def code_with_heart(link_info, options \\ [])
+
+  def code_with_heart(app_name, options) when is_atom(app_name) do
+    name = Application.get_env(app_name, :author_name)
+    location = Application.get_env(app_name, :author_url)
+
+    code_with_heart({name, location}, options)
+  end
+
+  def code_with_heart({name, location} = tuple, options) when is_tuple(tuple) do
     {link_options, options} = Keyword.pop(options, :link_options)
-    link_options = Keyword.merge([to: location], link_options)
+    link_options = Keyword.merge(link_options || [], to: location)
 
     content_tag(:div, options) do
       [
@@ -33,16 +62,34 @@ defmodule StaffNotesWeb.LayoutView do
   end
 
   @doc """
-  Renders the link to the source repository using the GitHub mark octicon.
+  Renders the link to the source repository.
 
-  All options are passed to `Phoenix.HTML.Link.link/2`.
+  ## Options
+
+  * `:text` -- If `:text` is true, use `GitHub` as the link text; otherwise use the [GitHub mark
+    octicon][mark-github] _(defaults to `false`)_
+  * All other options are passed to `Phoenix.HTML.Link.link/2`
+
+  [mark-github]: https://octicons.github.com/icon/mark-github/
   """
-  @spec github_link(String.t, Keyword.t) :: Phoenix.HTML.safe
-  def github_link(repo_url, options) do
-    options = Keyword.merge([to: repo_url], options)
+  @spec github_link(atom | String.t, Keyword.t) :: Phoenix.HTML.safe
+  def github_link(url, options \\ [])
 
-    link(octicon("mark-github"), options)
+  def github_link(app_name, options) when is_atom(app_name) do
+    repo_url = Application.get_env(app_name, :github_url)
+
+    github_link(repo_url, options)
   end
+
+  def github_link(repo_url, options) when is_binary(repo_url) and is_list(options) do
+    {text, options} = Keyword.pop(options, :text)
+    options = Keyword.merge(options, to: repo_url)
+
+    link(github_link_text(text), options)
+  end
+
+  defp github_link_text(true), do: "GitHub"
+  defp github_link_text(_), do: octicon("mark-github")
 
   @doc """
   Renders the appropriate login buttons depending on whether the user is signed in.
@@ -62,7 +109,7 @@ defmodule StaffNotesWeb.LayoutView do
     end
   end
 
-  def login_button(conn, current_user) do
+  def login_button(conn, %User{} = current_user) do
     [
       link(to: auth_path(conn, :delete)) do
         [
@@ -86,10 +133,13 @@ defmodule StaffNotesWeb.LayoutView do
   ## Examples
 
   ```
-  render_flash(get_flash(@conn))
+  render_flash(@conn)
   ```
   """
-  @spec render_flash(Map.t) :: Phoenix.HTML.safe
+  @spec render_flash(Plug.Conn.t | Map.t) :: Phoenix.HTML.safe
+  def render_flash(flash_info)
+
+  def render_flash(%Plug.Conn{} = conn), do: render_flash(get_flash(conn))
   def render_flash(flash), do: render_flash([], flash)
 
   defp render_flash(content, %{error: message} = flash) do

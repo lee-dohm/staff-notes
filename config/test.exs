@@ -18,4 +18,5 @@ config :staff_notes, StaffNotes.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
+# Customize the test environment for CI systems
 if System.get_env("CI") == "true", do: import_config "ci.exs"
