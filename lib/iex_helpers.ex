@@ -1,4 +1,4 @@
-defmodule IExHelpers do
+defmodule StaffNotes.IEx.Helpers do
   @moduledoc """
   Helper functions for use in `IEx`.
   """
