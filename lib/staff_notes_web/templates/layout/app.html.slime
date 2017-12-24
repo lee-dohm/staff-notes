@@ -21,7 +21,7 @@ html lang="en"
           = login_button(@conn, @current_user)
 
     .container
-      = render_flash(get_flash(@conn))
+      = render_flash(@conn)
 
       main role="main"
         = render(@view_module, @view_template, assigns)

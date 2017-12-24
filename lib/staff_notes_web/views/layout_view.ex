@@ -131,10 +131,13 @@ defmodule StaffNotesWeb.LayoutView do
   ## Examples
 
   ```
-  render_flash(get_flash(@conn))
+  render_flash(@conn)
   ```
   """
-  @spec render_flash(Map.t) :: Phoenix.HTML.safe
+  @spec render_flash(Plug.Conn.t | Map.t) :: Phoenix.HTML.safe
+  def render_flash(flash_info)
+
+  def render_flash(%Plug.Conn{} = conn), do: render_flash(get_flash(conn))
   def render_flash(flash), do: render_flash([], flash)
 
   defp render_flash(content, %{error: message} = flash) do
