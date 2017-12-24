@@ -14,37 +14,25 @@ html lang="en"
     header.masthead
       .container
         a.masthead-logo href="/"
-          = mega_octicon(:"file-text")
+          = mega_octicon("file-text")
           = gettext "Staff Notes"
 
         nav.masthead-nav
-          = render("login_button.html", assigns)
+          = login_button(@conn, @current_user)
 
     .container
-      = if get_flash(@conn, :info) do
-        p.flash role="alert" = get_flash(@conn, :info)
-
-      = if get_flash(@conn, :error) do
-        p.flash.flash-error role="alert" = get_flash(@conn, :error)
+      = render_flash(get_flash(@conn))
 
       main role="main"
-        = render @view_module, @view_template, assigns
+        = render(@view_module, @view_template, assigns)
 
     footer.container.mt-5
       .columns
         .two-fifths.column.centered
           .border-top.text-center.small.pt-2
-            a#about-link href="#{page_path(@conn, :about)}"
-              = gettext "About"
+            = link(gettext("About"), to: page_path(@conn, :about), id: "about-link")
             span.px-3
-            a#github-link.link-gray-dark href="https://github.com/lee-dohm/staff-notes"
-              = octicon("mark-github")
-          .text-center.small.pt-2
-            = octicon("code")
-            = gettext " with "
-            = octicon("heart")
-            = gettext " by "
-            a.link-gray-dark href="http://www.lee-dohm.com"
-              = gettext " Lee Dohm"
+            = github_link("https://github.com/lee-dohm/staff-notes", id: "github-link", class: "link-gray-dark")
+          = code_with_heart("Lee Dohm", "http://www.lee-dohm.com", class: "text-center small pt-2", link_options: [class: "link-gray-dark"])
 
     script src="#{static_path(@conn, "/js/app.js")}"

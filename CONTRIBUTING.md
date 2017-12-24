@@ -43,7 +43,9 @@ Other scripts that are available but not intended to be used directly by develop
     * Assigns
     * Session values
 * Controller specs **should not** verify content
-* View specs should verify that given the expected assigns, the right content is displayed
+* View specs should verify:
+    * For the entire view that given the expected assigns, the right content is displayed
+    * The output of helper functions
 
 ## Resources
 

@@ -32,7 +32,7 @@ defmodule StaffNotesWeb do
                         namespace: StaffNotesWeb
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
+      import Phoenix.Controller, only: [get_flash: 1, view_module: 1]
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
@@ -60,6 +60,15 @@ defmodule StaffNotesWeb do
   def channel do
     quote do
       use Phoenix.Channel
+      import StaffNotesWeb.Gettext
+    end
+  end
+
+  def helper do
+    quote do
+      use Phoenix.HTML
+
+      import PhoenixOcticons
       import StaffNotesWeb.Gettext
     end
   end
