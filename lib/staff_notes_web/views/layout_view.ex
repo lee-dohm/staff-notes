@@ -7,7 +7,14 @@ defmodule StaffNotesWeb.LayoutView do
   @type maybe_user :: StaffNotes.Accounts.User.t | nil
 
   @doc """
-  Renders the GitHub-style "<> with ♥ by [author link]" footer item.
+  Renders the GitHub-style `<> with ♥ by [author link]` footer item.
+
+  ## Options
+
+  Options are used to customize the rendering of the element.
+
+  * `:link_options` -- passed as attributes to the author link `a` tag
+  * All other options are applied as attributes to the containing `div` element
   """
   @spec code_with_heart(String.t, String.t, Keyword.t) :: Phoenix.HTML.safe
   def code_with_heart(name, location, options \\ []) do
@@ -39,6 +46,9 @@ defmodule StaffNotesWeb.LayoutView do
 
   @doc """
   Renders the appropriate login buttons depending on whether the user is signed in.
+
+  When `current_user` is `nil`, the login button is displayed. When `current_user` is defined, a
+  logout link and link to the user's profile page is displayed.
   """
   @spec login_button(Plug.Conn.t, maybe_user) :: Phoenix.HTML.safe
   def login_button(conn, current_user)
