@@ -82,13 +82,13 @@ defmodule StaffNotesWeb.LayoutView do
   @spec render_flash(Map.t) :: Phoenix.HTML.safe
   def render_flash(flash), do: render_flash([], flash)
 
-  defp render_flash(content, flash = %{error: message}) do
+  defp render_flash(content, %{error: message} = flash) do
     {:safe, error_flash} = content_tag(:p, message, role: "alert", class: "flash flash-error")
 
     render_flash([error_flash | content], Map.drop(flash, [:error]))
   end
 
-  defp render_flash(content, flash = %{info: message}) do
+  defp render_flash(content, %{info: message} = flash) do
     {:safe, info_flash} = content_tag(:p, message, role: "alert", class: "flash")
 
     render_flash([info_flash | content], Map.drop(flash, [:info]))
