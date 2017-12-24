@@ -1,3 +1,5 @@
+import_file_if_available "~/.iex.exs"
+
 alias StaffNotes.Accounts
 alias StaffNotes.Accounts.User
 alias StaffNotes.Markdown
@@ -10,3 +12,5 @@ alias StaffNotesWeb.ErrorView
 alias StaffNotesWeb.LayoutView
 alias StaffNotesWeb.PageView
 alias StaffNotesWeb.UserView
+
+import IExHelpers
