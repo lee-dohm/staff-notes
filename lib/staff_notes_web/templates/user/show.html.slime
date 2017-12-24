@@ -2,7 +2,5 @@
   #user-info-block.one-fourth.column
     = avatar(@user, size: 230)
     h2.d-inline-block = @user.name
-    = if @user.site_admin do
-      span#staff-badge.state.bg-blue.d-inline-block.mt-1.float-right
-        = gettext "Staff"
+    = staff_badge(@user, id: "staff-badge", class: "state bg-blue d-inline-block mt-1 float-right")
   .three-fourths.column
