@@ -46,7 +46,7 @@ defmodule StaffNotesWeb.LayoutView do
 
   def code_with_heart({name, location} = tuple, options) when is_tuple(tuple) do
     {link_options, options} = Keyword.pop(options, :link_options)
-    link_options = Keyword.merge(link_options, to: location)
+    link_options = Keyword.merge(link_options || [], to: location)
 
     content_tag(:div, options) do
       [
@@ -79,18 +79,15 @@ defmodule StaffNotesWeb.LayoutView do
     github_link(repo_url, options)
   end
 
-  def github_link(repo_url, options) when is_binary(repo_url) do
+  def github_link(repo_url, options) when is_binary(repo_url) and is_list(options) do
+    {text, options} = Keyword.pop(options, :text)
     options = Keyword.merge(options, to: repo_url)
 
-    link(github_link_text(options), options)
+    link(github_link_text(text), options)
   end
 
-  defp github_link_text(options) do
-    do_github_link_text(Keyword.get(options, :text))
-  end
-
-  defp do_github_link_text(true), do: "GitHub"
-  defp do_github_link_text(_), do: octicon("mark-github")
+  defp github_link_text(true), do: "GitHub"
+  defp github_link_text(_), do: octicon("mark-github")
 
   @doc """
   Renders the appropriate login buttons depending on whether the user is signed in.
