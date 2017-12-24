@@ -1,6 +1,9 @@
 defmodule StaffNotes.IEx.Helpers do
   @moduledoc """
-  Helper functions for use in `IEx`.
+  Helper functions for use in the `IEx` console.
+
+  All of these functions are available directly at the interactive prompt with no namespace
+  necessary.
   """
 
   alias StaffNotes.Accounts
