@@ -7,6 +7,8 @@ use Mix.Config
 
 # General application configuration
 config :staff_notes,
+  author_name: "Lee Dohm",
+  author_url: "http://www.lee-dohm.com",
   ecto_repos: [StaffNotes.Repo],
   generators: [binary_id: true]
 

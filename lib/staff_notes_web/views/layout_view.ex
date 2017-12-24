@@ -9,15 +9,42 @@ defmodule StaffNotesWeb.LayoutView do
   @doc """
   Renders the GitHub-style `<> with ♥ by [author link]` footer item.
 
+  This function can read the author link information from the `Application` environment. You can set
+  the author link information by adding the following to your `config.exs`:
+
+  ```
+  config :app_name,
+    author_name: "Author's name",
+    author_url: "https://example.com"
+  ```
+
+  Or you can supply the author link information as a `{name, url}` tuple as the first argument.
+
   ## Options
 
   Options are used to customize the rendering of the element.
 
   * `:link_options` -- passed as attributes to the author link `a` tag
   * All other options are applied as attributes to the containing `div` element
+
+  ## Examples
+
+  ```
+  Phoenix.HTML.safe_to_string(LayoutView.code_with_heart(:app_name))
+  #=> "<div><svg .../> with <svg .../> by <a href=\"https://example.com\">Author's Name</a></div>"
+  ```
   """
-  @spec code_with_heart(String.t, String.t, Keyword.t) :: Phoenix.HTML.safe
-  def code_with_heart(name, location, options \\ []) do
+  @spec code_with_heart(atom | {String.t, String.t}, Keyword.t) :: Phoenix.HTML.safe
+  def code_with_heart(link_info, options \\ [])
+
+  def code_with_heart(app_name, options) when is_atom(app_name) do
+    name = Application.get_env(app_name, :author_name)
+    location = Application.get_env(app_name, :author_url)
+
+    code_with_heart({name, location}, options)
+  end
+
+  def code_with_heart({name, location} = tuple, options) when is_tuple(tuple) do
     {link_options, options} = Keyword.pop(options, :link_options)
     link_options = Keyword.merge([to: location], link_options)
 
