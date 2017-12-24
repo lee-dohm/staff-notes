@@ -4,7 +4,9 @@ defmodule StaffNotesWeb.LayoutView do
   """
   use StaffNotesWeb, :view
 
-  @type maybe_user :: StaffNotes.Accounts.User.t | nil
+  alias StaffNotes.Accounts.User
+
+  @type maybe_user :: User.t | nil
 
   @doc """
   Renders the GitHub-style `<> with ♥ by [author link]` footer item.
@@ -107,7 +109,7 @@ defmodule StaffNotesWeb.LayoutView do
     end
   end
 
-  def login_button(conn, current_user) do
+  def login_button(conn, %User{} = current_user) do
     [
       link(to: auth_path(conn, :delete)) do
         [
