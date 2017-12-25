@@ -26,7 +26,16 @@ defmodule StaffNotes.Accounts do
     |> Repo.insert()
   end
 
-  def create_team(attrs \\ %{}) do
+  @doc """
+  Creates a team within an organization.
+  """
+  def create_team(team_attrs \\ %{}, %Organization{} = org) do
+    team_attrs
+    |> Map.put(:organization_id, org.id)
+    |> do_create_team()
+  end
+
+  defp do_create_team(attrs) do
     %Team{}
     |> Team.changeset(attrs)
     |> Repo.insert()

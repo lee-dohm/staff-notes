@@ -72,12 +72,14 @@ defmodule StaffNotes.Accounts.Team do
     timestamps()
   end
 
+  @doc false
   def original_team_attrs, do: %{name: "Owners", permission: :owners, original: true}
 
   @doc false
   def changeset(%Team{} = team, attrs) do
     team
-    |> cast(attrs, [:name, :permission, :original])
-    |> validate_required([:name, :permission, :original])
+    |> cast(attrs, [:name, :permission, :original, :organization_id])
+    |> validate_required([:name, :permission, :original, :organization_id])
+    |> foreign_key_constraint(:organization_id)
   end
 end

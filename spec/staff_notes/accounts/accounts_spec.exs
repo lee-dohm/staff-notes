@@ -14,10 +14,12 @@ defmodule StaffNotes.AccountsSpec do
   end
 
   def team_fixture(attrs \\ %{}) do
+    org = org_fixture()
+
     {:ok, team} =
       attrs
       |> Enum.into(valid_attrs())
-      |> Accounts.create_team()
+      |> Accounts.create_team(org)
 
     team
   end
@@ -60,15 +62,18 @@ defmodule StaffNotes.AccountsSpec do
 
     describe "create_team/1" do
       it "creates an team when given valid information" do
-        {:ok, %Team{} = team} = Accounts.create_team(valid_attrs())
+        org = org_fixture()
+        {:ok, %Team{} = team} = Accounts.create_team(valid_attrs(), org)
 
         expect(team.name).to eq("some name")
         expect(team.permission).to eq("owner")
         expect(team.original).to be_false()
+        expect(team.organization_id).to eq(org.id)
       end
 
       it "returns an error changeset when given invalid data" do
-        {:error, changeset} = Accounts.create_team(invalid_attrs())
+        org = org_fixture()
+        {:error, changeset} = Accounts.create_team(invalid_attrs(), org)
 
         expect(changeset).to be_struct(Ecto.Changeset)
       end
