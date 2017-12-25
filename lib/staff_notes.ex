@@ -5,20 +5,23 @@ defmodule StaffNotes do
   * Accounts
       * Organizations
           * An organization has many users
+          * An orgaanization has many teams
       * Teams
           * A team belongs to an organization
-          * A team can have many users
+          * A team has many users
       * Users &mdash; the staff of an organization
-          * A user can be on many teams
-          * A user authors many notes
+          * A user has many teams
+          * A user has many organizations
+          * A user has (authors) many notes
   * Records
       * Members &mdash; the members of the organization the staff notes are about
           * Members belong to an organization
           * A member has many notes
           * A member has many identities
       * Notes &mdash; the notes about the members
+          * A note belongs to an organization
           * A note belongs to a member
-          * A note was authored by a user
+          * A note belongs to (is authored by) a user
           * Notes may include text, images or other files
       * Identities &mdash; information identifying a member on a service
           * An identity belongs to a member

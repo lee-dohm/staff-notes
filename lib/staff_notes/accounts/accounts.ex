@@ -2,12 +2,49 @@ defmodule StaffNotes.Accounts do
   @moduledoc """
   The Accounts context.
   """
-
   import Ecto.Query, warn: false
-  alias StaffNotes.Repo
 
-  alias StaffNotes.Accounts.User
-  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Repo
+  alias StaffNotes.Accounts.{Organization, Team, User}
+
+  @doc """
+  Creates an organization.
+
+  When an organization is created:
+
+  1. It is created by a user
+  1. The organization is created
+  1. An "Owners" team is created for that organization (with "owner" permissions)
+  1. The creating user is added to the organization
+  1. The creating user is added to the "Owners" team
+
+  All of this is executed in a database transaction so if any step fails, it all gets rolled back.
+  """
+  def create_org(attrs \\ %{}) do
+    %Organization{}
+    |> Organization.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_team(attrs \\ %{}) do
+    %Team{}
+    |> Team.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def list_teams do
+    Repo.all(Team)
+  end
+
+  def get_team!(id), do: Repo.get!(Team, id)
+
+  def delete_team(%Team{} = team) do
+    Repo.delete(team)
+  end
+
+  def change_team(%Team{} = team) do
+    Team.changeset(team, %{})
+  end
 
   @doc """
   Returns the list of organizations.
@@ -74,12 +111,6 @@ defmodule StaffNotes.Accounts do
   """
   def get_user!(binary) when is_binary(binary), do: Repo.get_by!(User, name: binary)
   def get_user!(id) when is_integer(id), do: Repo.get!(User, id)
-
-  def create_org(attrs \\ %{}) do
-    %Organization{}
-    |> Organization.changeset(attrs)
-    |> Repo.insert()
-  end
 
   @doc """
   Creates a user.

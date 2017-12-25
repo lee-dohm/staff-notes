@@ -2,22 +2,100 @@ defmodule StaffNotes.AccountsSpec do
   use ESpec
 
   alias StaffNotes.Accounts
+  alias StaffNotes.Accounts.{Organization, Team, User}
+
+  def org_fixture(attrs \\ %{}) do
+    {:ok, org} =
+      attrs
+      |> Enum.into(valid_attrs())
+      |> Accounts.create_org()
+
+    org
+  end
+
+  def team_fixture(attrs \\ %{}) do
+    {:ok, team} =
+      attrs
+      |> Enum.into(valid_attrs())
+      |> Accounts.create_team()
+
+    team
+  end
+
+  def user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      attrs
+      |> Enum.into(valid_attrs())
+      |> Accounts.create_user()
+
+    user
+  end
+
+  describe "teams" do
+    let :valid_attrs, do: %{name: "some name", permission: "owner", original: false}
+    let :update_attrs, do: %{name: "some updated name", permission: "write", original: true}
+    let :invalid_attrs, do: %{name: nil, permission: nil, original: nil}
+
+    describe "list_teams/0" do
+      it "returns all teams" do
+        team = team_fixture()
+
+        expect(Accounts.list_teams()).to eq([team])
+      end
+    end
+
+    describe "get_team!/1" do
+      it "returns the team with the given id" do
+        team = team_fixture()
+
+        expect(Accounts.get_team!(team.id)).to eq(team)
+      end
+
+      it "raises an exception when given an invalid id" do
+        expect(fn ->
+          Accounts.get_team!(Ecto.UUID.generate())
+        end).to raise_exception(Ecto.NoResultsError)
+      end
+    end
+
+    describe "create_team/1" do
+      it "creates an team when given valid information" do
+        {:ok, %Team{} = team} = Accounts.create_team(valid_attrs())
+
+        expect(team.name).to eq("some name")
+        expect(team.permission).to eq("owner")
+        expect(team.original).to be_false()
+      end
+
+      it "returns an error changeset when given invalid data" do
+        {:error, changeset} = Accounts.create_team(invalid_attrs())
+
+        expect(changeset).to be_struct(Ecto.Changeset)
+      end
+    end
+
+    describe "delete_team/1" do
+      it "deletes the given team" do
+        team = team_fixture()
+        {:ok, %Team{}} = Accounts.delete_team(team)
+
+        expect(fn -> Accounts.get_team!(team.id) end).to raise_exception(Ecto.NoResultsError)
+      end
+    end
+
+    describe "change_team/1" do
+      it "returns a team changeset" do
+        team = team_fixture()
+
+        expect(Accounts.change_team(team)).to be_struct(Ecto.Changeset)
+      end
+    end
+  end
 
   describe "organizations" do
-    alias StaffNotes.Accounts.Organization
-
     let :valid_attrs, do: %{name: "some name"}
     let :update_attrs, do: %{name: "some updated name"}
     let :invalid_attrs, do: %{name: nil}
-
-    def org_fixture(attrs \\ %{}) do
-      {:ok, org} =
-        attrs
-        |> Enum.into(valid_attrs())
-        |> Accounts.create_org
-
-      org
-    end
 
     describe "list_orgs/0" do
       it "returns all orgs" do
@@ -91,20 +169,9 @@ defmodule StaffNotes.AccountsSpec do
   end
 
   describe "users" do
-    alias StaffNotes.Accounts.User
-
     let :valid_attrs, do: %{avatar_url: "some avatar_url", id: 42, name: "some name", site_admin: true}
     let :update_attrs, do: %{avatar_url: "some updated avatar_url", id: 43, name: "some updated name", site_admin: false}
     let :invalid_attrs, do: %{avatar_url: nil, id: nil, name: nil, site_admin: nil}
-
-    def user_fixture(attrs \\ %{}) do
-      {:ok, user} =
-        attrs
-        |> Enum.into(valid_attrs())
-        |> Accounts.create_user
-
-      user
-    end
 
     describe "list_users/0" do
       it "returns all users" do
