@@ -7,6 +7,21 @@ defmodule StaffNotes.Accounts do
   alias StaffNotes.Repo
 
   alias StaffNotes.Accounts.User
+  alias StaffNotes.Accounts.Organization
+
+  @doc """
+  Returns the list of organizations.
+
+  ## Examples
+
+  ```
+  iex> list_orgs()
+  [%Organization{}, ...]
+  ```
+  """
+  def list_orgs do
+    Repo.all(Organization)
+  end
 
   @doc """
   Returns the list of users.
@@ -17,16 +32,22 @@ defmodule StaffNotes.Accounts do
   iex> list_users()
   [%User{}, ...]
   ```
-
   """
   def list_users do
     Repo.all(User)
   end
 
   @doc """
+  Gets a single organization.
+
+  Raises `Ecto.NoResultsError` if the organization does not exist.
+  """
+  def get_org!(id), do: Repo.get!(Organization, id)
+
+  @doc """
   Gets a single user.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  Raises `Ecto.NoResultsError` if the user does not exist.
 
   ## Examples
 
@@ -54,6 +75,12 @@ defmodule StaffNotes.Accounts do
   def get_user!(binary) when is_binary(binary), do: Repo.get_by!(User, name: binary)
   def get_user!(id) when is_integer(id), do: Repo.get!(User, id)
 
+  def create_org(attrs \\ %{}) do
+    %Organization{}
+    |> Organization.changeset(attrs)
+    |> Repo.insert()
+  end
+
   @doc """
   Creates a user.
 
@@ -74,6 +101,12 @@ defmodule StaffNotes.Accounts do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def update_org(%Organization{} = org, attrs) do
+    org
+    |> Organization.changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """
@@ -98,6 +131,10 @@ defmodule StaffNotes.Accounts do
     |> Repo.update()
   end
 
+  def delete_org(%Organization{} = org) do
+    Repo.delete(org)
+  end
+
   @doc """
   Deletes a user.
 
@@ -116,6 +153,10 @@ defmodule StaffNotes.Accounts do
   """
   def delete_user(%User{} = user) do
     Repo.delete(user)
+  end
+
+  def change_org(%Organization{} = org) do
+    Organization.changeset(org, %{})
   end
 
   @doc """
