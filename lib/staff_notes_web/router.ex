@@ -20,7 +20,7 @@ defmodule StaffNotesWeb.Router do
     get "/", PageController, :index
     get "/about", PageController, :about
 
-    resources "/users", UserController, only: [:show]
+    resources "/users", UserController, only: [:show], param: "name"
   end
 
   scope "/auth", StaffNotesWeb do
