@@ -79,6 +79,8 @@ defmodule StaffNotes.Mixfile do
       groups_for_modules: [
         "Accounts": [
           StaffNotes.Accounts,
+          StaffNotes.Accounts.Organization,
+          StaffNotes.Accounst.Team,
           StaffNotes.Accounts.User
         ],
         "Controllers": [
