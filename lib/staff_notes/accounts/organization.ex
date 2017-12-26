@@ -1,9 +1,14 @@
 defmodule StaffNotes.Accounts.Organization do
+  @moduledoc """
+  Represents an organization that has members who need staff notes tracked.
+  """
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias StaffNotes.Accounts.{Organization, Team, User}
+  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.Team
+  alias StaffNotes.Accounts.User
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

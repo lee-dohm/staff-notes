@@ -5,7 +5,9 @@ defmodule StaffNotes.Accounts do
   import Ecto.Query, warn: false
 
   alias StaffNotes.Repo
-  alias StaffNotes.Accounts.{Organization, Team, User}
+  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.Team
+  alias StaffNotes.Accounts.User
 
   @doc """
   Creates an organization.

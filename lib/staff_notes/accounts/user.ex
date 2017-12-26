@@ -6,7 +6,9 @@ defmodule StaffNotes.Accounts.User do
 
   import Ecto.Changeset
 
-  alias StaffNotes.Accounts.{Organization, Team, User}
+  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.Team
+  alias StaffNotes.Accounts.User
 
   @primary_key {:id, :id, autogenerate: false}
   @foreign_key_type :id
