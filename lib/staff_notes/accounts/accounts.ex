@@ -52,12 +52,21 @@ defmodule StaffNotes.Accounts do
     Repo.all(query)
   end
 
+  @doc """
+  Gets the team by id.
+  """
   def get_team!(id), do: Repo.get!(Team, id)
 
+  @doc """
+  Deletes the team.
+  """
   def delete_team(%Team{} = team) do
     Repo.delete(team)
   end
 
+  @doc """
+  Creates a changeset for the team.
+  """
   def change_team(%Team{} = team) do
     Team.changeset(team, %{})
   end
