@@ -9,8 +9,8 @@ defmodule StaffNotesWeb.UserController do
   @doc """
   Displays the profile page for a user.
   """
-  def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
+  def show(conn, %{"name" => name}) do
+    user = Accounts.get_user!(name)
 
     conn
     |> assign(:user, user)

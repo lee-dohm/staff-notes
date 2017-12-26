@@ -3,7 +3,9 @@ defmodule StaffNotes.AccountsSpec do
 
   alias StaffNotes.Repo
   alias StaffNotes.Accounts
-  alias StaffNotes.Accounts.{Organization, Team, User}
+  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.Team
+  alias StaffNotes.Accounts.User
 
   def org_fixture(attrs \\ %{}) do
     {:ok, org} =
@@ -145,7 +147,7 @@ defmodule StaffNotes.AccountsSpec do
         {:ok, %Team{} = team} = Accounts.create_team(valid_attrs(), org)
 
         expect(team.name).to eq("some name")
-        expect(team.permission).to eq("owner")
+        expect(team.permission).to eq(:owner)
         expect(team.original).to be_false()
         expect(team.organization_id).to eq(org.id)
       end

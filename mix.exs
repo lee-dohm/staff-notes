@@ -54,6 +54,7 @@ defmodule StaffNotes.Mixfile do
     [
       {:cmark, "~> 0.7"},
       {:cowboy, "~> 1.0"},
+      {:ecto_enum, "~> 1.1"},
       {:gettext, "~> 0.11"},
       {:oauth2, "~> 0.9"},
       {:phoenix_ecto, "~> 3.2"},
@@ -80,7 +81,7 @@ defmodule StaffNotes.Mixfile do
         "Accounts": [
           StaffNotes.Accounts,
           StaffNotes.Accounts.Organization,
-          StaffNotes.Accounst.Team,
+          StaffNotes.Accounts.Team,
           StaffNotes.Accounts.User
         ],
         "Controllers": [
