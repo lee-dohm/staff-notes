@@ -12,8 +12,8 @@ defmodule StaffNotes.Accounts.Team do
 
   There are three permission levels:
 
-  * `owner`
-      * All permissions of `write`
+  * `:owner`
+      * All permissions of `:write`
       * Can invite users to the organization
       * Can remove users from the organization
       * If there is only one owner, they can delete the organization
@@ -21,14 +21,14 @@ defmodule StaffNotes.Accounts.Team do
       * Can rename teams
       * Can add or remove users from teams
       * Can view list of users within all teams
-  * `write`
-      * All permissions of `read`
+  * `:write`
+      * All permissions of `:read`
       * Can create members
       * Can create identities
       * Can merge members
       * Can create notes
       * Can edit notes they have authored
-  * `read`
+  * `:read`
       * Can view notes
       * Can view members
       * Can view identities
@@ -36,7 +36,8 @@ defmodule StaffNotes.Accounts.Team do
       * Can view list of users within the organization
       * Can view list of users within teams to which the user belongs
 
-  There can be multiple teams within
+  There can be multiple teams with the same permission level so that an organization can track
+  users how they wish.
 
   ## Original
 
@@ -47,8 +48,8 @@ defmodule StaffNotes.Accounts.Team do
   * It is created with `owner` permission level
   * It cannot be deleted
   * It cannot have its permission level changed
-  * If the team contains one member, they are not allowed to leave the team
-  * If the team contains one member, they are not allowed to leave the organization
+  * If the original team contains one member, they are not allowed to leave the team
+  * If the original team contains one member, they are not allowed to leave the organization
 
   This is done so that there will always be at least one organization member that is capable of
   administrating the organization.
