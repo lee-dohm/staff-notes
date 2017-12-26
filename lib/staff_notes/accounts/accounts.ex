@@ -41,8 +41,15 @@ defmodule StaffNotes.Accounts do
     |> Repo.insert()
   end
 
-  def list_teams do
-    Repo.all(Team)
+  @doc """
+  Lists all teams within the organization.
+  """
+  def list_teams(%Organization{} = org) do
+    query =
+      from team in Team,
+        where: team.organization_id == ^org.id
+
+    Repo.all(query)
   end
 
   def get_team!(id), do: Repo.get!(Team, id)

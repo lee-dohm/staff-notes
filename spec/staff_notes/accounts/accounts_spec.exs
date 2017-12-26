@@ -1,6 +1,7 @@
 defmodule StaffNotes.AccountsSpec do
   use ESpec
 
+  alias StaffNotes.Repo
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.{Organization, Team, User}
 
@@ -13,8 +14,8 @@ defmodule StaffNotes.AccountsSpec do
     org
   end
 
-  def team_fixture(attrs \\ %{}) do
-    org = org_fixture()
+  def team_fixture(attrs \\ %{}, org_attrs \\ %{}) do
+    org = org_fixture(org_attrs)
 
     {:ok, team} =
       attrs
@@ -38,11 +39,13 @@ defmodule StaffNotes.AccountsSpec do
     let :update_attrs, do: %{name: "some updated name", permission: "write", original: true}
     let :invalid_attrs, do: %{name: nil, permission: nil, original: nil}
 
-    describe "list_teams/0" do
-      it "returns all teams" do
+    describe "list_teams/1" do
+      it "returns all teams belonging to the given organization" do
+        team_fixture(%{name: "original name"}, %{name: "original org name"})
         team = team_fixture()
+        %{organization: org} = Repo.preload(team, :organization)
 
-        expect(Accounts.list_teams()).to eq([team])
+        expect(Accounts.list_teams(org)).to eq([team])
       end
     end
 
