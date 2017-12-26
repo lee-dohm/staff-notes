@@ -58,6 +58,7 @@ defmodule StaffNotes.Accounts.Team do
   import Ecto.Changeset
 
   alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.PermissionLevel
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
 
@@ -65,7 +66,7 @@ defmodule StaffNotes.Accounts.Team do
   @foreign_key_type :binary_id
   schema "teams" do
     field :name, :string
-    field :permission, :string
+    field :permission, PermissionLevel
     field :original, :boolean
 
     belongs_to :organization, Organization
@@ -75,7 +76,7 @@ defmodule StaffNotes.Accounts.Team do
   end
 
   @doc false
-  def original_team_attrs, do: %{name: "Owners", permission: :owners, original: true}
+  def original_team_attrs, do: %{name: "Owners", permission: :owner, original: true}
 
   @doc false
   def changeset(%Team{} = team, attrs) do
