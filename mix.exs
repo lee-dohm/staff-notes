@@ -80,7 +80,7 @@ defmodule StaffNotes.Mixfile do
         "Accounts": [
           StaffNotes.Accounts,
           StaffNotes.Accounts.Organization,
-          StaffNotes.Accounst.Team,
+          StaffNotes.Accounts.Team,
           StaffNotes.Accounts.User
         ],
         "Controllers": [

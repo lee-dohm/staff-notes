@@ -3,7 +3,9 @@ defmodule StaffNotes.AccountsSpec do
 
   alias StaffNotes.Repo
   alias StaffNotes.Accounts
-  alias StaffNotes.Accounts.{Organization, Team, User}
+  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.Team
+  alias StaffNotes.Accounts.User
 
   def org_fixture(attrs \\ %{}) do
     {:ok, org} =
