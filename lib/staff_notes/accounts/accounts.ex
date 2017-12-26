@@ -2,11 +2,90 @@ defmodule StaffNotes.Accounts do
   @moduledoc """
   The Accounts context.
   """
-
   import Ecto.Query, warn: false
-  alias StaffNotes.Repo
 
+  alias StaffNotes.Repo
+  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
+
+  @doc """
+  Creates an organization.
+
+  When an organization is created:
+
+  1. It is created by a user
+  1. The organization is created
+  1. An "Owners" team is created for that organization (with "owner" permissions)
+  1. The creating user is added to the organization
+  1. The creating user is added to the "Owners" team
+
+  All of this is executed in a database transaction so if any step fails, it all gets rolled back.
+  """
+  def create_org(attrs \\ %{}) do
+    %Organization{}
+    |> Organization.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Creates a team within an organization.
+  """
+  def create_team(team_attrs \\ %{}, %Organization{} = org) do
+    team_attrs
+    |> Map.put(:organization_id, org.id)
+    |> do_create_team()
+  end
+
+  defp do_create_team(attrs) do
+    %Team{}
+    |> Team.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Lists all teams within the organization.
+  """
+  def list_teams(%Organization{} = org) do
+    query =
+      from team in Team,
+        where: team.organization_id == ^org.id
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Gets the team by id.
+  """
+  def get_team!(id), do: Repo.get!(Team, id)
+
+  @doc """
+  Deletes the team.
+  """
+  def delete_team(%Team{} = team) do
+    Repo.delete(team)
+  end
+
+  @doc """
+  Creates a changeset for the team.
+  """
+  def change_team(%Team{} = team) do
+    Team.changeset(team, %{})
+  end
+
+  @doc """
+  Returns the list of organizations.
+
+  ## Examples
+
+  ```
+  iex> list_orgs()
+  [%Organization{}, ...]
+  ```
+  """
+  def list_orgs do
+    Repo.all(Organization)
+  end
 
   @doc """
   Returns the list of users.
@@ -17,16 +96,22 @@ defmodule StaffNotes.Accounts do
   iex> list_users()
   [%User{}, ...]
   ```
-
   """
   def list_users do
     Repo.all(User)
   end
 
   @doc """
+  Gets a single organization.
+
+  Raises `Ecto.NoResultsError` if the organization does not exist.
+  """
+  def get_org!(id), do: Repo.get!(Organization, id)
+
+  @doc """
   Gets a single user.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  Raises `Ecto.NoResultsError` if the user does not exist.
 
   ## Examples
 
@@ -76,6 +161,12 @@ defmodule StaffNotes.Accounts do
     |> Repo.insert()
   end
 
+  def update_org(%Organization{} = org, attrs) do
+    org
+    |> Organization.changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Updates a user.
 
@@ -98,6 +189,10 @@ defmodule StaffNotes.Accounts do
     |> Repo.update()
   end
 
+  def delete_org(%Organization{} = org) do
+    Repo.delete(org)
+  end
+
   @doc """
   Deletes a user.
 
@@ -116,6 +211,10 @@ defmodule StaffNotes.Accounts do
   """
   def delete_user(%User{} = user) do
     Repo.delete(user)
+  end
+
+  def change_org(%Organization{} = org) do
+    Organization.changeset(org, %{})
   end
 
   @doc """

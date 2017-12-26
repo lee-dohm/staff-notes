@@ -3,7 +3,11 @@ defmodule StaffNotes.Accounts.User do
   Represents a user of the system.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
+
+  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
 
   @primary_key {:id, :id, autogenerate: false}
@@ -12,6 +16,9 @@ defmodule StaffNotes.Accounts.User do
     field :avatar_url, :string
     field :name, :string
     field :site_admin, :boolean, default: false, null: false
+
+    many_to_many :organizations, Organization, join_through: "organizations_users"
+    many_to_many :teams, Team, join_through: "teams_users"
 
     timestamps()
   end
