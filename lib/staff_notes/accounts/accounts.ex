@@ -29,6 +29,13 @@ defmodule StaffNotes.Accounts do
 
   @doc """
   Creates an `Ecto.Changeset` for tracking team changes.
+
+  ## Examples
+
+  ```
+  iex> change_team(team)
+  %Ecto.Changeset{source: %Team{}}
+  ```
   """
   def change_team(%Team{} = team) do
     Team.changeset(team, %{})
@@ -43,7 +50,6 @@ defmodule StaffNotes.Accounts do
   iex> change_user(user)
   %Ecto.Changeset{source: %User{}}
   ```
-
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
