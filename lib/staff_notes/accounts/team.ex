@@ -77,6 +77,87 @@ defmodule StaffNotes.Accounts.Team do
     timestamps()
   end
 
+  @doc """
+  Implements business logic for creating teams.
+
+  * Prevents creating an original team if one already exists in the organization
+  """
+  def create_team_changeset(%Team{} = team, attrs \\ %{}) do
+    team
+    |> changeset(attrs)
+    |> validate_not_creating_second_original_team()
+  end
+
+  defp validate_not_creating_second_original_team(changeset) do
+    original = get_field(changeset, :original)
+    org_id = get_field(changeset, :organization_id)
+
+    if original && Accounts.original_team(org_id) do
+      add_error(
+        changeset,
+        :original,
+        "An original team already exists in this organization"
+      )
+    else
+      changeset
+    end
+  end
+
+  @doc """
+  Implements business logic for updating teams.
+
+  * Prevents changing the value of the original field
+  * Prevents changing of an original team's permission level
+  """
+  def update_team_changeset(%Team{} = team, attrs \\ %{}) do
+    team
+    |> changeset(attrs)
+    |> validate_original_field_unchanged()
+    |> validate_original_permission()
+  end
+
+  defp validate_original_permission(changeset) do
+    do_validate_original_permission(changeset, is_original_team?(changeset))
+  end
+
+  defp do_validate_original_permission(changeset, true) do
+    case get_field(changeset, :permission) do
+      :owner -> changeset
+      _ ->
+        changeset
+        |> add_error(:original, "Cannot change the permission level of the original team")
+    end
+  end
+
+  defp do_validate_original_permission(changeset, false), do: changeset
+
+  defp validate_original_field_unchanged(changeset) do
+    validate_original(changeset, is_original_team?(changeset))
+  end
+
+  defp is_original_team?(changeset) do
+    team_id = get_field(changeset, :id)
+    org_id = get_field(changeset, :organization_id)
+    original = Accounts.original_team(org_id)
+
+    team_id == original.id
+  end
+
+  defp validate_original(changeset, original) do
+    change = get_change(changeset, :original)
+
+    do_validate_original(changeset, original, change)
+  end
+
+  defp do_validate_original(changeset, true, true), do: changeset
+  defp do_validate_original(changeset, false, false), do: changeset
+  defp do_validate_original(changeset, _, nil), do: changeset
+
+  defp do_validate_original(changeset, _, _) do
+    changeset
+    |> add_error(:original, "A team's original field cannot be changed")
+  end
+
   @doc false
   def original_team_attrs, do: %{name: "Owners", permission: :owner, original: true}
 
