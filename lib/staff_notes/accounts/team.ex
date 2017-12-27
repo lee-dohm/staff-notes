@@ -169,8 +169,7 @@ defmodule StaffNotes.Accounts.Team do
 
   defp validate_not_deleting_original_team(changeset) do
     if is_original_team?(changeset) do
-      changeset
-      |> add_error(:original, "Cannot delete the original team")
+      add_error(changeset, :original, "Cannot delete the original team")
     else
       changeset
     end
@@ -187,8 +186,7 @@ defmodule StaffNotes.Accounts.Team do
   defp do_validate_original_field_unchanged(changeset, _, nil), do: changeset
 
   defp do_validate_original_field_unchanged(changeset, _, _) do
-    changeset
-    |> add_error(:original, "A team's original field cannot be changed")
+    add_error(changeset, :original, "A team's original field cannot be changed")
   end
 
   defp validate_original_permission(changeset) do
@@ -199,8 +197,7 @@ defmodule StaffNotes.Accounts.Team do
     case get_field(changeset, :permission) do
       :owner -> changeset
       _ ->
-        changeset
-        |> add_error(:permission, "Cannot change the permission level of the original team")
+        add_error(changeset, :permission, "Cannot change the permission level of the original team")
     end
   end
 
