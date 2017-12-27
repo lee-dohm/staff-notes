@@ -58,6 +58,7 @@ defmodule StaffNotes.Accounts.Team do
 
   import Ecto.Changeset
 
+  alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.PermissionLevel
   alias StaffNotes.Accounts.Team

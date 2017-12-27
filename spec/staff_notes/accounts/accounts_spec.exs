@@ -110,11 +110,25 @@ defmodule StaffNotes.AccountsSpec do
         expect(Accounts.change_org(org)).to be_struct(Ecto.Changeset)
       end
     end
+
+    describe "original_team/1" do
+      it "returns the original team when one exists" do
+        team = team_fixture(%{name: "some name", permission: :owner, original: true})
+
+        expect(Accounts.original_team(team.organization_id)).to eq(team)
+      end
+
+      it "returns nil when an original team does not exist" do
+        team = team_fixture(%{name: "some name", permission: :owner, original: false})
+
+        expect(Accounts.original_team(team.organization_id)).to be_nil()
+      end
+    end
   end
 
   describe "teams" do
-    let :valid_attrs, do: %{name: "some name", permission: "owner", original: false}
-    let :update_attrs, do: %{name: "some updated name", permission: "write", original: true}
+    let :valid_attrs, do: %{name: "some name", permission: :owner, original: false}
+    let :update_attrs, do: %{name: "some updated name", permission: :owner, original: true}
     let :invalid_attrs, do: %{name: nil, permission: nil, original: nil}
 
     describe "list_teams/1" do
@@ -142,7 +156,7 @@ defmodule StaffNotes.AccountsSpec do
     end
 
     describe "create_team/1" do
-      it "creates an team when given valid information" do
+      it "creates a team when given valid information" do
         org = org_fixture()
         {:ok, %Team{} = team} = Accounts.create_team(valid_attrs(), org)
 
@@ -158,6 +172,45 @@ defmodule StaffNotes.AccountsSpec do
 
         expect(changeset).to be_struct(Ecto.Changeset)
       end
+
+      it "returns an error changeset when creating the second original team in an org" do
+        team = team_fixture(%{original: true})
+        org = Accounts.get_org!(team.organization_id)
+        {:error, changeset} = Accounts.create_team(update_attrs(), org)
+
+        expect(changeset).to be_struct(Ecto.Changeset)
+      end
+    end
+
+    describe "update_team/2" do
+      it "updates the team when given valid data" do
+        team = team_fixture(%{original: true})
+        {:ok, team} = Accounts.update_team(team, update_attrs())
+
+        expect(team.name).to eq("some updated name")
+      end
+
+      it "returns an error changeset when given invalid data" do
+        team = team_fixture(%{original: true})
+        {:error, changeset} = Accounts.update_team(team, invalid_attrs())
+
+        expect(changeset).to be_struct(Ecto.Changeset)
+        expect(Accounts.get_team!(team.id)).to eq(team)
+      end
+
+      it "returns an error changeset when original is updated" do
+        team = team_fixture(%{original: true})
+        {:error, changeset} = Accounts.update_team(team, %{original: false})
+
+        expect(changeset).to be_struct(Ecto.Changeset)
+      end
+
+      it "returns an error changeset when attempting to change permission level of original team" do
+        team = team_fixture(%{original: true})
+        {:error, changeset} = Accounts.update_team(team, %{permission: :read})
+
+        expect(changeset).to be_struct(Ecto.Changeset)
+      end
     end
 
     describe "delete_team/1" do
@@ -166,6 +219,13 @@ defmodule StaffNotes.AccountsSpec do
         {:ok, %Team{}} = Accounts.delete_team(team)
 
         expect(fn -> Accounts.get_team!(team.id) end).to raise_exception(Ecto.NoResultsError)
+      end
+
+      it "returns an error changeset when attempting to delete the original team" do
+        team = team_fixture(%{original: true})
+        {:error, changeset} = Accounts.delete_team(team)
+
+        expect(changeset).to be_struct(Ecto.Changeset)
       end
     end
 

@@ -1,6 +1,8 @@
 import_file_if_available "~/.iex.exs"
 
 alias StaffNotes.Accounts
+alias StaffNotes.Accounts.Organization
+alias StaffNotes.Accounts.Team
 alias StaffNotes.Accounts.User
 alias StaffNotes.Markdown
 alias StaffNotes.Repo

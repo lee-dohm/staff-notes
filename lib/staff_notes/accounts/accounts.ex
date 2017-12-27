@@ -4,6 +4,7 @@ defmodule StaffNotes.Accounts do
   """
   import Ecto.Query, warn: false
 
+  alias Ecto.Changeset
   alias StaffNotes.Repo
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
@@ -30,6 +31,9 @@ defmodule StaffNotes.Accounts do
 
   @doc """
   Creates a team within an organization.
+
+  Will not create a team with `original` set to `true` if one already exists within the
+  organization.
   """
   def create_team(team_attrs \\ %{}, %Organization{} = org) do
     team_attrs
@@ -40,7 +44,23 @@ defmodule StaffNotes.Accounts do
   defp do_create_team(attrs) do
     %Team{}
     |> Team.changeset(attrs)
+    |> validate_originality()
     |> Repo.insert()
+  end
+
+  defp validate_originality(changeset) do
+    original = Changeset.get_field(changeset, :original)
+    org_id = Changeset.get_field(changeset, :organization_id)
+
+    if original && original_team(org_id) do
+      Changeset.add_error(
+        changeset,
+        :original,
+        "An original team already exists in this organization"
+      )
+    else
+      changeset
+    end
   end
 
   @doc """
@@ -55,13 +75,93 @@ defmodule StaffNotes.Accounts do
   end
 
   @doc """
+  Returns the original team for the organization, if it exists.
+
+  This shouldn't be susceptible to race conditions so long as the original team is **always**
+  created along with the organization.
+  """
+  def original_team(organization_id) do
+    query =
+      from team in Team,
+      where: [original: true, organization_id: ^organization_id]
+
+    Repo.one(query)
+  end
+
+  @doc """
   Gets the team by id.
   """
   def get_team!(id), do: Repo.get!(Team, id)
 
   @doc """
-  Deletes the team.
+  Updates the team.
+
+  Will not allow a team's `original` field to be changed.
   """
+  def update_team(%Team{} = team, attrs) do
+    team
+    |> Team.changeset(attrs)
+    |> validate_original_field_unchanged()
+    |> validate_original_permission()
+    |> Repo.update()
+  end
+
+  defp validate_original_permission(changeset) do
+    do_validate_original_permission(changeset, is_original_team?(changeset))
+  end
+
+  defp do_validate_original_permission(changeset, true) do
+    case Changeset.get_field(changeset, :permission) do
+      :owner -> changeset
+      _ ->
+        changeset
+        |> Changeset.add_error(:original, "Cannot change the permission level of the original team")
+    end
+  end
+
+  defp do_validate_original_permission(changeset, false), do: changeset
+
+  defp validate_original_field_unchanged(changeset) do
+    validate_original(changeset, is_original_team?(changeset))
+  end
+
+  defp is_original_team?(changeset) do
+    team_id = Changeset.get_field(changeset, :id)
+    org_id = Changeset.get_field(changeset, :organization_id)
+    original = original_team(org_id)
+
+    team_id == original.id
+  end
+
+  defp validate_original(changeset, original) do
+    change = Changeset.get_change(changeset, :original)
+
+    do_validate_original(changeset, original, change)
+  end
+
+  defp do_validate_original(changeset, true, true), do: changeset
+  defp do_validate_original(changeset, false, false), do: changeset
+  defp do_validate_original(changeset, _, nil), do: changeset
+
+  defp do_validate_original(changeset, _, _) do
+    changeset
+    |> Changeset.add_error(:original, "A team's original field cannot be changed")
+  end
+
+  @doc """
+  Deletes the team.
+
+  Will not delete an original team.
+  """
+  def delete_team(%Team{original: true} = team) do
+    changeset =
+      team
+      |> change_team()
+      |> Changeset.add_error(:original, "Cannot delete the original team")
+
+    {:error, changeset}
+  end
+
   def delete_team(%Team{} = team) do
     Repo.delete(team)
   end
