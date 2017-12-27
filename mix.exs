@@ -81,6 +81,7 @@ defmodule StaffNotes.Mixfile do
         "Accounts": [
           StaffNotes.Accounts,
           StaffNotes.Accounts.Organization,
+          StaffNotes.Accounts.PermissionLevel,
           StaffNotes.Accounts.Team,
           StaffNotes.Accounts.User
         ],
