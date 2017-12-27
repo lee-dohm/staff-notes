@@ -15,7 +15,6 @@ defmodule StaffNotes.Accounts do
   """
   import Ecto.Query, warn: false
 
-  alias Ecto.Changeset
   alias StaffNotes.Repo
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
@@ -43,8 +42,7 @@ defmodule StaffNotes.Accounts do
   @doc """
   Creates a team within an organization.
 
-  Will not create a team with `original` set to `true` if one already exists within the
-  organization.
+  See `StaffNotes.Accounts.Team.create_team_changeset/2` for applicable business rules.
   """
   def create_team(team_attrs \\ %{}, %Organization{} = org) do
     team_attrs
@@ -91,7 +89,7 @@ defmodule StaffNotes.Accounts do
   @doc """
   Updates the team.
 
-  Will not allow a team's `original` field to be changed.
+  See `StaffNotes.Accounts.Team.update_team_changeset/2` for applicable business rules.
   """
   def update_team(%Team{} = team, attrs) do
     team
@@ -102,19 +100,12 @@ defmodule StaffNotes.Accounts do
   @doc """
   Deletes the team.
 
-  Will not delete an original team.
+  See `StaffNotes.Accounts.Team.detele_team_changeset/1` for applicable business rules.
   """
-  def delete_team(%Team{original: true} = team) do
-    changeset =
-      team
-      |> change_team()
-      |> Changeset.add_error(:original, "Cannot delete the original team")
-
-    {:error, changeset}
-  end
-
   def delete_team(%Team{} = team) do
-    Repo.delete(team)
+    team
+    |> Team.delete_team_changeset()
+    |> Repo.delete()
   end
 
   @doc """

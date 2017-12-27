@@ -110,6 +110,20 @@ defmodule StaffNotes.Accounts.Team do
   end
 
   @doc """
+  Creates an `Ecto.Changeset` suitable for deleting a team.
+
+  ## Business rules
+
+  * Prevents deleting an original team
+  """
+  @spec delete_team_changeset(t) :: Ecto.Changeset.t
+  def delete_team_changeset(%Team{} = team) do
+    team
+    |> changeset(%{})
+    |> validate_not_deleting_original_team()
+  end
+
+  @doc """
   Creates an `Ecto.Changeset` suitable for updating a team.
 
   ## Business rules
@@ -123,6 +137,19 @@ defmodule StaffNotes.Accounts.Team do
     |> changeset(attrs)
     |> validate_original_field_unchanged()
     |> validate_original_permission()
+  end
+
+  defp is_original_team?(changeset) do
+    org_id = get_field(changeset, :organization_id)
+    original = Accounts.original_team(org_id)
+
+    if original do
+      team_id = get_field(changeset, :id)
+
+      team_id == original.id
+    else
+      false
+    end
   end
 
   defp validate_not_creating_second_original_team(changeset) do
@@ -140,6 +167,30 @@ defmodule StaffNotes.Accounts.Team do
     end
   end
 
+  defp validate_not_deleting_original_team(changeset) do
+    if is_original_team?(changeset) do
+      changeset
+      |> add_error(:original, "Cannot delete the original team")
+    else
+      changeset
+    end
+  end
+
+  defp validate_original_field_unchanged(changeset) do
+    change = get_change(changeset, :original)
+
+    do_validate_original_field_unchanged(changeset, is_original_team?(changeset), change)
+  end
+
+  defp do_validate_original_field_unchanged(changeset, true, true), do: changeset
+  defp do_validate_original_field_unchanged(changeset, false, false), do: changeset
+  defp do_validate_original_field_unchanged(changeset, _, nil), do: changeset
+
+  defp do_validate_original_field_unchanged(changeset, _, _) do
+    changeset
+    |> add_error(:original, "A team's original field cannot be changed")
+  end
+
   defp validate_original_permission(changeset) do
     do_validate_original_permission(changeset, is_original_team?(changeset))
   end
@@ -149,36 +200,9 @@ defmodule StaffNotes.Accounts.Team do
       :owner -> changeset
       _ ->
         changeset
-        |> add_error(:original, "Cannot change the permission level of the original team")
+        |> add_error(:permission, "Cannot change the permission level of the original team")
     end
   end
 
   defp do_validate_original_permission(changeset, false), do: changeset
-
-  defp validate_original_field_unchanged(changeset) do
-    validate_original(changeset, is_original_team?(changeset))
-  end
-
-  defp is_original_team?(changeset) do
-    team_id = get_field(changeset, :id)
-    org_id = get_field(changeset, :organization_id)
-    original = Accounts.original_team(org_id)
-
-    team_id == original.id
-  end
-
-  defp validate_original(changeset, original) do
-    change = get_change(changeset, :original)
-
-    do_validate_original(changeset, original, change)
-  end
-
-  defp do_validate_original(changeset, true, true), do: changeset
-  defp do_validate_original(changeset, false, false), do: changeset
-  defp do_validate_original(changeset, _, nil), do: changeset
-
-  defp do_validate_original(changeset, _, _) do
-    changeset
-    |> add_error(:original, "A team's original field cannot be changed")
-  end
 end
