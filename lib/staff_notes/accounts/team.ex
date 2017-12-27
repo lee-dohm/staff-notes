@@ -64,6 +64,8 @@ defmodule StaffNotes.Accounts.Team do
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
 
+  @type t :: %__MODULE__{}
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "teams" do
@@ -77,15 +79,50 @@ defmodule StaffNotes.Accounts.Team do
     timestamps()
   end
 
+  @doc false
+  def original_team_attrs, do: %{name: "Owners", permission: :owner, original: true}
+
   @doc """
-  Implements business logic for creating teams.
+  Generates an `Ecto.Changeset` that is applicable to all database operations.
+
+  A more specialized changeset will implement further business rules and should be preferred.
+  """
+  @spec changeset(t, %{}) :: Ecto.Changeset.t
+  def changeset(%Team{} = team, attrs) do
+    team
+    |> cast(attrs, [:name, :permission, :original, :organization_id])
+    |> validate_required([:name, :permission, :original, :organization_id])
+    |> foreign_key_constraint(:organization_id)
+  end
+
+  @doc """
+  Creates an `Ecto.Changeset` suitable for creating a new team.
+
+  ## Business rules
 
   * Prevents creating an original team if one already exists in the organization
   """
+  @spec create_team_changeset(t, %{}) :: Ecto.Changeset.t
   def create_team_changeset(%Team{} = team, attrs \\ %{}) do
     team
     |> changeset(attrs)
     |> validate_not_creating_second_original_team()
+  end
+
+  @doc """
+  Creates an `Ecto.Changeset` suitable for updating a team.
+
+  ## Business rules
+
+  * Prevents changing the value of the original field
+  * Prevents changing of an original team's permission level
+  """
+  @spec update_team_changeset(t, %{}) :: Ecto.Changeset.t
+  def update_team_changeset(%Team{} = team, attrs \\ %{}) do
+    team
+    |> changeset(attrs)
+    |> validate_original_field_unchanged()
+    |> validate_original_permission()
   end
 
   defp validate_not_creating_second_original_team(changeset) do
@@ -101,19 +138,6 @@ defmodule StaffNotes.Accounts.Team do
     else
       changeset
     end
-  end
-
-  @doc """
-  Implements business logic for updating teams.
-
-  * Prevents changing the value of the original field
-  * Prevents changing of an original team's permission level
-  """
-  def update_team_changeset(%Team{} = team, attrs \\ %{}) do
-    team
-    |> changeset(attrs)
-    |> validate_original_field_unchanged()
-    |> validate_original_permission()
   end
 
   defp validate_original_permission(changeset) do
@@ -156,16 +180,5 @@ defmodule StaffNotes.Accounts.Team do
   defp do_validate_original(changeset, _, _) do
     changeset
     |> add_error(:original, "A team's original field cannot be changed")
-  end
-
-  @doc false
-  def original_team_attrs, do: %{name: "Owners", permission: :owner, original: true}
-
-  @doc false
-  def changeset(%Team{} = team, attrs) do
-    team
-    |> cast(attrs, [:name, :permission, :original, :organization_id])
-    |> validate_required([:name, :permission, :original, :organization_id])
-    |> foreign_key_constraint(:organization_id)
   end
 end

@@ -1,6 +1,17 @@
 defmodule StaffNotes.Accounts do
   @moduledoc """
-  The Accounts context.
+  Represents the business-logic layer of working with the various accounts in the Staff Notes
+  application. There are three types of accounts in Staff Notes:
+
+  * Organizations - Represents an organization that has members whose behavior and achievements
+    need to be tracked by staff users
+  * Teams - Represents a group of users with the same permission level in an organization
+  * Users - Represents a staff member of an organization who will access or author notes
+
+  Business logic specific to a particular record is typically implemented within that module. For
+  example, the logic around original teams is implemented in the `StaffNotes.Accounts.Team` module.
+  Business logic that involves multiple records, such as when a user creates an organization (see
+  the `create_org/1` function) is implemented within this module.
   """
   import Ecto.Query, warn: false
 
