@@ -16,6 +16,7 @@ defmodule StaffNotes.Accounts do
   import Ecto.Query, warn: false
 
   alias Ecto.Changeset
+  alias Ecto.Multi
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
@@ -281,9 +282,9 @@ defmodule StaffNotes.Accounts do
   """
   @spec list_users(Organization.t) :: [User.t]
   def list_users(%Organization{} = org) do
-    org = Repo.preload(org, :users)
-
-    org.users
+    org
+    |> Ecto.assoc(:users)
+    |> Repo.all()
   end
 
   @doc """
@@ -291,9 +292,9 @@ defmodule StaffNotes.Accounts do
   """
   @spec list_users(Team.t) :: [User.t]
   def list_users(%Team{} = team) do
-    team = Repo.preload(team, :users)
-
-    team.users
+    team
+    |> Ecto.assoc(:users)
+    |> Repo.all()
   end
 
   @doc """
@@ -316,7 +317,28 @@ defmodule StaffNotes.Accounts do
   """
   @spec remove_user_from_org(User.t, Organization.t) :: {:ok, User.t} | {:error, Changeset.t}
   def remove_user_from_org(%User{} = user, %Organization{} = org) do
-    remove_association_from_user(user, org, :organizations)
+    if list_users(org) == [user] do
+      user
+      |> Accounts.change_user()
+      |> generate_error(:organizations, "Cannot remove the last user in the organization. The organization must be deleted instead.")
+    else
+      org = Repo.preload(org, :teams)
+
+      Multi.new
+      |> Multi.update(:organization, remove_association_from_user_changeset(user, org, :organizations))
+      |> Multi.update(:teams, remove_association_from_user_changeset(user, org.teams, :teams))
+      |> Repo.transaction()
+      |> case do
+           {:ok, %{teams: user}} -> {:ok, user}
+           {:error, _, value, _} -> {:error, value}
+         end
+    end
+  end
+
+  defp generate_error(changeset, key, message) do
+    changeset = Changeset.add_error(changeset, key, message)
+
+    {:error, changeset}
   end
 
   @doc """
@@ -324,39 +346,41 @@ defmodule StaffNotes.Accounts do
   """
   @spec remove_user_from_team(User.t, Team.t) :: {:ok, User.t} | {:error, Changeset.t}
   def remove_user_from_team(%User{} = user, %Team{} = team) do
-    remove_association_from_user(user, team, :teams)
+    user
+    |> remove_association_from_user_changeset(team, :teams)
+    |> Repo.update()
   end
 
-  defp generate_error(changeset, key, message) do
-    {:error, Changeset.add_error(changeset, key, message)}
+  defp remove_association_from_user_changeset(user, item, key) when not is_list(item) do
+    remove_association_from_user_changeset(user, [item], key)
   end
 
-  defp remove_associated_item_by_id(record, key, id) do
-    record
+  defp remove_association_from_user_changeset(user, list, key) do
+    ids = Enum.map(list, &(&1.id))
+
+    do_remove_association_from_user_changeset(user, ids, key)
+  end
+
+  defp do_remove_association_from_user_changeset(user, id_or_list, key) do
+    user = Repo.preload(user, key)
+
+    updated = remove_association_by_id(user, id_or_list, key)
+
+    user
+    |> Accounts.change_user()
+    |> Changeset.put_assoc(key, updated)
+  end
+
+  defp remove_association_by_id(user, list, key) when is_list(list) do
+    user
+    |> Map.get(key)
+    |> Enum.reject(&(&1.id in list))
+  end
+
+  defp remove_association_by_id(user, id, key) do
+    user
     |> Map.get(key)
     |> Enum.reject(&(&1.id == id))
-  end
-
-  defp remove_association_from_user(user, item, key) do
-    user = Repo.preload(user, key)
-    updated = remove_associated_item_by_id(user, key, item.id)
-    changeset = Accounts.change_user(user)
-
-    if updated?(user, key, updated) do
-      changeset
-      |> Changeset.put_assoc(key, updated)
-      |> Repo.update()
-    else
-      generate_error(
-        changeset,
-        key,
-        "User is not a member of `#{inspect item}`"
-      )
-    end
-  end
-
-  defp updated?(user, key, updated) do
-    Map.get(user, key) != updated
   end
 
   @doc """

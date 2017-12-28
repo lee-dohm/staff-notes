@@ -42,6 +42,7 @@ defmodule StaffNotes.AccountsSpec do
   let :team, do: team_fixture(team_attrs(), org())
   let :other_team, do: team_fixture(%{name: "other team"})
   let :user, do: user_fixture()
+  let :other_user, do: user_fixture(%{id: 43, name: "some other name"})
 
   describe "add_user_to_org/2" do
     it "adds the given user to the org" do
@@ -90,22 +91,32 @@ defmodule StaffNotes.AccountsSpec do
   describe "remove_user_from_org/2" do
     before do
       Accounts.add_user_to_org(user(), org())
+      Accounts.add_user_to_org(other_user(), org())
       Accounts.add_user_to_org(user(), other_org())
+      Accounts.add_user_to_team(user(), team())
     end
 
     it "removes the user from the org" do
       {:ok, user} = Accounts.remove_user_from_org(user(), org())
+      user = Repo.preload(user, :organizations)
 
       expect(user.organizations).to have_length(1)
       expect(user.organizations).to have(other_org())
     end
 
-    it "returns an error changeset when the user isn't a member of the given org" do
+    it "returns an error changeset when the user is the last member of the org" do
       {:error, changeset} =
-        Accounts.remove_user_from_org(user(), org_fixture(%{name: "still some other org"}))
+        Accounts.remove_user_from_org(user(), other_org())
 
       expect(changeset).to_not be_valid()
       expect(changeset).to have_errors(:organizations)
+    end
+
+    it "removes the user from teams belonging to that organization" do
+      {:ok, user} = Accounts.remove_user_from_org(user(), org())
+      user = Repo.preload(user, :teams)
+
+      expect(user.teams).to have_length(0)
     end
   end
 
@@ -120,14 +131,6 @@ defmodule StaffNotes.AccountsSpec do
 
       expect(user.teams).to have_length(1)
       expect(user.teams).to have(other_team())
-    end
-
-    it "returns an error changeset when the user isn't a member of the given team" do
-      {:error, changeset} =
-        Accounts.remove_user_from_team(user(), team_fixture(%{name: "still some other team"}, org()))
-
-      expect(changeset).to_not be_valid()
-      expect(changeset).to have_errors(:teams)
     end
   end
 end
