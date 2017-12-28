@@ -15,10 +15,38 @@ defmodule StaffNotes.Accounts do
   """
   import Ecto.Query, warn: false
 
-  alias StaffNotes.Repo
+  alias Ecto.Changeset
+  alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
+  alias StaffNotes.Repo
+
+  @doc """
+  Adds the user to the organization.
+  """
+  def add_user_to_org(%User{} = user, %Organization{} = org) do
+    user = Repo.preload(user, :organizations)
+    current_orgs = user.organizations
+
+    user
+    |> Accounts.change_user()
+    |> Changeset.put_assoc(:organizations, [org | current_orgs])
+    |> Repo.update()
+  end
+
+  @doc """
+  Adds the user to the team.
+  """
+  def add_user_to_team(%User{} = user, %Team{} = team) do
+    user = Repo.preload(user, :teams)
+    current_teams = user.teams
+
+    user
+    |> Accounts.change_user()
+    |> Changeset.put_assoc(:teams, [team | current_teams])
+    |> Repo.update()
+  end
 
   @doc """
   Creates an `Ecto.Changeset` for tracking organization changes.
@@ -220,7 +248,7 @@ defmodule StaffNotes.Accounts do
   end
 
   @doc """
-  Returns the list of users.
+  Returns the list of all users.
 
   ## Examples
 
@@ -231,6 +259,24 @@ defmodule StaffNotes.Accounts do
   """
   def list_users do
     Repo.all(User)
+  end
+
+  @doc """
+  List the users in an organization.
+  """
+  def list_users(%Organization{} = org) do
+    org = Repo.preload(org, :users)
+
+    org.users
+  end
+
+  @doc """
+  List the users on a team.
+  """
+  def list_users(%Team{} = team) do
+    team = Repo.preload(team, :users)
+
+    team.users
   end
 
   @doc """
