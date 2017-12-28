@@ -28,7 +28,9 @@ defmodule StaffNotes.Accounts do
   """
   @spec add_user_to_org(User.t, Organization.t) :: {:ok, User.t} | {:error, Changeset.t}
   def add_user_to_org(%User{} = user, %Organization{} = org) do
-    add_association_to_user(user, org, :organizations)
+    user
+    |> update_assoc_changeset(:organizations, &Accounts.change_user/1, fn(orgs) -> [org | orgs] end)
+    |> Repo.update()
   end
 
   @doc """
@@ -36,16 +38,8 @@ defmodule StaffNotes.Accounts do
   """
   @spec add_user_to_team(User.t, Team.t) :: {:ok, User.t} | {:error, Changeset.t}
   def add_user_to_team(%User{} = user, %Team{} = team) do
-    add_association_to_user(user, team, :teams)
-  end
-
-  defp add_association_to_user(user, item, key) do
-    user = Repo.preload(user, key)
-    current = Map.get(user, key)
-
     user
-    |> Accounts.change_user()
-    |> Changeset.put_assoc(key, [item | current])
+    |> update_assoc_changeset(:teams, &Accounts.change_user/1, fn(teams) -> [team | teams] end)
     |> Repo.update()
   end
 
@@ -318,21 +312,45 @@ defmodule StaffNotes.Accounts do
   @spec remove_user_from_org(User.t, Organization.t) :: {:ok, User.t} | {:error, Changeset.t}
   def remove_user_from_org(%User{} = user, %Organization{} = org) do
     if list_users(org) == [user] do
-      user
-      |> Accounts.change_user()
-      |> generate_error(:organizations, "Cannot remove the last user in the organization. The organization must be deleted instead.")
+      do_remove_last_user_error(user)
     else
-      org = Repo.preload(org, :teams)
-
-      Multi.new
-      |> Multi.update(:organization, remove_association_from_user_changeset(user, org, :organizations))
-      |> Multi.update(:teams, remove_association_from_user_changeset(user, org.teams, :teams))
-      |> Repo.transaction()
-      |> case do
-           {:ok, %{teams: user}} -> {:ok, user}
-           {:error, _, value, _} -> {:error, value}
-         end
+      do_remove_user_from_org(user, org)
     end
+  end
+
+  defp do_remove_last_user_error(user) do
+    user
+    |> Accounts.change_user()
+    |> generate_error(:organizations, "Cannot remove the last user in the organization. The organization must be deleted instead.")
+  end
+
+  defp do_remove_user_from_org(user, org) do
+    org = Repo.preload(org, :teams)
+
+    Multi.new
+    |> Multi.update(
+         :organization,
+         update_assoc_changeset(user, :organizations, &Accounts.change_user/1, fn(orgs) ->
+           Enum.reject(orgs, &(&1.id == org.id))
+         end)
+       )
+    |> Multi.update(
+         :teams,
+         update_assoc_changeset(user, :teams, &Accounts.change_user/1, fn(teams) ->
+           ids =
+             org
+             |> Ecto.assoc(:teams)
+             |> Repo.all()
+             |> Enum.map(&(&1.id))
+
+           Enum.reject(teams, &(&1.id in ids))
+         end)
+       )
+    |> Repo.transaction()
+    |> case do
+         {:ok, %{teams: user}} -> {:ok, user}
+         {:error, _, value, _} -> {:error, value}
+       end
   end
 
   defp generate_error(changeset, key, message) do
@@ -347,40 +365,10 @@ defmodule StaffNotes.Accounts do
   @spec remove_user_from_team(User.t, Team.t) :: {:ok, User.t} | {:error, Changeset.t}
   def remove_user_from_team(%User{} = user, %Team{} = team) do
     user
-    |> remove_association_from_user_changeset(team, :teams)
+    |> update_assoc_changeset(:teams, &Accounts.change_user/1, fn(teams) ->
+         Enum.reject(teams, &(&1.id == team.id))
+       end)
     |> Repo.update()
-  end
-
-  defp remove_association_from_user_changeset(user, item, key) when not is_list(item) do
-    remove_association_from_user_changeset(user, [item], key)
-  end
-
-  defp remove_association_from_user_changeset(user, list, key) do
-    ids = Enum.map(list, &(&1.id))
-
-    do_remove_association_from_user_changeset(user, ids, key)
-  end
-
-  defp do_remove_association_from_user_changeset(user, id_or_list, key) do
-    user = Repo.preload(user, key)
-
-    updated = remove_association_by_id(user, id_or_list, key)
-
-    user
-    |> Accounts.change_user()
-    |> Changeset.put_assoc(key, updated)
-  end
-
-  defp remove_association_by_id(user, list, key) when is_list(list) do
-    user
-    |> Map.get(key)
-    |> Enum.reject(&(&1.id in list))
-  end
-
-  defp remove_association_by_id(user, id, key) do
-    user
-    |> Map.get(key)
-    |> Enum.reject(&(&1.id == id))
   end
 
   @doc """
@@ -426,5 +414,23 @@ defmodule StaffNotes.Accounts do
     user
     |> User.changeset(attrs)
     |> Repo.update()
+  end
+
+  # Updates the association of `record`, named by `key` and returns an `Ecto.Changeset` of the
+  # change.
+  #
+  # `make_changeset` is a function that creates a changeset from a given record.
+  # `Accounts.change_user/1` is an example.
+  #
+  # `updater` is a function that transforms the list of current assocations into the desired list
+  # of associations. For example, it may add an item to the list or remove one or more items.
+  defp update_assoc_changeset(record, key, make_changeset, updater) do
+    record = Repo.preload(record, key)
+    current = Map.get(record, key)
+    updated = updater.(current)
+
+    record
+    |> make_changeset.()
+    |> Changeset.put_assoc(key, updated)
   end
 end
