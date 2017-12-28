@@ -2,24 +2,23 @@ defmodule StaffNotes.AccountsSpec do
   use ESpec
 
   alias StaffNotes.Accounts
-  alias StaffNotes.Accounts.Team
-  alias StaffNotes.Accounts.User
+  alias StaffNotes.Repo
+
+  import ESpec.Phoenix.Assertions.Changeset.Helpers
 
   def org_fixture(attrs \\ %{}) do
     {:ok, org} =
       attrs
-      |> Enum.into(valid_org_attrs())
+      |> Enum.into(org_attrs())
       |> Accounts.create_org()
 
     org
   end
 
-  def team_fixture(attrs \\ %{}, org_attrs \\ %{}) do
-    org = org_fixture(org_attrs)
-
+  def team_fixture(attrs \\ %{}, org \\ org()) do
     {:ok, team} =
       attrs
-      |> Enum.into(valid_team_attrs())
+      |> Enum.into(team_attrs())
       |> Accounts.create_team(org)
 
     team
@@ -28,111 +27,110 @@ defmodule StaffNotes.AccountsSpec do
   def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
-      |> Enum.into(valid_attrs())
+      |> Enum.into(user_attrs())
       |> Accounts.create_user()
 
     user
   end
 
-  describe "original_team/1" do
-    let :original_team_attrs, do: Team.original_team_attrs()
-    let :original_team, do: team_fixture(original_team_attrs())
-    let :valid_team_attrs, do: %{name: "team name", permission: :write, original: false}
-    let :valid_org_attrs, do: %{name: "org name"}
+  let :org_attrs, do: %{name: "org name"}
+  let :team_attrs, do: %{name: "team name", permission: :write, original: false}
+  let :user_attrs, do: %{avatar_url: "some avatar_url", id: 42, name: "some name", site_admin: false}
 
-    it "returns the original team when one exists" do
-      team = original_team()
+  let :org, do: org_fixture()
+  let :other_org, do: org_fixture(%{name: "other org"})
+  let :team, do: team_fixture(team_attrs(), org())
+  let :other_team, do: team_fixture(%{name: "other team"})
+  let :user, do: user_fixture()
+  let :other_user, do: user_fixture(%{id: 43, name: "some other name"})
 
-      expect(Accounts.original_team(team.organization_id)).to eq(team)
+  describe "add_user_to_org/2" do
+    it "adds the given user to the org" do
+      Accounts.add_user_to_org(user(), org())
+      list = Accounts.list_users(org())
+
+      expect(list).to eq([user()])
     end
 
-    it "returns nil when an original team does not exist" do
-      team = team_fixture(%{name: "some name", permission: :owner, original: false})
+    it "adds the given user to a second org" do
+      updated_user =
+        with {:ok, user} <- Accounts.add_user_to_org(user(), org()),
+             {:ok, user} <- Accounts.add_user_to_org(user, other_org())
+        do
+          Repo.preload(user, :organizations)
+        end
 
-      expect(Accounts.original_team(team.organization_id)).to be_nil()
+      expect(updated_user.organizations).to have_length(2)
+      expect(updated_user.organizations).to have(org())
+      expect(updated_user.organizations).to have(other_org())
     end
   end
 
-  describe "users" do
-    let :valid_attrs, do: %{avatar_url: "some avatar_url", id: 42, name: "some name", site_admin: true}
-    let :update_attrs, do: %{avatar_url: "some updated avatar_url", id: 43, name: "some updated name", site_admin: false}
-    let :invalid_attrs, do: %{avatar_url: nil, id: nil, name: nil, site_admin: nil}
+  describe "add_user_to_team/2" do
+    it "adds the user to the team" do
+      Accounts.add_user_to_team(user(), team())
+      list = Accounts.list_users(team())
 
-    describe "list_users/0" do
-      it "returns all users" do
-        user = user_fixture()
-
-        expect(Accounts.list_users()).to eq([user])
-      end
+      expect(list).to eq([user()])
     end
 
-    describe "get_user!/1" do
-      it "returns the user with the given id" do
-        user = user_fixture()
+    it "adds the given user to a second team" do
+      updated_user =
+        with {:ok, user} <- Accounts.add_user_to_team(user(), team()),
+             {:ok, user} <- Accounts.add_user_to_team(user, other_team())
+        do
+          Repo.preload(user, :teams)
+        end
 
-        expect(Accounts.get_user!(user.id)).to eq(user)
-      end
+      expect(updated_user.teams).to have_length(2)
+      expect(updated_user.teams).to have(team())
+      expect(updated_user.teams).to have(other_team())
+    end
+  end
 
-      it "returns the user with the given user name" do
-        user = user_fixture()
-
-        expect(Accounts.get_user!(user.name)).to eq(user)
-      end
+  describe "remove_user_from_org/2" do
+    before do
+      Accounts.add_user_to_org(user(), org())
+      Accounts.add_user_to_org(other_user(), org())
+      Accounts.add_user_to_org(user(), other_org())
+      Accounts.add_user_to_team(user(), team())
     end
 
-    describe "create_user/1" do
-      it "creates a user when given valid data" do
-        {:ok, %User{} = user} = Accounts.create_user(valid_attrs())
+    it "removes the user from the org" do
+      {:ok, user} = Accounts.remove_user_from_org(user(), org())
+      user = Repo.preload(user, :organizations)
 
-        expect(user.avatar_url).to eq("some avatar_url")
-        expect(user.id).to eq(42)
-        expect(user.name).to eq("some name")
-        expect(user.site_admin).to be_true()
-      end
-
-      it "returns an error changeset when given invalid data" do
-        {:error, changeset} = Accounts.create_user(invalid_attrs())
-
-        expect(changeset).to be_struct(Ecto.Changeset)
-      end
+      expect(user.organizations).to have_length(1)
+      expect(user.organizations).to have(other_org())
     end
 
-    describe "update_user/2" do
-      it "updates the user when given valid data" do
-        user = user_fixture()
-        {:ok, user} = Accounts.update_user(user, update_attrs())
+    it "returns an error changeset when the user is the last member of the org" do
+      {:error, changeset} =
+        Accounts.remove_user_from_org(user(), other_org())
 
-        expect(user).to be_struct(User)
-        expect(user.avatar_url).to eq("some updated avatar_url")
-        expect(user.id).to eq(43)
-        expect(user.name).to eq("some updated name")
-        expect(user.site_admin).to be_false()
-      end
-
-      it "returns an error changeset when given invalid data" do
-        user = user_fixture()
-        {:error, changeset} = Accounts.update_user(user, invalid_attrs())
-
-        expect(changeset).to be_struct(Ecto.Changeset)
-        expect(Accounts.get_user!(user.id)).to eq(user)
-      end
+      expect(changeset).to_not be_valid()
+      expect(changeset).to have_errors(:organizations)
     end
 
-    describe "delete_user/1" do
-      it "deletes the given user" do
-        user = user_fixture()
-        {:ok, %User{}} = Accounts.delete_user(user)
+    it "removes the user from teams belonging to that organization" do
+      {:ok, user} = Accounts.remove_user_from_org(user(), org())
+      user = Repo.preload(user, :teams)
 
-        expect(fn -> Accounts.get_user!(user.id) end).to raise_exception(Ecto.NoResultsError)
-      end
+      expect(user.teams).to have_length(0)
+    end
+  end
+
+  describe "remove_user_from_team/2" do
+    before do
+      Accounts.add_user_to_team(user(), team())
+      Accounts.add_user_to_team(user(), other_team())
     end
 
-    describe "change_user/1" do
-      it "returns a user changeset" do
-        user = user_fixture()
+    it "removes the user from the team" do
+      {:ok, user} = Accounts.remove_user_from_team(user(), team())
 
-        expect(Accounts.change_user(user)).to be_struct(Ecto.Changeset)
-      end
+      expect(user.teams).to have_length(1)
+      expect(user.teams).to have(other_team())
     end
   end
 end

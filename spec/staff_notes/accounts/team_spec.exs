@@ -117,6 +117,25 @@ defmodule StaffNotes.Accounts.TeamSpec do
       end
     end
 
+    describe "original_team/1" do
+      let :original_team_attrs, do: Team.original_team_attrs()
+      let :original_team, do: team_fixture(original_team_attrs())
+      let :valid_team_attrs, do: %{name: "team name", permission: :write, original: false}
+      let :valid_org_attrs, do: %{name: "org name"}
+
+      it "returns the original team when one exists" do
+        team = original_team()
+
+        expect(Accounts.original_team(team.organization_id)).to eq(team)
+      end
+
+      it "returns nil when an original team does not exist" do
+        team = team_fixture(%{name: "some name", permission: :owner, original: false})
+
+        expect(Accounts.original_team(team.organization_id)).to be_nil()
+      end
+    end
+
     describe "update_team/2" do
       it "updates the original team when given valid data" do
         original_team = original_team()

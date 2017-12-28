@@ -17,8 +17,8 @@ defmodule StaffNotes.Accounts.User do
     field :name, :string
     field :site_admin, :boolean, default: false, null: false
 
-    many_to_many :organizations, Organization, join_through: "organizations_users"
-    many_to_many :teams, Team, join_through: "teams_users"
+    many_to_many :organizations, Organization, join_through: "organizations_users", on_replace: :delete
+    many_to_many :teams, Team, join_through: "teams_users", on_replace: :delete
 
     timestamps()
   end
