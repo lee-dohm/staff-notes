@@ -27,13 +27,7 @@ defmodule StaffNotes.Accounts do
   """
   @spec add_user_to_org(User.t, Organization.t) :: {:ok, User.t} | {:error, Changeset.t}
   def add_user_to_org(%User{} = user, %Organization{} = org) do
-    user = Repo.preload(user, :organizations)
-    current_orgs = user.organizations
-
-    user
-    |> Accounts.change_user()
-    |> Changeset.put_assoc(:organizations, [org | current_orgs])
-    |> Repo.update()
+    add_association_to_user(user, org, :organizations)
   end
 
   @doc """
@@ -41,12 +35,16 @@ defmodule StaffNotes.Accounts do
   """
   @spec add_user_to_team(User.t, Team.t) :: {:ok, User.t} | {:error, Changeset.t}
   def add_user_to_team(%User{} = user, %Team{} = team) do
-    user = Repo.preload(user, :teams)
-    current_teams = user.teams
+    add_association_to_user(user, team, :teams)
+  end
+
+  defp add_association_to_user(user, item, key) do
+    user = Repo.preload(user, key)
+    current = Map.get(user, key)
 
     user
     |> Accounts.change_user()
-    |> Changeset.put_assoc(:teams, [team | current_teams])
+    |> Changeset.put_assoc(key, [item | current])
     |> Repo.update()
   end
 
@@ -311,6 +309,54 @@ defmodule StaffNotes.Accounts do
       where: [original: true, organization_id: ^organization_id]
 
     Repo.one(query)
+  end
+
+  @doc """
+  Removes the user from the organization.
+  """
+  @spec remove_user_from_org(User.t, Organization.t) :: {:ok, User.t} | {:error, Changeset.t}
+  def remove_user_from_org(%User{} = user, %Organization{} = org) do
+    remove_association_from_user(user, org, :organizations)
+  end
+
+  @doc """
+  Removes the user from the team.
+  """
+  @spec remove_user_from_team(User.t, Team.t) :: {:ok, User.t} | {:error, Changeset.t}
+  def remove_user_from_team(%User{} = user, %Team{} = team) do
+    remove_association_from_user(user, team, :teams)
+  end
+
+  defp generate_error(changeset, key, message) do
+    {:error, Changeset.add_error(changeset, key, message)}
+  end
+
+  defp remove_associated_item_by_id(record, key, id) do
+    record
+    |> Map.get(key)
+    |> Enum.reject(&(&1.id == id))
+  end
+
+  defp remove_association_from_user(user, item, key) do
+    user = Repo.preload(user, key)
+    updated = remove_associated_item_by_id(user, key, item.id)
+    changeset = Accounts.change_user(user)
+
+    if updated?(user, key, updated) do
+      changeset
+      |> Changeset.put_assoc(key, updated)
+      |> Repo.update()
+    else
+      generate_error(
+        changeset,
+        key,
+        "User is not a member of `#{inspect item}`"
+      )
+    end
+  end
+
+  defp updated?(user, key, updated) do
+    Map.get(user, key) != updated
   end
 
   @doc """
