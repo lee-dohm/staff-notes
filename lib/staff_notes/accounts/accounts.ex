@@ -1,6 +1,17 @@
 defmodule StaffNotes.Accounts do
   @moduledoc """
-  The Accounts context.
+  Represents the business-logic layer of working with the various accounts in the Staff Notes
+  application. There are three types of accounts in Staff Notes:
+
+  * Organizations - Represents an organization that has members whose behavior and achievements
+    need to be tracked by staff users
+  * Teams - Represents a group of users with the same permission level in an organization
+  * Users - Represents a staff member of an organization who will access or author notes
+
+  Business logic specific to a particular record is typically implemented within that module. For
+  example, the logic around original teams is implemented in the `StaffNotes.Accounts.Team` module.
+  Business logic that involves multiple records, such as when a user creates an organization (see
+  the `create_org/1` function) is implemented within this module.
   """
   import Ecto.Query, warn: false
 
@@ -8,6 +19,41 @@ defmodule StaffNotes.Accounts do
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
+
+  @doc """
+  Creates an `Ecto.Changeset` for tracking organization changes.
+  """
+  def change_org(%Organization{} = org) do
+    Organization.changeset(org, %{})
+  end
+
+  @doc """
+  Creates an `Ecto.Changeset` for tracking team changes.
+
+  ## Examples
+
+  ```
+  iex> change_team(team)
+  %Ecto.Changeset{source: %Team{}}
+  ```
+  """
+  def change_team(%Team{} = team) do
+    Team.changeset(team, %{})
+  end
+
+  @doc """
+  Creates an `Ecto.Changeset` for tracking user changes.
+
+  ## Examples
+
+  ```
+  iex> change_user(user)
+  %Ecto.Changeset{source: %User{}}
+  ```
+  """
+  def change_user(%User{} = user) do
+    User.changeset(user, %{})
+  end
 
   @doc """
   Creates an organization.
@@ -30,6 +76,8 @@ defmodule StaffNotes.Accounts do
 
   @doc """
   Creates a team within an organization.
+
+  See `StaffNotes.Accounts.Team.create_team_changeset/2` for applicable business rules.
   """
   def create_team(team_attrs \\ %{}, %Organization{} = org) do
     team_attrs
@@ -37,68 +85,70 @@ defmodule StaffNotes.Accounts do
     |> do_create_team()
   end
 
-  defp do_create_team(attrs) do
+  defp do_create_team(attrs) when is_map(attrs) do
     %Team{}
-    |> Team.changeset(attrs)
+    |> Team.create_team_changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Lists all teams within the organization.
-  """
-  def list_teams(%Organization{} = org) do
-    query =
-      from team in Team,
-        where: team.organization_id == ^org.id
+  Creates a user.
 
-    Repo.all(query)
+  ## Examples
+
+  ```
+  iex> create_user(%{field: value})
+  {:ok, %User{}}
+  ```
+
+  ```
+  iex> create_user(%{field: bad_value})
+  {:error, %Ecto.Changeset{}}
+  ```
+
+  """
+  def create_user(attrs \\ %{}) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
   end
 
   @doc """
-  Gets the team by id.
+  Deletes the organization.
   """
-  def get_team!(id), do: Repo.get!(Team, id)
+  def delete_org(%Organization{} = org) do
+    Repo.delete(org)
+  end
 
   @doc """
   Deletes the team.
+
+  See `StaffNotes.Accounts.Team.detele_team_changeset/1` for applicable business rules.
   """
   def delete_team(%Team{} = team) do
-    Repo.delete(team)
+    team
+    |> Team.delete_team_changeset()
+    |> Repo.delete()
   end
 
   @doc """
-  Creates a changeset for the team.
-  """
-  def change_team(%Team{} = team) do
-    Team.changeset(team, %{})
-  end
-
-  @doc """
-  Returns the list of organizations.
+  Deletes a user.
 
   ## Examples
 
   ```
-  iex> list_orgs()
-  [%Organization{}, ...]
+  iex> delete_user(user)
+  {:ok, %User{}}
   ```
+
+  ```
+  iex> delete_user(user)
+  {:error, %Ecto.Changeset{}}
+  ```
+
   """
-  def list_orgs do
-    Repo.all(Organization)
-  end
-
-  @doc """
-  Returns the list of users.
-
-  ## Examples
-
-  ```
-  iex> list_users()
-  [%User{}, ...]
-  ```
-  """
-  def list_users do
-    Repo.all(User)
+  def delete_user(%User{} = user) do
+    Repo.delete(user)
   end
 
   @doc """
@@ -107,6 +157,11 @@ defmodule StaffNotes.Accounts do
   Raises `Ecto.NoResultsError` if the organization does not exist.
   """
   def get_org!(id), do: Repo.get!(Organization, id)
+
+  @doc """
+  Gets the team by id.
+  """
+  def get_team!(id), do: Repo.get!(Team, id)
 
   @doc """
   Gets a single user.
@@ -140,30 +195,75 @@ defmodule StaffNotes.Accounts do
   def get_user!(id) when is_integer(id), do: Repo.get!(User, id)
 
   @doc """
-  Creates a user.
+  Returns the list of organizations.
 
   ## Examples
 
   ```
-  iex> create_user(%{field: value})
-  {:ok, %User{}}
+  iex> list_orgs()
+  [%Organization{}, ...]
   ```
-
-  ```
-  iex> create_user(%{field: bad_value})
-  {:error, %Ecto.Changeset{}}
-  ```
-
   """
-  def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
+  def list_orgs do
+    Repo.all(Organization)
   end
 
+  @doc """
+  Lists all teams within the organization.
+  """
+  def list_teams(%Organization{} = org) do
+    query =
+      from team in Team,
+        where: team.organization_id == ^org.id
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Returns the list of users.
+
+  ## Examples
+
+  ```
+  iex> list_users()
+  [%User{}, ...]
+  ```
+  """
+  def list_users do
+    Repo.all(User)
+  end
+
+  @doc """
+  Returns the original team for the organization, if it exists.
+
+  This shouldn't be susceptible to race conditions so long as the original team is **always**
+  created along with the organization.
+  """
+  def original_team(organization_id) do
+    query =
+      from team in Team,
+      where: [original: true, organization_id: ^organization_id]
+
+    Repo.one(query)
+  end
+
+  @doc """
+  Updates the organization.
+  """
   def update_org(%Organization{} = org, attrs) do
     org
     |> Organization.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Updates the team.
+
+  See `StaffNotes.Accounts.Team.update_team_changeset/2` for applicable business rules.
+  """
+  def update_team(%Team{} = team, attrs) do
+    team
+    |> Team.update_team_changeset(attrs)
     |> Repo.update()
   end
 
@@ -187,48 +287,5 @@ defmodule StaffNotes.Accounts do
     user
     |> User.changeset(attrs)
     |> Repo.update()
-  end
-
-  def delete_org(%Organization{} = org) do
-    Repo.delete(org)
-  end
-
-  @doc """
-  Deletes a user.
-
-  ## Examples
-
-  ```
-  iex> delete_user(user)
-  {:ok, %User{}}
-  ```
-
-  ```
-  iex> delete_user(user)
-  {:error, %Ecto.Changeset{}}
-  ```
-
-  """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
-  end
-
-  def change_org(%Organization{} = org) do
-    Organization.changeset(org, %{})
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking user changes.
-
-  ## Examples
-
-  ```
-  iex> change_user(user)
-  %Ecto.Changeset{source: %User{}}
-  ```
-
-  """
-  def change_user(%User{} = user) do
-    User.changeset(user, %{})
   end
 end
