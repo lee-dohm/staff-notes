@@ -8,24 +8,6 @@ defmodule StaffNotes.Accounts.TeamSpec do
   import ESpec.Phoenix.Assertions.Changeset.Helpers
 
   describe "teams" do
-    def org_fixture(attrs) do
-      {:ok, org} =
-        %{}
-        |> merge_attrs(attrs)
-        |> Accounts.create_org()
-
-      org
-    end
-
-    def team_fixture(attrs \\ %{}, org \\ org()) do
-      {:ok, team} =
-        regular_team_attrs()
-        |> merge_attrs(attrs)
-        |> Accounts.create_team(org)
-
-      team
-    end
-
     let :org, do: org_fixture(name: "org name")
     let :other_org, do: org_fixture(name: "other org name")
 
@@ -37,12 +19,12 @@ defmodule StaffNotes.Accounts.TeamSpec do
     let :update_attrs, do: %{name: "some updated name", permission: :owner, original: true}
     let :invalid_attrs, do: %{name: nil, permission: nil, original: nil}
 
-    let :original_team, do: team_fixture(original_team_attrs())
-    let :regular_team, do: team_fixture(regular_team_attrs())
+    let :original_team, do: team_fixture(original_team_attrs(), org())
+    let :regular_team, do: team_fixture(regular_team_attrs(), org())
 
     describe "change_team/1" do
       it "returns a team changeset" do
-        team = team_fixture()
+        team = team_fixture(org())
         changeset = Accounts.change_team(team)
 
         expect(changeset).to be_struct(Ecto.Changeset)
@@ -79,7 +61,7 @@ defmodule StaffNotes.Accounts.TeamSpec do
     describe "delete_team/1" do
       it "deletes the given team" do
         _original_team = original_team()
-        team = team_fixture()
+        team = team_fixture(org())
         {:ok, %Team{}} = Accounts.delete_team(team)
 
         expect(fn -> Accounts.get_team!(team.id) end).to raise_exception(Ecto.NoResultsError)
@@ -119,7 +101,7 @@ defmodule StaffNotes.Accounts.TeamSpec do
 
     describe "original_team/1" do
       let :original_team_attrs, do: Team.original_team_attrs()
-      let :original_team, do: team_fixture(original_team_attrs())
+      let :original_team, do: team_fixture(original_team_attrs(), org())
       let :valid_team_attrs, do: %{name: "team name", permission: :write, original: false}
       let :valid_org_attrs, do: %{name: "org name"}
 
@@ -130,7 +112,7 @@ defmodule StaffNotes.Accounts.TeamSpec do
       end
 
       it "returns nil when an original team does not exist" do
-        team = team_fixture(%{name: "some name", permission: :owner, original: false})
+        team = team_fixture(%{name: "some name", permission: :owner, original: false}, org())
 
         expect(Accounts.original_team(team.organization_id)).to be_nil()
       end

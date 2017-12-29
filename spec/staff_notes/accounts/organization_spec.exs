@@ -4,19 +4,11 @@ defmodule StaffNotes.Accounts.OrganizationSpec do
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
 
+  import Spec.Helpers
   import ESpec.Phoenix.Assertions.Changeset.Helpers
 
-  def org_fixture(attrs \\ %{}) do
-    {:ok, org} =
-      attrs
-      |> Enum.into(valid_attrs())
-      |> Accounts.create_org()
-
-    org
-  end
-
   describe "organizations" do
-    let :org, do: org_fixture(valid_attrs())
+    let :org, do: org_fixture()
     let :valid_attrs, do: %{name: "some name"}
     let :update_attrs, do: %{name: "some updated name"}
     let :invalid_attrs, do: %{name: nil}
@@ -32,7 +24,7 @@ defmodule StaffNotes.Accounts.OrganizationSpec do
 
     describe "create_org/1" do
       it "creates an org when given valid information" do
-        expect(org().name).to eq("some name")
+        expect(org().name).to eq("org name")
       end
 
       it "returns an error changeset when given invalid data" do

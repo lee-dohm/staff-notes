@@ -4,43 +4,13 @@ defmodule StaffNotes.AccountsSpec do
   alias StaffNotes.Accounts
   alias StaffNotes.Repo
 
+  import Spec.Helpers
   import ESpec.Phoenix.Assertions.Changeset.Helpers
-
-  def org_fixture(attrs \\ %{}) do
-    {:ok, org} =
-      attrs
-      |> Enum.into(org_attrs())
-      |> Accounts.create_org()
-
-    org
-  end
-
-  def team_fixture(attrs \\ %{}, org \\ org()) do
-    {:ok, team} =
-      attrs
-      |> Enum.into(team_attrs())
-      |> Accounts.create_team(org)
-
-    team
-  end
-
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
-      attrs
-      |> Enum.into(user_attrs())
-      |> Accounts.create_user()
-
-    user
-  end
-
-  let :org_attrs, do: %{name: "org name"}
-  let :team_attrs, do: %{name: "team name", permission: :write, original: false}
-  let :user_attrs, do: %{avatar_url: "some avatar_url", id: 42, name: "some name", site_admin: false}
 
   let :org, do: org_fixture()
   let :other_org, do: org_fixture(%{name: "other org"})
   let :team, do: team_fixture(team_attrs(), org())
-  let :other_team, do: team_fixture(%{name: "other team"})
+  let :other_team, do: team_fixture(%{name: "other team"}, org())
   let :user, do: user_fixture()
   let :other_user, do: user_fixture(%{id: 43, name: "some other name"})
 
