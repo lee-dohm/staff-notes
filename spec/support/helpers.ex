@@ -1,4 +1,4 @@
-defmodule Spec.Helpers do
+defmodule StaffNotes.Support.Helpers do
   alias StaffNotes.Accounts
 
   def org_attrs, do: %{name: "org name"}

@@ -1,4 +1,4 @@
-defmodule ESpec.Phoenix.Assertions.Changeset.BeValid do
+defmodule StaffNotes.Support.Matchers.Changeset.BeValid do
 
   use ESpec.Assertions.Interface
 

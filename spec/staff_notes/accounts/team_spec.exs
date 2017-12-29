@@ -4,8 +4,7 @@ defmodule StaffNotes.Accounts.TeamSpec do
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Team
 
-  import Spec.Helpers
-  import ESpec.Phoenix.Assertions.Changeset.Helpers
+  import StaffNotes.Support.{Helpers, Matchers}
 
   describe "teams" do
     let :org, do: org_fixture(name: "org name")

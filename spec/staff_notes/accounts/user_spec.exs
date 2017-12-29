@@ -5,8 +5,7 @@ defmodule StaffNotes.Accounts.UserSpec do
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.User
 
-  import Spec.Helpers
-  import ESpec.Phoenix.Assertions.Changeset.Helpers
+  import StaffNotes.Support.{Helpers, Matchers}
 
   describe "users" do
     let :user, do: user_fixture()

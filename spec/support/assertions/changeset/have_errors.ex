@@ -1,4 +1,4 @@
-defmodule ESpec.Phoenix.Assertions.Changeset.HaveErrors do
+defmodule StaffNotes.Support.Matchers.Changeset.HaveErrors do
   @moduledoc """
   Implements the `have_errors` matcher.
 
