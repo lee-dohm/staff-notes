@@ -79,41 +79,28 @@ defmodule StaffNotes.Mixfile do
       markdown_processor: ExDoc.Markdown.Cmark,
       groups_for_modules: [
         "Accounts": [
-          StaffNotes.Accounts,
-          StaffNotes.Accounts.Organization,
-          StaffNotes.Accounts.PermissionLevel,
-          StaffNotes.Accounts.Team,
-          StaffNotes.Accounts.User
+          ~r{^StaffNotes\.Accounts}
         ],
         "Controllers": [
-          StaffNotesWeb.AuthController,
-          StaffNotesWeb.PageController,
-          StaffNotesWeb.UserController
+          ~r{^StaffNotesWeb.*Controller$}
         ],
         "Helpers": [
-          StaffNotesWeb.AvatarHelpers,
-          StaffNotesWeb.ErrorHelpers,
-          StaffNotesWeb.Router.Helpers
+          ~r{^StaffNotesWeb.*Helpers$}
         ],
         "Localization": [
           StaffNotesWeb.Gettext
         ],
         "Markdown": [
-          StaffNotes.Markdown,
-          StaffNotes.Markdown.Ecto,
-          StaffNotesWeb.MarkdownEngine
+          ~r{Markdown}
         ],
         "OAuth": [
           StaffNotesWeb.GitHub
         ],
         "Sockets": [
-          StaffNotesWeb.UserSocket
+          ~r{^StaffNotesWeb.*Socket$}
         ],
         "Views": [
-          StaffNotesWeb.ErrorView,
-          StaffNotesWeb.LayoutView,
-          StaffNotesWeb.PageView,
-          StaffNotesWeb.UserView
+          ~r{^StaffNotesWeb.*View$}
         ]
       ],
       extras: [
