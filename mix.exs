@@ -18,8 +18,7 @@ defmodule StaffNotes.Mixfile do
       start_permanent: Mix.env == :prod,
       aliases: aliases(),
       deps: deps(),
-      docs: docs(),
-      preferred_cli_env: [espec: :test]
+      docs: docs()
     ]
   end
 
@@ -67,7 +66,6 @@ defmodule StaffNotes.Mixfile do
       {:dotenv, "~> 2.0", only: :dev},
       {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
-      {:espec_phoenix, "~> 0.6", only: :test},
       {:floki, "~> 0.19", only: [:dev, :test]}
     ]
   end
