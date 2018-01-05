@@ -64,7 +64,7 @@ defmodule StaffNotes.Mixfile do
       {:phoenix_slime, "~> 0.9"},
       {:postgrex, ">= 0.0.0"},
       {:dotenv, "~> 2.0", only: :dev},
-      {:ex_doc, "~> 0.18", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.18", only: [:dev, :test], runtime: false},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:floki, "~> 0.19", only: [:dev, :test]}
     ]
@@ -96,6 +96,10 @@ defmodule StaffNotes.Mixfile do
         ],
         "Sockets": [
           ~r{^StaffNotesWeb.*Socket$}
+        ],
+        "Test": [
+          ~r{^StaffNotes.*(Channel|Conn|Data)Case$},
+          ~r{^StaffNotes.Support}
         ],
         "Views": [
           ~r{^StaffNotesWeb.*View$}
