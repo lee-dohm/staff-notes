@@ -25,7 +25,6 @@ defmodule StaffNotesWeb.ChannelCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(StaffNotes.Repo)
     unless tags[:async] do
@@ -33,5 +32,4 @@ defmodule StaffNotesWeb.ChannelCase do
     end
     :ok
   end
-
 end

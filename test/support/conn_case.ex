@@ -26,7 +26,6 @@ defmodule StaffNotesWeb.ConnCase do
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(StaffNotes.Repo)
     unless tags[:async] do
@@ -34,5 +33,4 @@ defmodule StaffNotesWeb.ConnCase do
     end
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
-
 end
