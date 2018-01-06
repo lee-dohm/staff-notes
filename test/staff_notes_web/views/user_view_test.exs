@@ -8,10 +8,7 @@ defmodule StaffNotesWeb.UserViewTest do
   import Phoenix.View
   import StaffNotes.Support.Helpers
 
-  def escape(text) do
-    text
-    |> String.replace("'", "&#39;", global: true)
-  end
+  def escape(text), do: String.replace(text, "'", "&#39;", global: true)
 
   def staff_badge(user, options \\ []) do
     user
