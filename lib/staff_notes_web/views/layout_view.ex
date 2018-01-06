@@ -1,11 +1,24 @@
 defmodule StaffNotesWeb.LayoutView do
   @moduledoc """
-  View functions for the site's page layout.
+  View functions for the site's main page layout.
   """
   use StaffNotesWeb, :view
 
   alias StaffNotes.Accounts.User
 
+  @typedoc """
+  The application name as an atom.
+  """
+  @type app_name :: atom
+
+  @typedoc """
+  The link information as a tuple of the author's name and URL to link to.
+  """
+  @type link_info :: {String.t, String.t}
+
+  @typedoc """
+  Represents a type that may be a user or may represent nothing.
+  """
   @type maybe_user :: User.t | nil
 
   @doc """
@@ -26,7 +39,7 @@ defmodule StaffNotesWeb.LayoutView do
 
   Options are used to customize the rendering of the element.
 
-  * `:link_options` -- passed as attributes to the author link `a` tag
+  * `:link_options` -- A keyword list passed as attributes to the author link `a` tag
   * All other options are applied as attributes to the containing `div` element
 
   ## Examples
@@ -36,7 +49,7 @@ defmodule StaffNotesWeb.LayoutView do
   #=> "<div><svg .../> with <svg .../> by <a href=\"https://example.com\">Author's Name</a></div>"
   ```
   """
-  @spec code_with_heart(atom | {String.t, String.t}, Keyword.t) :: Phoenix.HTML.safe
+  @spec code_with_heart(app_name | link_info, Keyword.t) :: Phoenix.HTML.safe
   def code_with_heart(link_info, options \\ [])
 
   def code_with_heart(app_name, options) when is_atom(app_name) do
