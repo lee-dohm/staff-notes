@@ -200,6 +200,17 @@ defmodule StaffNotes.Accounts do
   @doc """
   Gets a single user.
 
+  Works the same as `get_user!/1` but returns `nil` instead of raising an error when the user is not
+  found.
+  """
+  @spec get_user(String.t | integer) :: User.t | nil
+  def get_user(name_or_id)
+  def get_user(binary) when is_binary(binary), do: Repo.get_by(User, name: binary)
+  def get_user(id) when is_integer(id), do: Repo.get(User, id)
+
+  @doc """
+  Gets a single user.
+
   Raises `Ecto.NoResultsError` if the user does not exist.
 
   ## Examples
@@ -226,6 +237,7 @@ defmodule StaffNotes.Accounts do
   ```
   """
   @spec get_user!(String.t | integer) :: User.t | no_return
+  def get_user!(name_or_id)
   def get_user!(binary) when is_binary(binary), do: Repo.get_by!(User, name: binary)
   def get_user!(id) when is_integer(id), do: Repo.get!(User, id)
 
