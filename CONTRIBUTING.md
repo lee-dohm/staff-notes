@@ -31,21 +31,31 @@ Other scripts that are available but not intended to be used directly by develop
 * `script/bootstrap` &mdash; Used to do a one-time install of all prerequisites for a development machine
 * `script/cibuild` &mdash; Used to run automated tests in the CI environment
 
-## Documentation
+## Style guide
+
+### Documentation
 
 * **DO** use fenced code blocks rather than indented blocks for examples
 
-## Writing Tests
+### Views
 
-* Controller specs should verify:
-    * HTTP Status
-    * Redirects
-    * Assigns
-    * Session values
-* Controller specs **should not** verify content
-* View specs should verify:
-    * For the entire view that given the expected assigns, the right content is displayed
-    * The output of helper functions
+* **DO** name functions beginning with `render` if they render a child template -- example `StaffNotesWeb.UserView.render_user_orgs/1`
+* **DO** name functions that write elements directly for what they inject -- example `StaffNotesWeb.UserView.staff_badge/2`
+
+### Writing tests
+
+#### Controller tests
+
+* **DO** verify HTTP status
+* **DO** verify redirects
+* **DO** verify assigns
+* **DO** verify session values
+* **DO NOT** verify content
+
+#### View tests
+
+* **DO** verify the correct content is displayed given the expected assigns
+* **DO** verify the output of helper functions
 
 ## Resources
 

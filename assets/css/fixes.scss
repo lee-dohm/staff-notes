@@ -1,0 +1,6 @@
+// primer v10.2.0
+//
+// The default of `-webkit-appearance: button` makes the colors go away
+button, html [type="button"], [type="reset"], [type="submit"] {
+    -webkit-appearance: inherit;
+}

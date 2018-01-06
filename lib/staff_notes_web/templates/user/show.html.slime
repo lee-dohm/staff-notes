@@ -4,3 +4,5 @@
     h2.d-inline-block = @user.name
     = staff_badge(@user, id: "staff-badge", class: "state bg-blue d-inline-block mt-1 float-right")
   .three-fourths.column
+    h2 = gettext("Organizations")
+    = render_user_orgs(@user)

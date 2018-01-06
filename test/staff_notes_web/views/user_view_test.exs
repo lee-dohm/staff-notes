@@ -2,10 +2,16 @@ defmodule StaffNotesWeb.UserViewTest do
   use StaffNotesWeb.ConnCase
   use Phoenix.HTML
 
+  alias StaffNotes.Accounts
   alias StaffNotesWeb.UserView
 
   import Phoenix.View
   import StaffNotes.Support.Helpers
+
+  def escape(text) do
+    text
+    |> String.replace("'", "&#39;", global: true)
+  end
 
   def staff_badge(user, options \\ []) do
     user
@@ -45,6 +51,31 @@ defmodule StaffNotesWeb.UserViewTest do
       content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)
 
       assert content =~ context.user.name
+    end
+  end
+
+  describe "organization block" do
+    setup do
+      {
+        :ok,
+        user: user_fixture()
+      }
+    end
+
+    test "displays the blankslate when not a member of any organizations", context do
+      content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)
+
+      assert content =~ escape(~s(You don't belong to any organizations))
+      assert content =~ ~s(Click here to create one)
+    end
+
+    test "displays the organization name if a member of one", context do
+      org = org_fixture()
+      {:ok, _} = Accounts.add_user_to_org(context.user, org)
+
+      content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)
+
+      assert content =~ org.name
     end
   end
 end
