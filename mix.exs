@@ -72,7 +72,7 @@ defmodule StaffNotes.Mixfile do
 
   defp docs do
     [
-      main: "readme",
+      main: docs_main(Mix.env),
       source_url: "https://github.com/lee-dohm/staff-notes",
       markdown_processor: ExDoc.Markdown.Cmark,
       groups_for_modules: [
@@ -122,6 +122,10 @@ defmodule StaffNotes.Mixfile do
       ],
     ]
   end
+
+  # When generating test documentation, make the default page land in the test docs
+  defp docs_main(:test), do: "StaffNotes.Support.Helpers"
+  defp docs_main(_), do: "readme"
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
