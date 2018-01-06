@@ -1,6 +1,6 @@
 defmodule StaffNotesWeb.UserController do
   @moduledoc """
-  Handles requests under the `/user` path.
+  Handles requests for `StaffNotes.Accounts.User` records.
   """
   use StaffNotesWeb, :controller
 
@@ -12,6 +12,8 @@ defmodule StaffNotesWeb.UserController do
 
   Returns 404 if the user is not found.
   """
+  @spec show(Plug.Conn.t, Map.t) :: Plug.Conn.t
+  def show(conn, params)
   def show(conn, %{"name" => name}), do: do_show(conn, Accounts.get_user(name))
 
   defp do_show(conn, nil) do
