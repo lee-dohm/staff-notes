@@ -9,7 +9,7 @@ defmodule StaffNotesWeb.ErrorViewTest do
     test "returns page not found", context do
       content = render_to_string(ErrorView, "404.html", conn: context.conn)
 
-      assert content =~ "Page not found"
+      assert content =~ ~r(<img.*404)
     end
   end
 
@@ -17,7 +17,7 @@ defmodule StaffNotesWeb.ErrorViewTest do
     test "returns internal server error", context do
       content = render_to_string(ErrorView, "500.html", conn: context.conn)
 
-      assert content =~ "Internal server error"
+      assert content =~ ~r(<img.*500)
     end
   end
 
@@ -25,7 +25,7 @@ defmodule StaffNotesWeb.ErrorViewTest do
     test "returns internal server error", context do
       content = render_to_string(ErrorView, "505.html", conn: context.conn)
 
-      assert content =~ "Internal server error"
+      assert content =~ ~r(<img.*500)
     end
   end
 end
