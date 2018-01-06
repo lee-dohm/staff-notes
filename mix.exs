@@ -18,8 +18,7 @@ defmodule StaffNotes.Mixfile do
       start_permanent: Mix.env == :prod,
       aliases: aliases(),
       deps: deps(),
-      docs: docs(),
-      preferred_cli_env: [espec: :test]
+      docs: docs()
     ]
   end
 
@@ -65,9 +64,8 @@ defmodule StaffNotes.Mixfile do
       {:phoenix_slime, "~> 0.9"},
       {:postgrex, ">= 0.0.0"},
       {:dotenv, "~> 2.0", only: :dev},
-      {:ex_doc, "~> 0.18", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.18", only: [:dev, :test], runtime: false},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
-      {:espec_phoenix, "~> 0.6", only: :test},
       {:floki, "~> 0.19", only: [:dev, :test]}
     ]
   end
@@ -99,6 +97,10 @@ defmodule StaffNotes.Mixfile do
         "Sockets": [
           ~r{^StaffNotesWeb.*Socket$}
         ],
+        "Test": [
+          ~r{^StaffNotes.*(Channel|Conn|Data)Case$},
+          ~r{^StaffNotes.Support}
+        ],
         "Views": [
           ~r{^StaffNotesWeb.*View$}
         ]
@@ -122,6 +124,6 @@ defmodule StaffNotes.Mixfile do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "spec/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_),     do: ["lib"]
 end

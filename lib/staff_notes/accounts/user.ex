@@ -28,8 +28,7 @@ defmodule StaffNotes.Accounts.User do
     user
     |> cast(attrs, [:name, :id, :avatar_url, :site_admin])
     |> validate_required([:name, :id, :avatar_url, :site_admin])
-    |> unique_constraint(:name)
-    |> unique_constraint(:id)
+    |> unique_constraint(:id, name: :users_pkey)
   end
 
   defimpl Phoenix.Param do

@@ -1,4 +1,7 @@
 defmodule StaffNotes.Support.Helpers do
+  @moduledoc """
+  Helpers for tests.
+  """
   alias StaffNotes.Accounts
 
   def org_attrs, do: %{name: "org name"}
