@@ -6,4 +6,4 @@
   .column.three-fourths
     h2 = gettext("Organizations")
     .org-info-list
-      = render_org_info_list(@user)
+      = render_org_info_list(@conn, @user)

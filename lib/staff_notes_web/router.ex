@@ -21,6 +21,10 @@ defmodule StaffNotesWeb.Router do
     get "/about", PageController, :about
 
     resources "/users", UserController, only: [:show], param: "name"
+
+    resources "/orgs", OrganizationController, except: [:index] do
+      # resources "/teams", TeamController
+    end
   end
 
   scope "/auth", StaffNotesWeb do
