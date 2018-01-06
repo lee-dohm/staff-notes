@@ -1,0 +1,2 @@
+.org-info-item
+  h3 = show_org_link(@org)

@@ -1,8 +1,9 @@
 .columns
-  #user-info-block.one-fourth.column
+  #user-info-block.column.one-fourth
     = avatar(@user, size: 230)
     h2.d-inline-block = @user.name
     = staff_badge(@user, id: "staff-badge", class: "state bg-blue d-inline-block mt-1 float-right")
-  .three-fourths.column
+  .column.three-fourths
     h2 = gettext("Organizations")
-    = render_user_orgs(@user)
+    .org-info-list
+      = render_org_info_list(@user)
