@@ -3,6 +3,7 @@ defmodule StaffNotes.Accounts.OrganizationTest do
 
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Ecto.Slug
 
   import StaffNotes.Support.Helpers
 
@@ -11,7 +12,7 @@ defmodule StaffNotes.Accounts.OrganizationTest do
       :ok,
       invalid_attrs: %{name: nil},
       org: org_fixture(),
-      valid_attrs: %{name: "some name"}
+      valid_attrs: %{name: "some-name"}
     }
   end
 
@@ -27,7 +28,7 @@ defmodule StaffNotes.Accounts.OrganizationTest do
     test "creates an org", context do
       {:ok, org} = Accounts.create_org(context.valid_attrs)
 
-      assert org.name == "some name"
+      assert Slug.to_string(org.name) == "some-name"
     end
 
     test "returns an error changeset when given invalid attributes", context do
@@ -68,9 +69,9 @@ defmodule StaffNotes.Accounts.OrganizationTest do
 
   describe "update_org/2" do
     test "updates the org when given valid data", context do
-      {:ok, updated_org} = Accounts.update_org(context.org, %{name: "updated name"})
+      {:ok, updated_org} = Accounts.update_org(context.org, %{name: "updated-name"})
 
-      assert updated_org.name == "updated name"
+      assert Slug.to_string(updated_org.name) == "updated-name"
     end
 
     test "returns an error changeset when given invalid data", context do

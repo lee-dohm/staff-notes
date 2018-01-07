@@ -98,7 +98,7 @@ defmodule StaffNotes.Accounts.TeamTest do
     end
 
     test "returns nil when there is no original team" do
-      org = org_fixture(%{name: "some other org name"})
+      org = org_fixture(%{name: "some-other-org-name"})
 
       refute Accounts.original_team(org.id)
     end

@@ -27,7 +27,7 @@ defmodule StaffNotes.AccountsTest do
     end
 
     test "adds the user to a second org", context do
-      other_org = org_fixture(%{name: "other org"})
+      other_org = org_fixture(%{name: "other-org"})
 
       updated_user =
         with {:ok, user} <- Accounts.add_user_to_org(context.user, context.org),
@@ -69,7 +69,7 @@ defmodule StaffNotes.AccountsTest do
   describe "remove_user_from_org/2" do
     setup context do
       other_user = user_fixture(%{name: "other-user", id: 43})
-      other_org = org_fixture(%{name: "other org"})
+      other_org = org_fixture(%{name: "other-org"})
 
       {:ok, _} = Accounts.add_user_to_org(context.user, context.org)
       {:ok, _} = Accounts.add_user_to_org(other_user, context.org)

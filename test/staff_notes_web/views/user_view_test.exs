@@ -3,6 +3,7 @@ defmodule StaffNotesWeb.UserViewTest do
   use Phoenix.HTML
 
   alias StaffNotes.Accounts
+  alias StaffNotes.Ecto.Slug
   alias StaffNotesWeb.UserView
 
   import Phoenix.View
@@ -72,7 +73,7 @@ defmodule StaffNotesWeb.UserViewTest do
 
       content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)
 
-      assert content =~ org.name
+      assert content =~ Slug.to_string(org.name)
     end
   end
 end
