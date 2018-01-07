@@ -3,6 +3,7 @@ defmodule StaffNotes.Accounts.UserTest do
 
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.User
+  alias StaffNotes.Ecto.Slug
 
   import StaffNotes.Support.Helpers
 
@@ -24,7 +25,7 @@ defmodule StaffNotes.Accounts.UserTest do
       org = org_fixture()
       {:ok, _} = Accounts.add_user_to_org(context.user, org)
 
-      _other_user = user_fixture(%{name: "other name", id: 43})
+      _other_user = user_fixture(%{name: "other-name", id: 43})
 
       users = Accounts.list_users(org)
 
@@ -39,16 +40,16 @@ defmodule StaffNotes.Accounts.UserTest do
     end
 
     test "returns the user with the given user name", context do
-      assert Accounts.get_user!("user name") == context.user
+      assert Accounts.get_user!("user-name") == context.user
     end
   end
 
   describe "create_user/1" do
     test "creates a user when given valid data" do
-      {:ok, %User{} = user} = Accounts.create_user(%{name: "some user name", id: 43, avatar_url: "url", site_admin: false})
+      {:ok, %User{} = user} = Accounts.create_user(%{name: "some-user-name", id: 43, avatar_url: "url", site_admin: false})
 
       assert user.avatar_url == "url"
-      assert user.name == "some user name"
+      assert user.name == %Slug{text: "some-user-name"}
       assert user.id == 43
       refute user.site_admin
     end

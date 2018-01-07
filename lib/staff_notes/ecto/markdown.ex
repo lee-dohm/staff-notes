@@ -1,4 +1,4 @@
-defmodule StaffNotes.Markdown.Ecto do
+defmodule StaffNotes.Ecto.Markdown do
   @moduledoc """
   A custom Ecto type for storing and retrieving blocks of Markdown in the database.
 
@@ -7,11 +7,11 @@ defmodule StaffNotes.Markdown.Ecto do
   ```
   defmodule StaffNotes.Notes.Note do
     use Ecto.Schema
-    alias StaffNotes.Markdown
+    alias StaffNotes.Ecto.Markdown
 
     schema "notes" do
       field :title, :string
-      field :text, Markdown.Ecto
+      field :text, Markdown
     end
   end
   ```

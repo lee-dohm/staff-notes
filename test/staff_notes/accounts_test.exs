@@ -68,7 +68,7 @@ defmodule StaffNotes.AccountsTest do
 
   describe "remove_user_from_org/2" do
     setup context do
-      other_user = user_fixture(%{name: "other user", id: 43})
+      other_user = user_fixture(%{name: "other-user", id: 43})
       other_org = org_fixture(%{name: "other org"})
 
       {:ok, _} = Accounts.add_user_to_org(context.user, context.org)

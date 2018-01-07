@@ -82,6 +82,9 @@ defmodule StaffNotes.Mixfile do
         "Controllers": [
           ~r{^StaffNotesWeb.*Controller$}
         ],
+        "Ecto Types": [
+          ~r{^StaffNotes.Ecto.*}
+        ],
         "Helpers": [
           ~r{^StaffNotesWeb.*Helpers$}
         ],

@@ -9,12 +9,13 @@ defmodule StaffNotes.Accounts.User do
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
+  alias StaffNotes.Ecto.Slug
 
   @primary_key {:id, :id, autogenerate: false}
   @foreign_key_type :id
   schema "users" do
     field :avatar_url, :string
-    field :name, :string
+    field :name, Slug
     field :site_admin, :boolean, default: false, null: false
 
     many_to_many :organizations, Organization, join_through: "organizations_users", on_replace: :delete
