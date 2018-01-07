@@ -17,6 +17,11 @@ defmodule StaffNotesWeb do
   and import those modules here.
   """
 
+  @typedoc """
+  Parameters passed to a controller action.
+  """
+  @type params :: Map.t
+
   def controller do
     quote do
       use Phoenix.Controller, namespace: StaffNotesWeb

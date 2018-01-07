@@ -19,25 +19,25 @@ defmodule StaffNotesWeb.UserView do
   @doc """
   Renders the list of organizations the given user belongs to.
   """
-  def render_org_info_list(user) do
+  def render_org_info_list(conn, user) do
     user = Repo.preload(user, :organizations)
 
-    do_render_org_info_list(user.organizations)
+    do_render_org_info_list(conn, user.organizations)
   end
 
-  defp do_render_org_info_list(orgs) when length(orgs) == 0 do
-    render(__MODULE__, "org_info_blankslate.html")
+  defp do_render_org_info_list(conn, orgs) when length(orgs) == 0 do
+    render(__MODULE__, "org_info_blankslate.html", conn: conn)
   end
 
-  defp do_render_org_info_list(orgs) do
-    render_many(orgs, __MODULE__, "org_info_item.html", as: :org)
+  defp do_render_org_info_list(conn, orgs) do
+    render_many(orgs, __MODULE__, "org_info_item.html", conn: conn, as: :org)
   end
 
   @doc """
   Creates a link to the given organization's show page.
   """
-  def show_org_link(org) do
-    link(org.name, to: "#")
+  def show_org_link(conn, org) do
+    link(org.name, to: organization_path(conn, :show, org))
   end
 
   @doc """

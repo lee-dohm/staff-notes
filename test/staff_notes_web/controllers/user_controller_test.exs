@@ -11,12 +11,14 @@ defmodule StaffNotesWeb.UserControllerTest do
 
       assert html_response(conn, :ok)
       assert conn.assigns.user == context.regular_user
+      assert rendered?(conn, "show.html")
     end
 
     test "a user that doesn't exist returns not found", context do
       conn = get(context.conn, user_path(context.conn, :show, "user that doesn't exist"))
 
       assert html_response(conn, :not_found)
+      assert error_rendered?(conn, :not_found)
       refute conn.assigns[:user]
     end
   end

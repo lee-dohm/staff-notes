@@ -1,0 +1,10 @@
+h2 = @org.name
+.tabnav
+  nav.tabnav-tabs aria-label="Navigation bar"
+    a href="#" class="tabnav-tab selected" aria-current="page" Notes
+    a href="#" class="tabnav-tab"
+      | Members
+      span class="Counter" = length(@org.users)
+    a href="#" class="tabnav-tab"
+      | Teams
+      span class="Counter" = length(@org.teams)
