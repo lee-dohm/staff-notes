@@ -1,14 +1,12 @@
 defmodule StaffNotes.Ecto.Slug do
   @moduledoc """
-  Represents an identifier that can be used in a URL.
+  An `Ecto.Type` that represents an identifier that can be used in a URL.
 
   Follows the GitHub pattern for logins. They consist of:
 
   * Alphanumerics &mdash; `/[a-zA-Z0-9]/`
   * Hyphens &mdash; `/-/`
   * Must begin and end with an alphanumeric
-
-  Which means it must satisfy this regular expression: `/\A[a-z0-9]+(-[a-z0-9]+)*\z/i`
   """
   @pattern ~r{\A[a-z0-9]+(-[a-z0-9]+)*\z}i
 
@@ -71,6 +69,18 @@ defmodule StaffNotes.Ecto.Slug do
   def dump(_other), do: :error
 
   @doc """
+  Converts a slug to iodata.
+  """
+  def to_iodata(%__MODULE__{} = slug), do: __MODULE__.to_string(slug)
+
+  @doc """
+  Converts a slug to a string.
+  """
+  def to_string(%__MODULE__{} = slug) do
+    if StaffNotes.Ecto.Slug.valid?(slug), do: slug.text, else: "INVALID SLUG #{slug.text}"
+  end
+
+  @doc """
   Determines whether the given value is valid to be used as a slug.
   """
   @spec valid?(t | String.t) :: boolean
@@ -79,12 +89,10 @@ defmodule StaffNotes.Ecto.Slug do
   def valid?(_), do: false
 
   defimpl Phoenix.HTML.Safe do
-    def to_iodata(%StaffNotes.Ecto.Slug{} = slug), do: to_string(slug)
+    def to_iodata(%StaffNotes.Ecto.Slug{} = slug), do: StaffNotes.Ecto.Slug.to_iodata(slug)
   end
 
   defimpl String.Chars do
-    def to_string(%StaffNotes.Ecto.Slug{} = slug) do
-      if StaffNotes.Ecto.Slug.valid?(slug), do: slug.text, else: "INVALID SLUG #{slug.text}"
-    end
+    def to_string(%StaffNotes.Ecto.Slug{} = slug), do: StaffNotes.Ecto.Slug.to_string(slug)
   end
 end
