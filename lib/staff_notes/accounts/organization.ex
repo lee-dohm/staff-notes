@@ -29,4 +29,10 @@ defmodule StaffNotes.Accounts.Organization do
     |> validate_required([:name])
     |> unique_constraint(:name)
   end
+
+  defimpl Phoenix.Param do
+    def to_param(%{name: name}) do
+      "#{name}"
+    end
+  end
 end

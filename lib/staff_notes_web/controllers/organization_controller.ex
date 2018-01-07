@@ -40,9 +40,9 @@ defmodule StaffNotesWeb.OrganizationController do
   """
   @spec show(Plug.Conn.t, StaffNotesWeb.params) :: Plug.Conn.t
   def show(conn, params)
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"name" => name}) do
     org =
-      id
+      name
       |> Accounts.get_org!()
       |> Repo.preload([:teams, :users])
 

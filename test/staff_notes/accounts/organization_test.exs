@@ -51,7 +51,7 @@ defmodule StaffNotes.Accounts.OrganizationTest do
 
   describe "get_org!/1" do
     test "returns the org with the given id", context do
-      assert Accounts.get_org!(context.org.id) == context.org
+      assert Accounts.get_org!(context.org.name) == context.org
     end
 
     test "raises an exception when given an invalid id" do
