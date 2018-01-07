@@ -60,6 +60,13 @@ defmodule StaffNotes.Support.Helpers do
   end
 
   @doc """
+  Creates a standard organization and adds it to the test context as `:regular_org`
+  """
+  def setup_regular_org(_context) do
+    {:ok, regular_org: org_fixture()}
+  end
+
+  @doc """
   Creates a standard user and adds it to the test context as `:regular_user`.
   """
   def setup_regular_user(_context) do

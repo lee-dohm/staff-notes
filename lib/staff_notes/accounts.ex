@@ -183,6 +183,8 @@ defmodule StaffNotes.Accounts do
     Repo.delete(user)
   end
 
+  def get_org(name), do: Repo.get_by(Organization, name: name)
+
   @doc """
   Gets a single organization.
 
