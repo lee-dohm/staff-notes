@@ -90,7 +90,7 @@ defmodule StaffNotes.Support.Helpers do
     user
   end
 
-  defp org_attrs, do: %{name: "org name"}
-  defp team_attrs, do: %{name: "team name", permission: :write, original: false}
+  defp org_attrs, do: %{name: "org-name"}
+  defp team_attrs, do: %{name: "team-name", permission: :write, original: false}
   defp user_attrs, do: %{avatar_url: "some avatar_url", id: 42, name: "user-name", site_admin: false}
 end

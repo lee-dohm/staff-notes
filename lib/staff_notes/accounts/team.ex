@@ -2,12 +2,6 @@ defmodule StaffNotes.Accounts.Team do
   @moduledoc """
   A team is a collection of users within an organization that have the same permission level.
 
-  ## Name
-
-  The name of the team is used to create its "slug", the text used within the URL related to the
-  team. The team's slug must be unique when compared to all other team slugs within the
-  organization.
-
   ## Permission Level
 
   There are three permission levels:
@@ -63,13 +57,14 @@ defmodule StaffNotes.Accounts.Team do
   alias StaffNotes.Accounts.PermissionLevel
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
+  alias StaffNotes.Ecto.Slug
 
   @type t :: %__MODULE__{}
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "teams" do
-    field :name, :string
+    field :name, Slug
     field :permission, PermissionLevel
     field :original, :boolean
 
@@ -80,7 +75,7 @@ defmodule StaffNotes.Accounts.Team do
   end
 
   @doc false
-  def original_team_attrs, do: %{name: "Owners", permission: :owner, original: true}
+  def original_team_attrs, do: %{name: "owners", permission: :owner, original: true}
 
   @doc """
   Generates an `Ecto.Changeset` that is applicable to all database operations.
@@ -137,6 +132,12 @@ defmodule StaffNotes.Accounts.Team do
     |> changeset(attrs)
     |> validate_original_field_unchanged()
     |> validate_original_permission()
+  end
+
+  defimpl Phoenix.Param do
+    def to_param(%{name: name}) do
+      "#{name}"
+    end
   end
 
   defp is_original_team?(changeset) do

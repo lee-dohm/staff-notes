@@ -9,11 +9,12 @@ defmodule StaffNotes.Accounts.Organization do
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
+  alias StaffNotes.Ecto.Slug
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "organizations" do
-    field :name, :string
+    field :name, Slug
 
     has_many :teams, Team
     many_to_many :users, User, join_through: "organizations_users"
@@ -27,5 +28,11 @@ defmodule StaffNotes.Accounts.Organization do
     |> cast(attrs, [:name])
     |> validate_required([:name])
     |> unique_constraint(:name)
+  end
+
+  defimpl Phoenix.Param do
+    def to_param(%{name: name}) do
+      "#{name}"
+    end
   end
 end

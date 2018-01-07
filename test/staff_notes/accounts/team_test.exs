@@ -3,6 +3,7 @@ defmodule StaffNotes.Accounts.TeamTest do
 
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Team
+  alias StaffNotes.Ecto.Slug
 
   import StaffNotes.Support.Helpers
 
@@ -15,7 +16,7 @@ defmodule StaffNotes.Accounts.TeamTest do
       org: org,
       original_team: team_fixture(Team.original_team_attrs(), org),
       team: team_fixture(org),
-      valid_attrs: %{name: "some name", permission: :write, original: false}
+      valid_attrs: %{name: "some-name", permission: :write, original: false}
     }
   end
 
@@ -31,7 +32,7 @@ defmodule StaffNotes.Accounts.TeamTest do
     test "creates an team", context do
       {:ok, %Team{} = team} = Accounts.create_team(context.valid_attrs, context.org)
 
-      assert team.name == "some name"
+      assert Slug.to_string(team.name) == "some-name"
       assert team.permission == :write
       refute team.original
     end
@@ -71,13 +72,13 @@ defmodule StaffNotes.Accounts.TeamTest do
   end
 
   describe "get_team!/1" do
-    test "returns the team with the given id", context do
-      assert Accounts.get_team!(context.team.id) == context.team
+    test "returns the team with the given name", context do
+      assert Accounts.get_team!(context.team.name) == context.team
     end
 
     test "raises an exception when given an invalid id" do
       assert_raise Ecto.NoResultsError, fn ->
-        Accounts.get_team!(Ecto.UUID.generate())
+        Accounts.get_team!("no-team-named-this")
       end
     end
   end
@@ -98,7 +99,7 @@ defmodule StaffNotes.Accounts.TeamTest do
     end
 
     test "returns nil when there is no original team" do
-      org = org_fixture(%{name: "some other org name"})
+      org = org_fixture(%{name: "some-other-org-name"})
 
       refute Accounts.original_team(org.id)
     end
@@ -106,17 +107,17 @@ defmodule StaffNotes.Accounts.TeamTest do
 
   describe "update_team/2" do
     test "updates the original team when given valid data", context do
-      {:ok, updated_team} = Accounts.update_team(context.original_team, %{name: "updated name"})
+      {:ok, updated_team} = Accounts.update_team(context.original_team, %{name: "updated-name"})
 
-      assert updated_team.name == "updated name"
+      assert Slug.to_string(updated_team.name) == "updated-name"
       assert updated_team.permission == :owner
       assert updated_team.original
     end
 
     test "updates a regular team when given valid data", context do
-      {:ok, updated_team} = Accounts.update_team(context.team, %{name: "updated name"})
+      {:ok, updated_team} = Accounts.update_team(context.team, %{name: "updated-name"})
 
-      assert updated_team.name == "updated name"
+      assert Slug.to_string(updated_team.name) == "updated-name"
       assert updated_team.permission == :write
       refute updated_team.original
     end

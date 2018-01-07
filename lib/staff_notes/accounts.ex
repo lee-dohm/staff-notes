@@ -189,13 +189,13 @@ defmodule StaffNotes.Accounts do
   Raises `Ecto.NoResultsError` if the organization does not exist.
   """
   @spec get_org!(String.t) :: Organization.t | no_return
-  def get_org!(id), do: Repo.get!(Organization, id)
+  def get_org!(name), do: Repo.get_by!(Organization, name: name)
 
   @doc """
   Gets the team by id.
   """
   @spec get_team!(String.t) :: Team.t | no_return
-  def get_team!(id), do: Repo.get!(Team, id)
+  def get_team!(name), do: Repo.get_by!(Team, name: name)
 
   @doc """
   Gets a single user.
