@@ -49,9 +49,12 @@ defmodule StaffNotes.Markdown do
 
   def to_html(_other), do: ""
 
+  @doc """
+  Converts a block of markdown to iodata.
+  """
+  def to_iodata(%__MODULE__{} = markdown), do: to_html(markdown)
+
   defimpl Phoenix.HTML.Safe do
-    def to_iodata(%StaffNotes.Markdown{} = markdown) do
-      StaffNotes.Markdown.to_html(markdown)
-    end
+    def to_iodata(%StaffNotes.Markdown{} = markdown), do: StaffNotes.Markdown.to_iodata(markdown)
   end
 end

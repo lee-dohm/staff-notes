@@ -7,11 +7,11 @@ defmodule StaffNotes.Ecto.Markdown do
   ```
   defmodule StaffNotes.Notes.Note do
     use Ecto.Schema
-    alias StaffNotes.Ecto
+    alias StaffNotes.Ecto.Markdown
 
     schema "notes" do
       field :title, :string
-      field :text, Ecto.Markdown
+      field :text, Markdown
     end
   end
   ```

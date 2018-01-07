@@ -7,6 +7,19 @@ defmodule StaffNotes.Ecto.Slug do
   * Alphanumerics &mdash; `/[a-zA-Z0-9]/`
   * Hyphens &mdash; `/-/`
   * Must begin and end with an alphanumeric
+
+  Use this as the type of the database field in the schema:
+
+  ```
+  defmodule StaffNotes.Accounts.Organization do
+    use Ecto.Schema
+    alias StaffNotes.Ecto.Slug
+
+    schema "organizations" do
+      field :name, Slug
+    end
+  end
+  ```
   """
   @pattern ~r{\A[a-z0-9]+(-[a-z0-9]+)*\z}i
 
