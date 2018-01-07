@@ -47,7 +47,7 @@ defmodule StaffNotesWeb.UserViewTest do
     test "displays the user's name", context do
       content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)
 
-      assert content =~ context.user.name
+      assert content =~ to_string(context.user.name)
     end
   end
 

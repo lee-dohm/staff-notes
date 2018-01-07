@@ -7,7 +7,7 @@ defmodule StaffNotesWeb.UserControllerTest do
     setup [:setup_regular_user]
 
     test "a user that exists returns ok", context do
-      conn = get(context.conn, user_path(context.conn, :show, context.regular_user.name))
+      conn = get(context.conn, user_path(context.conn, :show, context.regular_user))
 
       assert html_response(conn, :ok)
       assert conn.assigns.user == context.regular_user
@@ -15,7 +15,7 @@ defmodule StaffNotesWeb.UserControllerTest do
     end
 
     test "a user that doesn't exist returns not found", context do
-      conn = get(context.conn, user_path(context.conn, :show, "user that doesn't exist"))
+      conn = get(context.conn, user_path(context.conn, :show, "user-that-does-not-exist"))
 
       assert html_response(conn, :not_found)
       assert error_rendered?(conn, :not_found)
