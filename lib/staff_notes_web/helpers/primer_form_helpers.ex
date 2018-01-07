@@ -1,6 +1,7 @@
 defmodule StaffNotesWeb.PrimerFormHelpers do
   @moduledoc """
-  Helper functions for generating forms that work with [Primer](http://primercss.io/).
+  Helper functions for generating forms that work with
+  [Primer](https://github.com/primer/primer/tree/master/modules/primer-forms).
   """
   use Phoenix.HTML
 
@@ -9,6 +10,8 @@ defmodule StaffNotesWeb.PrimerFormHelpers do
 
   @doc """
   Displays the appropriate input control for the given field.
+
+  See: http://blog.plataformatec.com.br/2016/09/dynamic-forms-with-phoenix/
   """
   def input(form, field) do
     type = Form.input_type(form, field)
