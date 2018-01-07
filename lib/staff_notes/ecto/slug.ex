@@ -2,11 +2,10 @@ defmodule StaffNotes.Ecto.Slug do
   @moduledoc """
   An `Ecto.Type` that represents an identifier that can be used in a URL.
 
-  Follows the GitHub pattern for logins. They consist of:
+  This type also makes it so that `binary_id` is distinguishable from a name because it keeps them
+  both strongly typed.
 
-  * Alphanumerics &mdash; `/[a-zA-Z0-9]/`
-  * Hyphens &mdash; `/-/`
-  * Must begin and end with an alphanumeric
+  ## Use
 
   Use this as the type of the database field in the schema:
 
@@ -20,6 +19,14 @@ defmodule StaffNotes.Ecto.Slug do
     end
   end
   ```
+
+  ## Format
+
+  Follows the GitHub pattern for logins. They consist of:
+
+  * Alphanumerics &mdash; `/[a-zA-Z0-9]/`
+  * Hyphens &mdash; `/-/`
+  * Must begin and end with an alphanumeric
   """
   @pattern ~r{\A[a-z0-9]+(-[a-z0-9]+)*\z}i
 
