@@ -1,7 +1,7 @@
-defmodule StaffNotes.SlugTest do
+defmodule StaffNotes.Ecto.SlugTest do
   use ExUnit.Case, async: true
 
-  alias StaffNotes.Slug
+  alias StaffNotes.Ecto.Slug
 
   defp invalid_slug, do: %Slug{text: invalid_text()}
   defp invalid_text, do: "---foo---"

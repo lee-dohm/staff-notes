@@ -9,7 +9,7 @@ defmodule StaffNotes.Accounts.User do
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
-  alias StaffNotes.Slug
+  alias StaffNotes.Ecto.Slug
 
   @primary_key {:id, :id, autogenerate: false}
   @foreign_key_type :id

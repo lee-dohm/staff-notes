@@ -3,7 +3,7 @@ defmodule StaffNotes.Accounts.UserTest do
 
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.User
-  alias StaffNotes.Slug
+  alias StaffNotes.Ecto.Slug
 
   import StaffNotes.Support.Helpers
 

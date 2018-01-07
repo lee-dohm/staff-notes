@@ -1,4 +1,4 @@
-defmodule StaffNotes.Slug do
+defmodule StaffNotes.Ecto.Slug do
   @moduledoc """
   Represents an identifier that can be used in a URL.
 
@@ -79,12 +79,12 @@ defmodule StaffNotes.Slug do
   def valid?(_), do: false
 
   defimpl Phoenix.HTML.Safe do
-    def to_iodata(%StaffNotes.Slug{} = slug), do: to_string(slug)
+    def to_iodata(%StaffNotes.Ecto.Slug{} = slug), do: to_string(slug)
   end
 
   defimpl String.Chars do
-    def to_string(%StaffNotes.Slug{} = slug) do
-      if StaffNotes.Slug.valid?(slug), do: slug.text, else: "INVALID SLUG #{slug.text}"
+    def to_string(%StaffNotes.Ecto.Slug{} = slug) do
+      if StaffNotes.Ecto.Slug.valid?(slug), do: slug.text, else: "INVALID SLUG #{slug.text}"
     end
   end
 end
