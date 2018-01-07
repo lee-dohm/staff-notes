@@ -34,7 +34,9 @@ defmodule StaffNotesWeb.OrganizationController do
   Renders a form for creating a new organization.
   """
   def new(conn, _params) do
-    conn
+    changeset = Organization.changeset(%Organization{}, %{})
+
+    render(conn, "new.html", changeset: changeset)
   end
 
   @doc """
