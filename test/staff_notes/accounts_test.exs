@@ -108,7 +108,7 @@ defmodule StaffNotes.AccountsTest do
 
   describe "remove_user_from_team/2" do
     setup context do
-      other_team = team_fixture(%{name: "other team"}, context.org)
+      other_team = team_fixture(%{name: "other-team"}, context.org)
       {:ok, _} = Accounts.add_user_to_team(context.user, context.team)
       {:ok, _} = Accounts.add_user_to_team(context.user, other_team)
 
