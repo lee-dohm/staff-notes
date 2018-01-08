@@ -2,9 +2,9 @@ defmodule StaffNotes.Support.Helpers do
   @moduledoc """
   Function helpers for tests.
 
-  There are three types of helper functions:
+  There are a few common types of helper functions:
 
-  * Functions that end in `?` are tests intended to be used in assertions
+  * Functions that are intended to be used in assertions end in `?`
   * `fixture` functions that create records in the database and return the data object
   * `setup` functions that are intended to be called from `ExUnit.Callbacks.setup/1` to add items
   to the test context
@@ -38,6 +38,11 @@ defmodule StaffNotes.Support.Helpers do
   end
 
   @doc """
+  Replaces characters in the string with their HTML-escaped versions.
+  """
+  def escape(text), do: String.replace(text, "'", "&#39;", global: true)
+
+  @doc """
   Inserts a new organization into the database and returns it.
   """
   def org_fixture(attrs \\ %{}) do
@@ -57,6 +62,13 @@ defmodule StaffNotes.Support.Helpers do
   def rendered?(conn, nil, template), do: view_template(conn) == template
   def rendered?(conn, module, template) do
     view_module(conn) == module && rendered?(conn, template)
+  end
+
+  @doc """
+  Creates a standard organization and adds it to the test context as `:regular_org`
+  """
+  def setup_regular_org(_context) do
+    {:ok, regular_org: org_fixture()}
   end
 
   @doc """

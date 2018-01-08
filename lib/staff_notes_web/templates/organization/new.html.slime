@@ -1,0 +1,5 @@
+= form_for @changeset, organization_path(@conn, :create), fn f ->
+  = input(f, :name)
+
+  .form-actions
+    = submit(gettext("Submit new organization"), class: "btn btn-primary")

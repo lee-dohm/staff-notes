@@ -1,1 +1,24 @@
-img class="centered" src="https://http.cat/404"
+doctype html
+html lang="en"
+  head
+    meta charset="utf-8"
+    meta content="IE=edge" http-equiv="X-UA-Compatible"
+    meta content="width=device-width, initial-scale=1" name="viewport"
+    meta content="" name="description"
+    meta content="" name="author"
+
+    title = gettext "Staff Notes"
+    link rel="stylesheet" href="#{static_path(@conn, "/css/app.css")}"
+
+  body
+    header.masthead
+      .container
+        a.masthead-logo href="/"
+          = mega_octicon("file-text")
+          = gettext "Staff Notes"
+
+    .container
+      main role="main"
+        img class="centered" src="https://http.cat/404"
+
+    script src="#{static_path(@conn, "/js/app.js")}"

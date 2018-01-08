@@ -5,7 +5,9 @@ defmodule StaffNotesWeb.OrganizationController do
   use StaffNotesWeb, :controller
 
   alias StaffNotes.Accounts
+  alias StaffNotes.Accounts.Organization
   alias StaffNotes.Repo
+  alias StaffNotesWeb.ErrorView
 
   @doc """
   Receives parameters for creating a new organization and saves it in the database.
@@ -15,14 +17,14 @@ defmodule StaffNotesWeb.OrganizationController do
   end
 
   @doc """
-  Receives an organization to be deleted by id and deletes it from the database.
+  Receives an organization to be deleted by name and deletes it from the database.
   """
   def delete(conn, _params) do
     conn
   end
 
   @doc """
-  Receives an organization by id and renders a form for editing it.
+  Receives an organization by name and renders a form for editing it.
   """
   def edit(conn, _params) do
     conn
@@ -32,19 +34,27 @@ defmodule StaffNotesWeb.OrganizationController do
   Renders a form for creating a new organization.
   """
   def new(conn, _params) do
-    conn
+    changeset = Organization.changeset(%Organization{}, %{})
+
+    render(conn, "new.html", changeset: changeset)
   end
 
   @doc """
-  Renders an organization by id.
+  Renders an organization by name.
   """
   @spec show(Plug.Conn.t, StaffNotesWeb.params) :: Plug.Conn.t
   def show(conn, params)
-  def show(conn, %{"name" => name}) do
-    org =
-      name
-      |> Accounts.get_org!()
-      |> Repo.preload([:teams, :users])
+  def show(conn, %{"name" => name}), do: do_show(conn, Accounts.get_org(name))
+
+  defp do_show(conn, nil) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(ErrorView)
+    |> render("404.html")
+  end
+
+  defp do_show(conn, %Organization{} = org) do
+    org = Repo.preload(org, [:teams, :users])
 
     conn
     |> assign(:org, org)
@@ -52,7 +62,7 @@ defmodule StaffNotesWeb.OrganizationController do
   end
 
   @doc """
-  Receives paramets for updating an organization and saves it to the database.
+  Receives parameters for updating an organization and saves it to the database.
   """
   def update(conn, _params) do
     conn

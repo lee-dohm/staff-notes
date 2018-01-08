@@ -14,12 +14,10 @@ defmodule StaffNotesWeb.UserControllerTest do
       assert rendered?(conn, "show.html")
     end
 
-    test "a user that doesn't exist returns not found", context do
-      conn = get(context.conn, user_path(context.conn, :show, "user-that-does-not-exist"))
-
-      assert html_response(conn, :not_found)
-      assert error_rendered?(conn, :not_found)
-      refute conn.assigns[:user]
+    test "a user that doesn't exist raises NoResultsError", context do
+      assert_raise Ecto.NoResultsError, fn ->
+        get(context.conn, user_path(context.conn, :show, "user-that-does-not-exist"))
+      end
     end
   end
 end
