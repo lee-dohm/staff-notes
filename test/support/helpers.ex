@@ -42,7 +42,6 @@ defmodule StaffNotes.Support.Helpers do
   """
   def escape(text), do: String.replace(text, "'", "&#39;", global: true)
 
-
   @doc """
   Inserts a new organization into the database and returns it.
   """
