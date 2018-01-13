@@ -18,8 +18,8 @@ defmodule StaffNotes.Accounts.Organization do
   schema "organizations" do
     field :name, Slug
 
-    has_many :teams, Team
-    many_to_many :users, User, join_through: "organizations_users"
+    many_to_many :users, User, join_through: "organizations_users", on_delete: :delete_all
+    has_many :teams, Team, on_delete: :delete_all
 
     timestamps()
   end
