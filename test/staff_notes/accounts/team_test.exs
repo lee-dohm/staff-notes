@@ -16,7 +16,6 @@ defmodule StaffNotes.Accounts.TeamTest do
       :ok,
       invalid_attrs: %{name: nil, permission: nil, original: nil},
       org: org,
-      original_team: team_fixture(Team.original_team_attrs(), org),
       team: team_fixture(org),
       valid_attrs: %{name: "some-name", permission: :write, original: false}
     }
