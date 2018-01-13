@@ -5,8 +5,8 @@ defmodule StaffNotes.IEx.Helpers do
   All of these functions are available directly at the interactive prompt with no namespace
   necessary.
   """
-
-  alias StaffNotes.Accounts
+  alias Ecto.Query
+  alias StaffNotes.{Accounts, Repo}
   alias StaffNotes.Accounts.User
 
   @doc """
@@ -27,6 +27,21 @@ defmodule StaffNotes.IEx.Helpers do
   """
   @spec demote_user(User.t) :: User.t
   def demote_user(%User{} = user), do: Accounts.update_user(user, %{site_admin: false})
+
+  @doc """
+  Gets the first record that matches the given query.
+
+  ## Examples
+
+  ```
+  dat Organization
+  ```
+  """
+  def dat(queryable) do
+    queryable
+    |> Query.first()
+    |> Repo.one()
+  end
 
   @doc """
   Promotes the named user to a site admin.
