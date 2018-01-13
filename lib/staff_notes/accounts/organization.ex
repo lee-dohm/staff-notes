@@ -6,6 +6,8 @@ defmodule StaffNotes.Accounts.Organization do
 
   import Ecto.Changeset
 
+  alias Ecto.Multi
+  alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
@@ -28,6 +30,23 @@ defmodule StaffNotes.Accounts.Organization do
     |> cast(attrs, [:name])
     |> validate_required([:name])
     |> unique_constraint(:name)
+  end
+
+  @doc false
+  def create_org_changeset(attrs \\ %{}, %User{} = user) do
+    changeset = Organization.changeset(%Organization{}, attrs)
+
+    Multi.new
+    |> Multi.insert(:org, changeset)
+    |> Multi.run(:team, fn(%{org: org}) ->
+         Accounts.create_team(Team.original_team_attrs(), org)
+       end)
+    |> Multi.run(:add_user_to_org, fn(%{org: org}) ->
+         Accounts.add_user_to_org(user, org)
+       end)
+    |> Multi.run(:add_user_to_team, fn(%{team: team}) ->
+         Accounts.add_user_to_team(user, team)
+       end)
   end
 
   defimpl Phoenix.Param do

@@ -51,10 +51,13 @@ defmodule StaffNotesWeb.UserViewTest do
   end
 
   describe "organization block" do
-    setup do
+    setup [:setup_regular_org]
+
+    setup(context) do
       {
         :ok,
-        user: user_fixture()
+        org: context.regular_org,
+        user: context.regular_user
       }
     end
 
@@ -66,7 +69,7 @@ defmodule StaffNotesWeb.UserViewTest do
     end
 
     test "displays the organization name if a member of one", context do
-      org = org_fixture()
+      org = context.org
       {:ok, _} = Accounts.add_user_to_org(context.user, org)
 
       content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)

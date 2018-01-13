@@ -7,10 +7,12 @@ defmodule StaffNotes.Accounts.UserTest do
 
   import StaffNotes.Support.Helpers
 
-  setup do
+  setup [:setup_regular_org]
+
+  setup(context) do
     {
       :ok,
-      user: user_fixture()
+      user: context.regular_user
     }
   end
 
@@ -22,7 +24,7 @@ defmodule StaffNotes.Accounts.UserTest do
 
   describe "list_users/1" do
     test "returns all users in an organization", context do
-      org = org_fixture()
+      org = context.regular_org
       {:ok, _} = Accounts.add_user_to_org(context.user, org)
 
       _other_user = user_fixture(%{name: "other-name", id: 43})

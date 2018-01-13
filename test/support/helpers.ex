@@ -23,6 +23,7 @@ defmodule StaffNotes.Support.Helpers do
   """
   alias Plug.Conn.Status
   alias StaffNotes.Accounts
+  alias StaffNotes.Accounts.User
   alias StaffNotesWeb.ErrorView
 
   import Phoenix.Controller, only: [view_module: 1, view_template: 1]
@@ -45,11 +46,11 @@ defmodule StaffNotes.Support.Helpers do
   @doc """
   Inserts a new organization into the database and returns it.
   """
-  def org_fixture(attrs \\ %{}) do
-    {:ok, org} =
+  def org_fixture(attrs \\ %{}, %User{} = user) do
+    {:ok, %{org: org}} =
       attrs
       |> Enum.into(org_attrs())
-      |> Accounts.create_org()
+      |> Accounts.create_org(user)
 
     org
   end
@@ -67,8 +68,14 @@ defmodule StaffNotes.Support.Helpers do
   @doc """
   Creates a standard organization and adds it to the test context as `:regular_org`
   """
+  def setup_regular_org(%{regular_user: user}) do
+    {:ok, regular_org: org_fixture(user)}
+  end
+
   def setup_regular_org(_context) do
-    {:ok, regular_org: org_fixture()}
+    user = user_fixture()
+
+    {:ok, regular_org: org_fixture(user), regular_user: user}
   end
 
   @doc """

@@ -7,8 +7,10 @@ defmodule StaffNotes.Accounts.TeamTest do
 
   import StaffNotes.Support.Helpers
 
-  setup do
-    org = org_fixture()
+  setup [:setup_regular_org]
+
+  setup(context) do
+    org = context.regular_org
 
     {
       :ok,

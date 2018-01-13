@@ -6,14 +6,14 @@ defmodule StaffNotes.AccountsTest do
 
   import StaffNotes.Support.Helpers
 
-  setup do
-    org = org_fixture()
+  setup [:setup_regular_org]
 
+  setup(context) do
     {
       :ok,
-      org: org,
-      team: team_fixture(org),
-      user: user_fixture()
+      org: context.regular_org,
+      team: team_fixture(context.regular_org),
+      user: context.regular_user
     }
   end
 
