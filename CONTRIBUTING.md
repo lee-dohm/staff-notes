@@ -25,6 +25,8 @@ This project follows the [GitHub "scripts to rule them all" pattern](http://gith
 * `script/console` &mdash; Opens the development console
 * `script/db-console` &mdash; Opens the database console for the development database
 * `script/docs` &mdash; Generates developer documentation
+    * `--open` Opens the documentation in the local web browser after generation
+    * `--test` Generates the documentation including test modules and helpers
 
 Other scripts that are available but not intended to be used directly by developers:
 
@@ -56,6 +58,10 @@ Other scripts that are available but not intended to be used directly by develop
 ### Documentation
 
 * **DO** use fenced code blocks rather than indented blocks for examples
+
+### Templates
+
+Templates for this web application are written using [Slime](https://github.com/slime-lang/slime) and the [Phoenix Slime engine](https://github.com/slime-lang/phoenix_slime).
 
 ### Views
 
