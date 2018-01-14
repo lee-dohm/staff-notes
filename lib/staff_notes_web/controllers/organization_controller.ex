@@ -13,10 +13,12 @@ defmodule StaffNotesWeb.OrganizationController do
   Receives parameters for creating a new organization and saves it in the database.
   """
   def create(conn, %{"organization" => org}) do
-    {:ok, results} = Accounts.create_org(org, conn.assigns.current_user)
-
-    conn
-    |> redirect(to: organization_path(conn, :show, results.org))
+    case Accounts.create_org(org, conn.assigns.current_user) do
+      {:ok, results} ->
+        redirect(conn, to: organization_path(conn, :show, results.org))
+      {:error, :org, changeset, %{}} ->
+        render(conn, "new.html", changeset: changeset)
+    end
   end
 
   @doc """
