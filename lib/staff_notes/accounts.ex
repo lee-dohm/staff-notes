@@ -209,6 +209,16 @@ defmodule StaffNotes.Accounts do
   @spec get_team!(String.t) :: Team.t | no_return
   def get_team!(name), do: Repo.get_by!(Team, name: name)
 
+  def get_team!(org_name, team_name) do
+    query =
+      from t in Team,
+      join: o in Organization, on: o.id == t.organization_id,
+      where: o.name == ^org_name,
+      where: t.name == ^team_name
+
+    Repo.one!(query)
+  end
+
   @doc """
   Gets a single user.
 

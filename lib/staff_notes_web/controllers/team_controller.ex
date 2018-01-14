@@ -54,7 +54,10 @@ defmodule StaffNotesWeb.TeamController do
   Displays a team for an organization.
   """
   def show(conn, %{"organization_name" => org_name, "id" => team_name}) do
-    team = Accounts.get_team!(team_name)
+    team =
+      org_name
+      |> Accounts.get_team!(team_name)
+      |> Repo.preload([:organization])
 
     render(conn, "show.html", team: team)
   end
