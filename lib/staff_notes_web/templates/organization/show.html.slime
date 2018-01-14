@@ -1,17 +1,7 @@
 h2 = @org.name
-.tabnav
-  nav.tabnav-tabs aria-label="Navigation bar"
-    a href="#" class="tabnav-tab selected" aria-current="page"
-      = octicon(:"file-text")
-      = gettext("Notes")
-    a href="#" class="tabnav-tab"
-      = octicon(:organization)
-      = gettext("Staff")
-      span class="Counter" = length(@org.users)
-    a href="#" class="tabnav-tab"
-      = octicon(:jersey)
-      = gettext("Teams")
-      span class="Counter" = length(@org.teams)
-    a href="#{organization_path(@conn, :edit, @org)}" class="tabnav-tab float-right"
-      = octicon(:gear)
-      = gettext("Settings")
+
+= render_tabnav do
+  = tabnav_item(gettext("Notes"), organization_path(@conn, :show, @org), icon: :"file-text", selected: true)
+  = tabnav_item(gettext("Staff"), "#", counter: length(@org.users), icon: :organization)
+  = tabnav_item(gettext("Teams"), "#", counter: length(@org.teams), icon: :jersey)
+  = tabnav_item(gettext("Settings"), organization_path(@conn, :edit, @org), icon: :gear, right: true)
