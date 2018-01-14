@@ -6,8 +6,9 @@ defmodule StaffNotes.IEx.Helpers do
   necessary.
   """
   alias Ecto.Query
-  alias StaffNotes.{Accounts, Repo}
+  alias StaffNotes.Accounts
   alias StaffNotes.Accounts.User
+  alias StaffNotes.Repo
 
   @doc """
   Cleanly shuts down the local node and exits the shell.
