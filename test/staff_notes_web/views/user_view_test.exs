@@ -62,7 +62,8 @@ defmodule StaffNotesWeb.UserViewTest do
     end
 
     test "displays the blankslate when not a member of any organizations", context do
-      content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)
+      new_user = user_fixture(%{name: "brand-new-user", id: 43})
+      content = render_to_string(UserView, "show.html", conn: context.conn, user: new_user)
 
       assert content =~ escape(~s(You don't belong to any organizations))
       assert content =~ ~s(Click here to create one)

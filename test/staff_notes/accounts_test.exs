@@ -54,7 +54,7 @@ defmodule StaffNotes.AccountsTest do
 
   describe "remove_user_from_org/2" do
     test "removes the user from the org", context do
-      {:ok, %User{} = user} = Accounts.add_user_to_org(context.user, context.other_org)
+      {:ok, %User{}} = Accounts.add_user_to_org(context.user, context.other_org)
       {:ok, %User{} = user} = Accounts.remove_user_from_org(context.user, context.other_org)
       user = Repo.preload(user, :organizations)
 
