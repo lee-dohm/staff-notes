@@ -133,7 +133,7 @@ defmodule StaffNotesWeb.LayoutView do
       end,
       link(to: user_path(conn, :show, current_user)) do
         [
-          current_user.name,
+          to_string(current_user.name),
           avatar(current_user, size: 36)
         ]
       end

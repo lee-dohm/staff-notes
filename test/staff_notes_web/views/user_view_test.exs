@@ -51,22 +51,26 @@ defmodule StaffNotesWeb.UserViewTest do
   end
 
   describe "organization block" do
-    setup do
+    setup [:setup_regular_org]
+
+    setup(context) do
       {
         :ok,
-        user: user_fixture()
+        org: context.regular_org,
+        user: context.regular_user
       }
     end
 
     test "displays the blankslate when not a member of any organizations", context do
-      content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)
+      new_user = user_fixture(%{name: "brand-new-user", id: 43})
+      content = render_to_string(UserView, "show.html", conn: context.conn, user: new_user)
 
       assert content =~ escape(~s(You don't belong to any organizations))
       assert content =~ ~s(Click here to create one)
     end
 
     test "displays the organization name if a member of one", context do
-      org = org_fixture()
+      org = context.org
       {:ok, _} = Accounts.add_user_to_org(context.user, org)
 
       content = render_to_string(UserView, "show.html", conn: context.conn, user: context.user)

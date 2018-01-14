@@ -7,14 +7,15 @@ defmodule StaffNotes.Accounts.TeamTest do
 
   import StaffNotes.Support.Helpers
 
-  setup do
-    org = org_fixture()
+  setup [:setup_regular_org]
+
+  setup(context) do
+    org = context.regular_org
 
     {
       :ok,
       invalid_attrs: %{name: nil, permission: nil, original: nil},
       org: org,
-      original_team: team_fixture(Team.original_team_attrs(), org),
       team: team_fixture(org),
       valid_attrs: %{name: "some-name", permission: :write, original: false}
     }
@@ -64,7 +65,8 @@ defmodule StaffNotes.Accounts.TeamTest do
     end
 
     test "returns an error changeset when attempting to delete the original team", context do
-      {:error, %Ecto.Changeset{} = changeset} = Accounts.delete_team(context.original_team)
+      team = Accounts.original_team(context.org.id)
+      {:error, %Ecto.Changeset{} = changeset} = Accounts.delete_team(team)
 
       refute changeset.valid?
       assert errors_on(changeset).original
@@ -85,21 +87,29 @@ defmodule StaffNotes.Accounts.TeamTest do
 
   describe "list_teams/0" do
     test "lists all teams", context do
+      original_team = Accounts.original_team(context.org.id)
       teams = Accounts.list_teams(context.org)
 
       assert length(teams) == 2
-      assert context.original_team in teams
+      assert original_team in teams
       assert context.team in teams
     end
   end
 
   describe "original_team/1" do
     test "returns the original team for the given organization", context do
-      assert Accounts.original_team(context.org.id) == context.original_team
+      query =
+        from t in Team,
+          where: t.organization_id == ^context.org.id,
+          where: t.original
+      team = Repo.one(query)
+
+      assert Accounts.original_team(context.org.id) == team
     end
 
     test "returns nil when there is no original team" do
-      org = org_fixture(%{name: "some-other-org-name"})
+      changeset = Accounts.change_org(%StaffNotes.Accounts.Organization{name: "yet-another-org"})
+      {:ok, org} = Repo.insert(changeset)
 
       refute Accounts.original_team(org.id)
     end
@@ -107,7 +117,8 @@ defmodule StaffNotes.Accounts.TeamTest do
 
   describe "update_team/2" do
     test "updates the original team when given valid data", context do
-      {:ok, updated_team} = Accounts.update_team(context.original_team, %{name: "updated-name"})
+      team = Accounts.original_team(context.org.id)
+      {:ok, updated_team} = Accounts.update_team(team, %{name: "updated-name"})
 
       assert Slug.to_string(updated_team.name) == "updated-name"
       assert updated_team.permission == :owner
@@ -130,7 +141,8 @@ defmodule StaffNotes.Accounts.TeamTest do
     end
 
     test "returns an error changeset when trying to mark an original team as not original", context do
-      {:error, changeset} = Accounts.update_team(context.original_team, %{original: false})
+      team = Accounts.original_team(context.org.id)
+      {:error, changeset} = Accounts.update_team(team, %{original: false})
 
       refute changeset.valid?
       assert %{original: ["A team's original field cannot be changed"]} = errors_on(changeset)
@@ -144,7 +156,8 @@ defmodule StaffNotes.Accounts.TeamTest do
     end
 
     test "returns an error changeset when trying to change permission level of original team", context do
-      {:error, changeset} = Accounts.update_team(context.original_team, %{permission: :read})
+      team = Accounts.original_team(context.org.id)
+      {:error, changeset} = Accounts.update_team(team, %{permission: :read})
 
       refute changeset.valid?
       assert %{permission: ["Cannot change the permission level of the original team"]} = errors_on(changeset)

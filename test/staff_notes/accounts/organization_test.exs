@@ -7,11 +7,13 @@ defmodule StaffNotes.Accounts.OrganizationTest do
 
   import StaffNotes.Support.Helpers
 
-  setup do
+  setup [:setup_regular_org]
+
+  setup(context) do
     {
       :ok,
       invalid_attrs: %{name: nil},
-      org: org_fixture(),
+      org: context.regular_org,
       valid_attrs: %{name: "some-name"}
     }
   end
@@ -26,13 +28,13 @@ defmodule StaffNotes.Accounts.OrganizationTest do
 
   describe "create_org/1" do
     test "creates an org", context do
-      {:ok, org} = Accounts.create_org(context.valid_attrs)
+      {:ok, %{org: org}} = Accounts.create_org(context.valid_attrs, context.regular_user)
 
       assert Slug.to_string(org.name) == "some-name"
     end
 
     test "returns an error changeset when given invalid attributes", context do
-      {:error, changeset} = Accounts.create_org(context.invalid_attrs)
+      {:error, :org, changeset, _} = Accounts.create_org(context.invalid_attrs, context.regular_user)
 
       refute changeset.valid?
       assert %{name: ["can't be blank"]} = errors_on(changeset)

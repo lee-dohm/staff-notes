@@ -17,13 +17,13 @@ defmodule StaffNotes.Repo.Migrations.CreateTeams do
     end
 
     create table(:teams_users, primary_key: false) do
-      add :team_id, references(:teams, type: :binary_id)
-      add :user_id, references(:users, type: :id)
+      add :team_id, references(:teams, type: :binary_id, on_delete: :delete_all)
+      add :user_id, references(:users, type: :id, on_delete: :delete_all)
     end
 
     create table(:organizations_users, primary_key: false) do
-      add :organization_id, references(:organizations, type: :binary_id)
-      add :user_id, references(:users, type: :id)
+      add :organization_id, references(:organizations, type: :binary_id, on_delete: :delete_all)
+      add :user_id, references(:users, type: :id, on_delete: :delete_all)
     end
   end
 

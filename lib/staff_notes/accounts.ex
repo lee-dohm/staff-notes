@@ -88,17 +88,17 @@ defmodule StaffNotes.Accounts do
 
   1. It is created by a user
   1. The organization is created
-  1. An "Owners" team is created for that organization (with "owner" permissions)
+  1. An "owners" team is created for that organization (with "owner" permissions)
   1. The creating user is added to the organization
-  1. The creating user is added to the "Owners" team
+  1. The creating user is added to the "owners" team
 
   All of this is executed in a database transaction so if any step fails, it all gets rolled back.
   """
-  @spec create_org(Map.t) :: {:ok, Organization.t} | {:error, Changeset.t}
-  def create_org(attrs \\ %{}) do
-    %Organization{}
-    |> Organization.changeset(attrs)
-    |> Repo.insert()
+  @spec create_org(Map.t, User.t) :: {:ok, Organization.t} | {:error, Changeset.t}
+  def create_org(attrs \\ %{}, %User{} = user) do
+    attrs
+    |> Organization.create_org_changeset(user)
+    |> Repo.transaction()
   end
 
   @doc """

@@ -69,7 +69,7 @@ defmodule StaffNotes.Accounts.Team do
     field :original, :boolean
 
     belongs_to :organization, Organization
-    many_to_many :users, User, join_through: "teams_users"
+    many_to_many :users, User, join_through: "teams_users", on_delete: :delete_all
 
     timestamps()
   end
