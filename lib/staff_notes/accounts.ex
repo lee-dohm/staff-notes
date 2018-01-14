@@ -133,7 +133,6 @@ defmodule StaffNotes.Accounts do
   iex> create_user(%{field: bad_value})
   {:error, %Ecto.Changeset{}}
   ```
-
   """
   @spec create_user(Map.t) :: {:ok, User.t} | {:error, Changeset.t}
   def create_user(attrs \\ %{}) do
@@ -144,6 +143,9 @@ defmodule StaffNotes.Accounts do
 
   @doc """
   Deletes the organization.
+
+  This also deletes all teams within the organization and disassociates all users from the
+  organization and its teams.
   """
   @spec delete_org(Organization.t) :: {:ok, Organization.t} | {:error, Changeset.t}
   def delete_org(%Organization{} = org) do
@@ -153,7 +155,7 @@ defmodule StaffNotes.Accounts do
   @doc """
   Deletes the team.
 
-  See `StaffNotes.Accounts.Team.detele_team_changeset/1` for applicable business rules.
+  See `StaffNotes.Accounts.Team.delete_team_changeset/1` for applicable business rules.
   """
   @spec delete_team(Team.t) :: {:ok, Team.t} | {:error, Changeset.t}
   def delete_team(%Team{} = team) do
@@ -176,13 +178,19 @@ defmodule StaffNotes.Accounts do
   iex> delete_user(user)
   {:error, %Ecto.Changeset{}}
   ```
-
   """
   @spec delete_user(User.t) :: {:ok, User.t} | {:error, Changeset.t}
   def delete_user(%User{} = user) do
     Repo.delete(user)
   end
 
+  @doc """
+  Gets a single organization.
+
+  Works the same as `get_org!/1` but returns `nil` instead of raising an error when the organization
+  is not found.
+  """
+  @spec get_org(String.t) :: Organization.t | nil
   def get_org(name), do: Repo.get_by(Organization, name: name)
 
   @doc """
@@ -195,6 +203,8 @@ defmodule StaffNotes.Accounts do
 
   @doc """
   Gets the team by id.
+
+  Raises `Ecto.NoResultsError` if the team does not exist.
   """
   @spec get_team!(String.t) :: Team.t | no_return
   def get_team!(name), do: Repo.get_by!(Team, name: name)
@@ -315,7 +325,8 @@ defmodule StaffNotes.Accounts do
   def original_team(organization_id) do
     query =
       from team in Team,
-      where: [original: true, organization_id: ^organization_id]
+      where: team.organization_id == ^organization_id,
+      where: team.original
 
     Repo.one(query)
   end
