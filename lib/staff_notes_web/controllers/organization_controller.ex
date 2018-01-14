@@ -56,21 +56,13 @@ defmodule StaffNotesWeb.OrganizationController do
   """
   @spec show(Plug.Conn.t, StaffNotesWeb.params) :: Plug.Conn.t
   def show(conn, params)
-  def show(conn, %{"name" => name}), do: do_show(conn, Accounts.get_org(name))
+  def show(conn, %{"name" => name}) do
+    org =
+      name
+      |> Accounts.get_org!()
+      |> Repo.preload([:teams, :users])
 
-  defp do_show(conn, nil) do
-    conn
-    |> put_status(:not_found)
-    |> put_view(ErrorView)
-    |> render("404.html")
-  end
-
-  defp do_show(conn, %Organization{} = org) do
-    org = Repo.preload(org, [:teams, :users])
-
-    conn
-    |> assign(:org, org)
-    |> render("show.html")
+    render(conn, "show.html", org: org)
   end
 
   @doc """
