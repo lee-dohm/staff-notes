@@ -23,7 +23,7 @@ defmodule StaffNotesWeb.Router do
     resources "/users", UserController, only: [:show], param: "name"
 
     resources "/orgs", OrganizationController, except: [:index], param: "name" do
-      # resources "/teams", TeamController
+      resources "/teams", TeamController
     end
   end
 
