@@ -4,14 +4,16 @@ defmodule StaffNotesWeb.UserView do
   """
   use StaffNotesWeb, :view
 
+  import StaffNotesWeb.Router.Helpers
+
   alias StaffNotes.Accounts.User
   alias StaffNotes.Repo
 
   @doc """
   Renders a "Create organization" button.
   """
-  def create_org_button(options \\ []) do
-    link_options = Keyword.merge(options, to: "#", type: "button")
+  def create_org_button(conn, options \\ []) do
+    link_options = Keyword.merge(options, to: organization_path(conn, :new), type: "button")
 
     link(gettext("Create organization"), link_options)
   end

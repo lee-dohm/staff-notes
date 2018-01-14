@@ -12,8 +12,13 @@ defmodule StaffNotesWeb.OrganizationController do
   @doc """
   Receives parameters for creating a new organization and saves it in the database.
   """
-  def create(conn, _params) do
-    conn
+  def create(conn, %{"organization" => org}) do
+    case Accounts.create_org(org, conn.assigns.current_user) do
+      {:ok, results} ->
+        redirect(conn, to: organization_path(conn, :show, results.org))
+      {:error, :org, changeset, %{}} ->
+        render(conn, "new.html", changeset: changeset)
+    end
   end
 
   @doc """
@@ -26,8 +31,15 @@ defmodule StaffNotesWeb.OrganizationController do
   @doc """
   Receives an organization by name and renders a form for editing it.
   """
-  def edit(conn, _params) do
-    conn
+  def edit(conn, %{"name" => name}) do
+    org =
+      name
+      |> Accounts.get_org!()
+      |> Repo.preload([:teams, :users])
+
+    changeset = Organization.changeset(org, %{})
+
+    render(conn, "edit.html", changeset: changeset, name: name, org: org)
   end
 
   @doc """
@@ -44,27 +56,27 @@ defmodule StaffNotesWeb.OrganizationController do
   """
   @spec show(Plug.Conn.t, StaffNotesWeb.params) :: Plug.Conn.t
   def show(conn, params)
-  def show(conn, %{"name" => name}), do: do_show(conn, Accounts.get_org(name))
+  def show(conn, %{"name" => name}) do
+    org =
+      name
+      |> Accounts.get_org!()
+      |> Repo.preload([:teams, :users])
 
-  defp do_show(conn, nil) do
-    conn
-    |> put_status(:not_found)
-    |> put_view(ErrorView)
-    |> render("404.html")
-  end
-
-  defp do_show(conn, %Organization{} = org) do
-    org = Repo.preload(org, [:teams, :users])
-
-    conn
-    |> assign(:org, org)
-    |> render("show.html")
+    render(conn, "show.html", org: org)
   end
 
   @doc """
   Receives parameters for updating an organization and saves it to the database.
   """
-  def update(conn, _params) do
-    conn
+  def update(conn, %{"name" => name, "organization" => attrs}) do
+    org =
+      name
+      |> Accounts.get_org!()
+      |> Repo.preload([:teams, :users])
+
+    case Accounts.update_org(org, attrs) do
+      {:ok, updated} -> redirect(conn, to: organization_path(conn, :show, updated))
+      {:error, changeset} -> render(conn, "edit.html", changeset: changeset, name: name, org: org)
+    end
   end
 end

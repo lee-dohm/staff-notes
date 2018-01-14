@@ -1,0 +1,20 @@
+h2 = @name
+
+.tabnav
+  nav.tabnav-tabs aria-label="Navigation bar"
+    a href="#{organization_path(@conn, :show, @org)}" class="tabnav-tab" = gettext("Notes")
+    a href="#" class="tabnav-tab"
+      = gettext("Staff")
+      span class="Counter" = length(@org.users)
+    a href="#" class="tabnav-tab"
+      = gettext("Teams")
+      span class="Counter" = length(@org.teams)
+    a href="#{organization_path(@conn, :edit, @org)}" class="tabnav-tab float-right selected" aria-current="page"
+      = octicon(:gear)
+      = gettext("Settings")
+
+= form_for @changeset, organization_path(@conn, :update, @name), fn f ->
+  = input(f, :name)
+
+  .form-actions
+    = submit(gettext("Update"), class: "btn btn-primary")

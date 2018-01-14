@@ -15,11 +15,9 @@ defmodule StaffNotesWeb.OrganizationControllerTest do
     end
 
     test "an org that does not exist returns an error", context do
-      conn = get(context.conn, organization_path(context.conn, :show, "org-that-does-not-exist"))
-
-      assert html_response(conn, :not_found)
-      assert error_rendered?(conn, :not_found)
-      refute conn.assigns[:org]
+      assert_raise Ecto.NoResultsError, fn ->
+        get(context.conn, organization_path(context.conn, :show, "org-that-does-not-exist"))
+      end
     end
   end
 end
