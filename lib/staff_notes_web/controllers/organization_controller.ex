@@ -32,12 +32,14 @@ defmodule StaffNotesWeb.OrganizationController do
   Receives an organization by name and renders a form for editing it.
   """
   def edit(conn, %{"name" => name}) do
-    changeset =
+    org =
       name
       |> Accounts.get_org!()
-      |> Organization.changeset(%{})
+      |> Repo.preload([:teams, :users])
 
-    render(conn, "edit.html", changeset: changeset, name: name)
+    changeset = Organization.changeset(org, %{})
+
+    render(conn, "edit.html", changeset: changeset, name: name, org: org)
   end
 
   @doc """
@@ -75,11 +77,14 @@ defmodule StaffNotesWeb.OrganizationController do
   Receives parameters for updating an organization and saves it to the database.
   """
   def update(conn, %{"name" => name, "organization" => attrs}) do
-    org = Accounts.get_org(name)
+    org =
+      name
+      |> Accounts.get_org!()
+      |> Repo.preload([:teams, :users])
 
     case Accounts.update_org(org, attrs) do
       {:ok, updated} -> redirect(conn, to: organization_path(conn, :show, updated))
-      {:error, changeset} -> render(conn, "edit.html", changeset: changeset, name: name)
+      {:error, changeset} -> render(conn, "edit.html", changeset: changeset, name: name, org: org)
     end
   end
 end
