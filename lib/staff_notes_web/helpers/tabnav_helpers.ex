@@ -10,8 +10,21 @@ defmodule StaffNotesWeb.TabNavHelpers do
 
   ## Examples
 
+  In Elixir code:
+
   ```
-  render_tabnav([tabnav_item("Text", "https://example.com")])
+  render_tabnav do
+    [
+      tabnav_item("Text", "https://example.com")
+    ]
+  end
+  ```
+
+  In Slime template:
+
+  ```
+  = render_tabnav do
+    = tabnav_item("Text", "https://example.com")
   ```
   """
   def render_tabnav(do: block) do
@@ -25,8 +38,17 @@ defmodule StaffNotesWeb.TabNavHelpers do
 
   ## Examples
 
+  Rendering a tabnav item with an icon, counter, aligned right, and selected:
+
   ```
-  tabnav_item("Settings", "https://example.com", counter: 5, icon: :gear, selected: true)
+  tabnav_item(
+    "Settings",
+    "https://example.com",
+    counter: 5,
+    icon: :gear,
+    right: true,
+    selected: true
+  )
   ```
   """
   def tabnav_item(text, path, options \\ []) do
@@ -39,7 +61,7 @@ defmodule StaffNotesWeb.TabNavHelpers do
     class = build_class(selected, right)
 
     options = [href: path, class: class]
-    if selected, do: options = Keyword.put(options, :"aria-current", "page")
+    options = if selected, do: Keyword.put(options, :"aria-current", "page"), else: options
 
     content_tag(:a, contents, options)
   end
