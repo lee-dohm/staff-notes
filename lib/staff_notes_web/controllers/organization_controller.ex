@@ -7,7 +7,6 @@ defmodule StaffNotesWeb.OrganizationController do
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Repo
-  alias StaffNotesWeb.ErrorView
 
   @doc """
   Receives parameters for creating a new organization and saves it in the database.

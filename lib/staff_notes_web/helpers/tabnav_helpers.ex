@@ -13,7 +13,7 @@ defmodule StaffNotesWeb.TabNavHelpers do
   In Elixir code:
 
   ```
-  render_tabnav do
+  tabnav do
     [
       tabnav_item("Text", "https://example.com")
     ]
@@ -23,11 +23,11 @@ defmodule StaffNotesWeb.TabNavHelpers do
   In Slime template:
 
   ```
-  = render_tabnav do
+  = tabnav do
     = tabnav_item("Text", "https://example.com")
   ```
   """
-  def render_tabnav(do: block) do
+  def tabnav(do: block) do
     content_tag(:div, class: "tabnav") do
       content_tag(:nav, block, class: "tabnav-tabs", "aria-label": "Navigation bar")
     end

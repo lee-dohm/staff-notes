@@ -1,6 +1,6 @@
 h2 = @name
 
-= render_tabnav do
+= tabnav do
   = tabnav_item(gettext("Notes"), organization_path(@conn, :show, @org), icon: :"file-text")
   = tabnav_item(gettext("Staff"), "#", counter: length(@org.users), icon: :organization)
   = tabnav_item(gettext("Teams"), "#", counter: length(@org.teams), icon: :jersey)
