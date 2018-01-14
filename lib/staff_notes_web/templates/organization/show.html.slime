@@ -1,7 +1,9 @@
 h2 = @org.name
 .tabnav
   nav.tabnav-tabs aria-label="Navigation bar"
-    a href="#" class="tabnav-tab selected" aria-current="page" = gettext("Notes")
+    a href="#" class="tabnav-tab selected" aria-current="page"
+      = octicon(:"file-text")
+      = gettext("Notes")
     a href="#" class="tabnav-tab"
       = gettext("Staff")
       span class="Counter" = length(@org.users)
