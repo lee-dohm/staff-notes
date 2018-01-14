@@ -1,4 +1,4 @@
 .blankslate
   h3 = gettext("You don't belong to any organizations")
   p = gettext("Click here to create one")
-  = create_org_button(class: "btn btn-primary")
+  = create_org_button(@conn, class: "btn btn-primary")

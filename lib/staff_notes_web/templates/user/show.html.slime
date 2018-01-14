@@ -7,3 +7,5 @@
     h2 = gettext("Organizations")
     .org-info-list
       = render_org_info_list(@conn, @user)
+    .float-right
+      = create_org_button(@conn, class: "btn btn-primary")
