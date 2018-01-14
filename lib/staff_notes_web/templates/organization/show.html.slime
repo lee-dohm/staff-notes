@@ -5,9 +5,11 @@ h2 = @org.name
       = octicon(:"file-text")
       = gettext("Notes")
     a href="#" class="tabnav-tab"
+      = octicon(:organization)
       = gettext("Staff")
       span class="Counter" = length(@org.users)
     a href="#" class="tabnav-tab"
+      = octicon(:jersey)
       = gettext("Teams")
       span class="Counter" = length(@org.teams)
     a href="#{organization_path(@conn, :edit, @org)}" class="tabnav-tab float-right"
