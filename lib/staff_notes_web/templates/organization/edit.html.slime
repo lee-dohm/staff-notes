@@ -1,0 +1,5 @@
+= form_for @changeset, organization_path(@conn, :update, @name), fn f ->
+  = input(f, :name)
+
+  .form-actions
+    = submit(gettext("Update"), class: "btn btn-primary")

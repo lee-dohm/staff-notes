@@ -8,3 +8,6 @@ h2 = @org.name
     a href="#" class="tabnav-tab"
       = gettext("Teams")
       span class="Counter" = length(@org.teams)
+    a href="#{organization_path(@conn, :edit, @org)}" class="tabnav-tab float-right"
+      = octicon(:gear)
+      = gettext("Settings")

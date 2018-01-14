@@ -31,8 +31,13 @@ defmodule StaffNotesWeb.OrganizationController do
   @doc """
   Receives an organization by name and renders a form for editing it.
   """
-  def edit(conn, _params) do
-    conn
+  def edit(conn, %{"name" => name}) do
+    changeset =
+      name
+      |> Accounts.get_org!()
+      |> Organization.changeset(%{})
+
+    render(conn, "edit.html", changeset: changeset, name: name)
   end
 
   @doc """
@@ -69,7 +74,12 @@ defmodule StaffNotesWeb.OrganizationController do
   @doc """
   Receives parameters for updating an organization and saves it to the database.
   """
-  def update(conn, _params) do
-    conn
+  def update(conn, %{"name" => name, "organization" => attrs}) do
+    org = Accounts.get_org(name)
+
+    case Accounts.update_org(org, attrs) do
+      {:ok, updated} -> redirect(conn, to: organization_path(conn, :show, updated))
+      {:error, changeset} -> render(conn, "edit.html", changeset: changeset, name: name)
+    end
   end
 end
