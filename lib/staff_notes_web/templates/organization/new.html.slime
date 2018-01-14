@@ -1,5 +1,8 @@
+h2 = gettext("Create a new organization")
+p = gettext("An organization is a group of staff that share notes about members of a larger group or community.")
+
 = form_for @changeset, organization_path(@conn, :create), fn f ->
   = input(f, :name)
 
   .form-actions
-    = submit(gettext("Submit new organization"), class: "btn btn-primary")
+    = submit(gettext("Create organization"), class: "btn btn-primary")
