@@ -10,6 +10,7 @@ defmodule StaffNotes.Accounts.User do
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
   alias StaffNotes.Ecto.Slug
+  alias StaffNotes.Notes.Note
 
   @primary_key {:id, :id, autogenerate: false}
   @foreign_key_type :id
@@ -18,6 +19,7 @@ defmodule StaffNotes.Accounts.User do
     field :name, Slug
     field :site_admin, :boolean, default: false, null: false
 
+    has_many :notes, Note, foreign_key: :author_id
     many_to_many :organizations, Organization, join_through: "organizations_users", on_replace: :delete, on_delete: :delete_all
     many_to_many :teams, Team, join_through: "teams_users", on_replace: :delete, on_delete: :delete_all
 

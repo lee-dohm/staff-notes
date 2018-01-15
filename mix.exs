@@ -94,6 +94,9 @@ defmodule StaffNotes.Mixfile do
         "Markdown": [
           ~r{Markdown}
         ],
+        "Notes": [
+          ~r{^StaffNotes.Notes}
+        ],
         "OAuth": [
           StaffNotesWeb.GitHub
         ],
