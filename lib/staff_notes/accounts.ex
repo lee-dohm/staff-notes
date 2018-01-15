@@ -191,15 +191,42 @@ defmodule StaffNotes.Accounts do
   is not found.
   """
   @spec get_org(String.t) :: Organization.t | nil
-  def get_org(name), do: Repo.get_by(Organization, name: name)
+  def get_org(name, options \\ []), do: Repo.one(get_org_query(name, options))
 
   @doc """
   Gets a single organization.
 
   Raises `Ecto.NoResultsError` if the organization does not exist.
+
+  ## Options
+
+  * `:with` &mdash; Specifies the records to preload in the organization record. It uses the same
+    keyword list syntax as `Ecto.Repo.preload/3`
+
+  ## Examples
+
+  Gets just the organization record:
+
+  ```
+  Accounts.get_org!("org-name")
+  ```
+
+  Gets the organization record and preloads the `users` field.
+
+  ```
+  Accounts.get_org!("org-name", with: [:users])
+  ```
   """
   @spec get_org!(String.t) :: Organization.t | no_return
-  def get_org!(name), do: Repo.get_by!(Organization, name: name)
+  def get_org!(name, options \\ []), do: Repo.one!(get_org_query(name, options))
+
+  defp get_org_query(name, options) do
+    preload = Keyword.get(options, :with)
+    query = from o in Organization, where: o.name == ^name
+    query = if preload, do: Organization.with(query, preload), else: query
+
+    query
+  end
 
   @doc """
   Gets the team by id.

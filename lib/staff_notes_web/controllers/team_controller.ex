@@ -35,10 +35,7 @@ defmodule StaffNotesWeb.TeamController do
   Displays the list of teams for an organization.
   """
   def index(conn, %{"organization_name" => name}) do
-    org =
-      name
-      |> Accounts.get_org!()
-      |> Repo.preload(teams: [:organization, :users], users: [])
+    org = Accounts.get_org!(name, with: [teams: [:organization]])
 
     render(conn, "index.html", org: org)
   end

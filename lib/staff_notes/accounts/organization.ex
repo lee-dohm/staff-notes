@@ -5,6 +5,7 @@ defmodule StaffNotes.Accounts.Organization do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import Ecto.Query
 
   alias Ecto.Multi
   alias StaffNotes.Accounts
@@ -48,6 +49,10 @@ defmodule StaffNotes.Accounts.Organization do
          Accounts.add_user_to_team(user, team)
        end)
   end
+
+  def with(queryable, preload \\ [])
+  def with(queryable, []), do: queryable
+  def with(queryable, preload), do: from q in queryable, preload: ^preload
 
   defimpl Phoenix.Param do
     def to_param(%{name: name}) do
