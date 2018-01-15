@@ -28,7 +28,7 @@ defmodule StaffNotesWeb.NoteController do
   @doc """
   Displays the list of notes for an organization.
   """
-  def index(conn, %{"organization_name" => name}) do
+  def index(conn, %{"organization_name" => _name}) do
     conn
   end
 
@@ -42,7 +42,7 @@ defmodule StaffNotesWeb.NoteController do
   @doc """
   Displays a note.
   """
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => _id}) do
     conn
   end
 

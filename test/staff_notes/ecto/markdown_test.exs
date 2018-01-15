@@ -1,7 +1,7 @@
-defmodule StaffNotes.MarkdownTest do
+defmodule StaffNotes.Ecto.MarkdownTest do
   use ExUnit.Case, async: true
 
-  alias StaffNotes.Markdown
+  alias StaffNotes.Ecto.Markdown
 
   describe "to_html/1" do
     test "renders HTML unchanged" do
