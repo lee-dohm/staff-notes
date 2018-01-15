@@ -132,6 +132,7 @@ defmodule StaffNotes.Accounts.Team do
     |> changeset(attrs)
     |> validate_original_field_unchanged()
     |> validate_original_permission()
+    |> unique_constraint(:name, name: :teams_organization_id_name_index)
   end
 
   defimpl Phoenix.Param do

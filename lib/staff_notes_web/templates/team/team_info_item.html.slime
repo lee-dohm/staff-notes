@@ -1,0 +1,11 @@
+.team-info-item.TableObject
+  .TableObject-item.TableObject-item--primary
+    h3
+      a href="#{organization_team_path(@conn, :show, to_string(@team.organization.name), @team)}"
+        = @team.name
+      = if @team.original, do: "*"
+  .TableObject-item
+    div
+      = gettext("Permission level")
+      ':
+      = Phoenix.HTML.Form.humanize(@team.permission)
