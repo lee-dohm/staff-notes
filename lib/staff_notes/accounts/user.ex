@@ -18,6 +18,7 @@ defmodule StaffNotes.Accounts.User do
     field :name, Slug
     field :site_admin, :boolean, default: false, null: false
 
+    has_many :notes, Note
     many_to_many :organizations, Organization, join_through: "organizations_users", on_replace: :delete, on_delete: :delete_all
     many_to_many :teams, Team, join_through: "teams_users", on_replace: :delete, on_delete: :delete_all
 

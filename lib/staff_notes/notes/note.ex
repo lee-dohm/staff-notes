@@ -7,6 +7,7 @@ defmodule StaffNotes.Notes.Note do
   import Ecto.Changeset
 
   alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.User
   alias StaffNotes.Ecto.Markdown
   alias StaffNotes.Notes.Note
 
@@ -15,6 +16,7 @@ defmodule StaffNotes.Notes.Note do
   schema "notes" do
     field :text, Markdown
 
+    belongs_to :author, User
     belongs_to :organization, Organization
 
     timestamps()
@@ -23,7 +25,7 @@ defmodule StaffNotes.Notes.Note do
   @doc false
   def changeset(%Note{} = note, attrs) do
     note
-    |> cast(attrs, [:text, :organization_id])
-    |> validate_required([:text, :organization_id])
+    |> cast(attrs, [:text, :author_id, :organization_id])
+    |> validate_required([:text, :author_id, :organization_id])
   end
 end
