@@ -16,7 +16,7 @@ defmodule StaffNotes.Notes.Note do
   schema "notes" do
     field :text, Markdown
 
-    belongs_to :author, User
+    belongs_to :author, User, type: :id
     belongs_to :organization, Organization
 
     timestamps()

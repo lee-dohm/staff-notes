@@ -12,6 +12,7 @@ defmodule StaffNotes.Notes do
   import Ecto.Query, warn: false
 
   alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Accounts.User
   alias StaffNotes.Repo
   alias StaffNotes.Notes.Note
 
@@ -44,8 +45,10 @@ defmodule StaffNotes.Notes do
   {:error, %Ecto.Changeset{}}
   ```
   """
-  def create_note(attrs \\ %{}) do
+  def create_note(attrs \\ %{}, %User{} = author, %Organization{} = org) do
     %Note{}
+    |> Map.put(:author_id, author.id)
+    |> Map.put(:organization_id, org.id)
     |> Note.changeset(attrs)
     |> Repo.insert()
   end

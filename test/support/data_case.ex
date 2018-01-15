@@ -22,6 +22,7 @@ defmodule StaffNotes.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import StaffNotes.DataCase
+      import StaffNotes.Support.Helpers
     end
   end
 

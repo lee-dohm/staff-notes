@@ -24,6 +24,10 @@ defmodule StaffNotes.Support.Helpers do
   alias Plug.Conn.Status
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.User
+  alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Markdown
+  alias StaffNotes.Notes
+  alias StaffNotes.Notes.Note
   alias StaffNotesWeb.ErrorView
 
   import Phoenix.Controller, only: [view_module: 1, view_template: 1]
@@ -42,6 +46,31 @@ defmodule StaffNotes.Support.Helpers do
   Replaces characters in the string with their HTML-escaped versions.
   """
   def escape(text), do: String.replace(text, "'", "&#39;", global: true)
+
+  @doc """
+  Creates `StaffNotes.Markdown` struct from a string.
+  """
+  def markdown(text, options \\ [])
+
+  def markdown(text, []) do
+    %Markdown{text: text, html: Markdown.to_html(text)}
+  end
+
+  def markdown(text, rendered: false) do
+    %Markdown{text: text, html: nil}
+  end
+
+  @doc """
+  Inserts a new note into the database and returns it.
+  """
+  def note_fixture(attrs \\ %{}, %User{} = author, %Organization{} = org) do
+    {:ok, note} =
+      attrs
+      |> Enum.into(note_attrs())
+      |> Notes.create_note(author, org)
+
+    %Note{note | text: %Markdown{text: note.text.text, html: Markdown.to_html(note.text.text)}}
+  end
 
   @doc """
   Inserts a new organization into the database and returns it.
@@ -63,6 +92,22 @@ defmodule StaffNotes.Support.Helpers do
   def rendered?(conn, nil, template), do: view_template(conn) == template
   def rendered?(conn, module, template) do
     view_module(conn) == module && rendered?(conn, template)
+  end
+
+  @doc """
+  Creates a standard note, all of its prerequisites, and adds it to the context as `:regular_note`.
+  """
+  def setup_regular_note(_context) do
+    author = user_fixture()
+    org = org_fixture(author)
+
+    {
+      :ok,
+      author: author,
+      regular_note: note_fixture(author, org),
+      regular_org: org,
+      regular_user: author
+    }
   end
 
   @doc """
@@ -109,6 +154,7 @@ defmodule StaffNotes.Support.Helpers do
     user
   end
 
+  defp note_attrs, do: %{text: "some text"}
   defp org_attrs, do: %{name: "org-name"}
   defp team_attrs, do: %{name: "team-name", permission: :write, original: false}
   defp user_attrs, do: %{avatar_url: "some avatar_url", id: 42, name: "user-name", site_admin: false}
