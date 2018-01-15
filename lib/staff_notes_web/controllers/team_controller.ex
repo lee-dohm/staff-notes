@@ -53,7 +53,7 @@ defmodule StaffNotesWeb.TeamController do
   @doc """
   Displays a team for an organization.
   """
-  def show(conn, %{"organization_name" => org_name, "id" => team_name}) do
+  def show(conn, %{"organization_name" => org_name, "name" => team_name}) do
     team =
       org_name
       |> Accounts.get_team!(team_name)
