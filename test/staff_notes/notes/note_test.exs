@@ -1,7 +1,6 @@
 defmodule StaffNotes.NotesTest do
   use StaffNotes.DataCase
 
-  alias StaffNotes.Markdown
   alias StaffNotes.Notes
   alias StaffNotes.Notes.Note
 
