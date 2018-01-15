@@ -1,6 +1,13 @@
 defmodule StaffNotes.Notes do
   @moduledoc """
   Represents the business-logic layer of working with the records around the staff notes.
+
+  There are a few different record types:
+
+  * Comments - A comment on an Identity, Member, or Note
+  * Identity - Information on an identity of a member
+  * Members - A member of the community
+  * Notes - A note on a community member
   """
   import Ecto.Query, warn: false
 
