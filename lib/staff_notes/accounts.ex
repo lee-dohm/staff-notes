@@ -190,7 +190,7 @@ defmodule StaffNotes.Accounts do
   Works the same as `get_org!/1` but returns `nil` instead of raising an error when the organization
   is not found.
   """
-  @spec get_org(String.t) :: Organization.t | nil
+  @spec get_org(String.t, Keyword.t) :: Organization.t | nil
   def get_org(name, options \\ []), do: Repo.one(get_org_query(name, options))
 
   @doc """
@@ -217,7 +217,7 @@ defmodule StaffNotes.Accounts do
   Accounts.get_org!("org-name", with: [:users])
   ```
   """
-  @spec get_org!(String.t) :: Organization.t | no_return
+  @spec get_org!(String.t, Keyword.t) :: Organization.t | no_return
   def get_org!(name, options \\ []), do: Repo.one!(get_org_query(name, options))
 
   defp get_org_query(name, options) do
