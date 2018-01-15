@@ -5,7 +5,7 @@ defmodule StaffNotes.Notes do
   There are a few different record types:
 
   * Comments - A comment on an Identity, Member, or Note
-  * Identity - Information on an identity of a member
+  * Identity - Information on an identity of a member (whether GitHub, Twitter, email or IP address)
   * Members - A member of the community
   * Notes - A note on a community member
   """
