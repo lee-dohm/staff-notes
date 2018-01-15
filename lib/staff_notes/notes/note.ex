@@ -7,12 +7,13 @@ defmodule StaffNotes.Notes.Note do
   import Ecto.Changeset
 
   alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Ecto.Markdown
   alias StaffNotes.Notes.Note
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "notes" do
-    field :text, :string
+    field :text, Markdown
 
     belongs_to :organization, Organization
 
