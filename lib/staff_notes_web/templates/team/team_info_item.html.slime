@@ -6,6 +6,7 @@
       = if @team.original, do: "*"
   .TableObject-item
     div
-      = gettext("Permission level")
-      ':
+      strong
+        = gettext("Permission level")
+        ':
       = Phoenix.HTML.Form.humanize(@team.permission)

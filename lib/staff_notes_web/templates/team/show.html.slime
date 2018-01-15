@@ -3,7 +3,7 @@ h3
 
 = tabnav do
   = tabnav_item(gettext("Notes"), organization_path(@conn, :show, @team.organization), icon: :"file-text")
-  = tabnav_item(gettext("Staff"), "#", icon: :organization)
+  = tabnav_item(gettext("Staff"), organization_staff_path(@conn, :index, @org), icon: :organization)
   = tabnav_item(gettext("Teams"), organization_team_path(@conn, :index, @team.organization), icon: :jersey, selected: true)
   = tabnav_item(gettext("Settings"), organization_path(@conn, :edit, @team.organization), icon: :gear, right: true)
 

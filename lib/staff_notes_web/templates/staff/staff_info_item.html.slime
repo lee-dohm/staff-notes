@@ -1,0 +1,10 @@
+.team-info-item.TableObject
+  .TableObject-item.TableObject-item--primary
+    h3
+      a href="#{user_path(@conn, :show, @user)}"
+        = @user.name
+  .TableObject-item
+    strong
+      = gettext("Permiission level")
+      ':
+    |Owner
