@@ -66,6 +66,7 @@ defmodule StaffNotesWeb.TabNavHelpers do
     content_tag(:a, contents, options)
   end
 
+  defp build_class(false, right), do: build_class(nil, right)
   defp build_class(nil, nil), do: "tabnav-tab"
   defp build_class(nil, _), do: "tabnav-tab float-right"
   defp build_class(_, nil), do: "tabnav-tab selected"
