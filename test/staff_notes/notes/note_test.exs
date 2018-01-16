@@ -7,7 +7,7 @@ defmodule StaffNotes.NotesTest do
   describe "notes" do
     setup [:setup_regular_note]
 
-    test "list_notes/0 returns all notes", context do
+    test "list_notes/1 returns all notes for an organization", context do
       assert Notes.list_notes(context.regular_org) == [context.regular_note]
     end
 
@@ -15,11 +15,11 @@ defmodule StaffNotes.NotesTest do
       assert Notes.get_note!(context.regular_note.id) == context.regular_note
     end
 
-    test "create_note/1 with valid data creates a note", context do
+    test "create_note/3 with valid data creates a note", context do
       assert context.regular_note.text == markdown("some text")
     end
 
-    test "create_note/1 with invalid data returns error changeset", context do
+    test "create_note/3 with invalid data returns error changeset", context do
       assert {:error, %Ecto.Changeset{}} = Notes.create_note(%{text: nil}, context.author, context.regular_org)
     end
 
