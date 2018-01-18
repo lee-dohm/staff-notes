@@ -54,6 +54,7 @@ defmodule StaffNotesWeb do
       import StaffNotesWeb.PrimerFormHelpers
       import StaffNotesWeb.SharedHelpers
       import StaffNotesWeb.TabNavHelpers
+      import StaffNotesWeb.TimeHelpers
     end
   end
 

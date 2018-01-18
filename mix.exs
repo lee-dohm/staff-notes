@@ -63,6 +63,7 @@ defmodule StaffNotes.Mixfile do
       {:phoenix_octicons, "~> 0.2.0"},
       {:phoenix_slime, "~> 0.9"},
       {:postgrex, ">= 0.0.0"},
+      {:timex, "~> 3.1"},
       {:dotenv, "~> 2.0", only: :dev},
       {:ex_doc, "~> 0.18", only: [:dev, :test], runtime: false},
       {:phoenix_live_reload, "~> 1.0", only: :dev},

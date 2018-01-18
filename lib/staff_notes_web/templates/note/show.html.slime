@@ -6,6 +6,8 @@ h2 = @note.organization.name
   .Box-header
     strong = @note.author.name
     '
-    = gettext("wrote:")
+    = gettext("wrote")
+    '
+    = timeago(@note.inserted_at)
   .Box-body.markdown-body
     = @note.text
