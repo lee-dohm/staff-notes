@@ -4,6 +4,10 @@ defmodule StaffNotesWeb.NoteController do
   """
   use StaffNotesWeb, :controller
 
+  alias StaffNotes.Accounts
+  alias StaffNotes.Notes
+  alias StaffNotes.Notes.Note
+
   @doc """
   Receives parameters for creating a new note for an organization and stores it in the database.
   """
@@ -35,8 +39,11 @@ defmodule StaffNotesWeb.NoteController do
   @doc """
   Renders a form for creating a new note for an organization.
   """
-  def new(conn, _params) do
-    conn
+  def new(conn, %{"organization_name" => name}) do
+    org = Accounts.get_org!(name)
+    changeset = Notes.change_note(%Note{})
+
+    render(conn, "new.html", changeset: changeset, org: org)
   end
 
   @doc """
