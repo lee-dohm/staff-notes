@@ -7,12 +7,19 @@ defmodule StaffNotesWeb.NoteController do
   alias StaffNotes.Accounts
   alias StaffNotes.Notes
   alias StaffNotes.Notes.Note
+  alias StaffNotes.Repo
 
   @doc """
   Receives parameters for creating a new note for an organization and stores it in the database.
   """
-  def create(conn, _params) do
-    conn
+  def create(conn, %{"organization_name" => org_name, "note" => note}) do
+    author = conn.assigns.current_user
+    org = Accounts.get_org!(org_name)
+
+    case Notes.create_note(note, author, org) do
+      {:ok, note} -> redirect(conn, to: organization_note_path(conn, :show, org, note))
+      {:error, changeset} -> render(conn, "new.html", changeset: changeset, org: org)
+    end
   end
 
   @doc """
@@ -49,8 +56,13 @@ defmodule StaffNotesWeb.NoteController do
   @doc """
   Displays a note.
   """
-  def show(conn, %{"id" => _id}) do
-    conn
+  def show(conn, %{"id" => id}) do
+    note =
+      id
+      |> Notes.get_note!()
+      |> Repo.preload([:author, :organization])
+
+    render(conn, "show.html", note: note)
   end
 
   @doc """

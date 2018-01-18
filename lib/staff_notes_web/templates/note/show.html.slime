@@ -1,0 +1,11 @@
+h2 = @note.organization.name
+
+= render_shared("organization_tabnav.html", conn: @conn, org: @note.organization, selected: :notes)
+
+.Box
+  .Box-header
+    strong = @note.author.name
+    '
+    = gettext("wrote:")
+  .Box-body.markdown-body
+    = @note.text
