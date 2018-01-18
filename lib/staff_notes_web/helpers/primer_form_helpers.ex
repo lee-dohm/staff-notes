@@ -13,12 +13,12 @@ defmodule StaffNotesWeb.PrimerFormHelpers do
 
   See: http://blog.plataformatec.com.br/2016/09/dynamic-forms-with-phoenix/
   """
-  def input(form, field) do
-    type = Form.input_type(form, field)
+  def input(form, field, options \\ []) do
+    type = options[:using] || Form.input_type(form, field)
 
     wrapper_opts = [class: "form-group #{error_class(form, field)}"]
     label_opts = []
-    input_opts = [class: "form-control"]
+    input_opts = [class: "form-control #{options[:class]}"]
 
     content_tag(:dl, wrapper_opts) do
       label = content_tag(:dt) do
