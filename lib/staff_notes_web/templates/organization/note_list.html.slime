@@ -1,8 +1,4 @@
-
 .Box
-  .Box-header
-    .text-right
-      = link_button(gettext("Create note"), to: organization_note_path(@conn, :new, @org), class: "btn btn-primary")
   .Box-body
     ul
       = render_many(@notes, __MODULE__, "note_list_item.html", conn: @conn, org: @org, as: :note)

@@ -2,4 +2,8 @@ h2 = @org.name
 
 = render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :notes)
 
+.subnav
+  .float-right
+    = link_button(gettext("Create note"), to: organization_note_path(@conn, :new, @org), class: "btn btn-primary")
+
 = render_note_list(@conn, @org)
