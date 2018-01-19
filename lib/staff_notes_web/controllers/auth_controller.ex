@@ -20,13 +20,13 @@ defmodule StaffNotesWeb.AuthController do
 
     conn
     |> put_session(:return_to, return_to)
-    |> redirect(external: GitHub.authorize_url!)
+    |> redirect(external: GitHub.authorize_url!())
   end
 
   def index(conn, _) do
     Logger.debug(fn -> "Authorize user and return to home page" end)
 
-    redirect(conn, external: GitHub.authorize_url!)
+    redirect(conn, external: GitHub.authorize_url!())
   end
 
   @doc """

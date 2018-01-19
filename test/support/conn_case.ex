@@ -28,9 +28,11 @@ defmodule StaffNotesWeb.ConnCase do
 
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(StaffNotes.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(StaffNotes.Repo, {:shared, self()})
     end
+
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

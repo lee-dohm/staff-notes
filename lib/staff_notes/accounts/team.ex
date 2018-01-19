@@ -64,12 +64,12 @@ defmodule StaffNotes.Accounts.Team do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "teams" do
-    field :name, Slug
-    field :permission, PermissionLevel
-    field :original, :boolean
+    field(:name, Slug)
+    field(:permission, PermissionLevel)
+    field(:original, :boolean)
 
-    belongs_to :organization, Organization
-    many_to_many :users, User, join_through: "teams_users", on_delete: :delete_all
+    belongs_to(:organization, Organization)
+    many_to_many(:users, User, join_through: "teams_users", on_delete: :delete_all)
 
     timestamps()
   end
@@ -82,7 +82,7 @@ defmodule StaffNotes.Accounts.Team do
 
   A more specialized changeset will implement further business rules and should be preferred.
   """
-  @spec changeset(t, %{}) :: Ecto.Changeset.t
+  @spec changeset(t, %{}) :: Ecto.Changeset.t()
   def changeset(%Team{} = team, attrs) do
     team
     |> cast(attrs, [:name, :permission, :original, :organization_id])
@@ -97,7 +97,7 @@ defmodule StaffNotes.Accounts.Team do
 
   * Prevents creating an original team if one already exists in the organization
   """
-  @spec create_team_changeset(t, %{}) :: Ecto.Changeset.t
+  @spec create_team_changeset(t, %{}) :: Ecto.Changeset.t()
   def create_team_changeset(%Team{} = team, attrs \\ %{}) do
     team
     |> changeset(attrs)
@@ -111,7 +111,7 @@ defmodule StaffNotes.Accounts.Team do
 
   * Prevents deleting an original team
   """
-  @spec delete_team_changeset(t) :: Ecto.Changeset.t
+  @spec delete_team_changeset(t) :: Ecto.Changeset.t()
   def delete_team_changeset(%Team{} = team) do
     team
     |> changeset(%{})
@@ -126,7 +126,7 @@ defmodule StaffNotes.Accounts.Team do
   * Prevents changing the value of the original field
   * Prevents changing of an original team's permission level
   """
-  @spec update_team_changeset(t, %{}) :: Ecto.Changeset.t
+  @spec update_team_changeset(t, %{}) :: Ecto.Changeset.t()
   def update_team_changeset(%Team{} = team, attrs \\ %{}) do
     team
     |> changeset(attrs)
@@ -197,9 +197,15 @@ defmodule StaffNotes.Accounts.Team do
 
   defp do_validate_original_permission(changeset, true) do
     case get_field(changeset, :permission) do
-      :owner -> changeset
+      :owner ->
+        changeset
+
       _ ->
-        add_error(changeset, :permission, "Cannot change the permission level of the original team")
+        add_error(
+          changeset,
+          :permission,
+          "Cannot change the permission level of the original team"
+        )
     end
   end
 

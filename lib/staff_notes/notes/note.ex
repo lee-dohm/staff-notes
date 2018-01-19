@@ -14,10 +14,10 @@ defmodule StaffNotes.Notes.Note do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "notes" do
-    field :text, Markdown
+    field(:text, Markdown)
 
-    belongs_to :author, User, type: :id
-    belongs_to :organization, Organization
+    belongs_to(:author, User, type: :id)
+    belongs_to(:organization, Organization)
 
     timestamps()
   end

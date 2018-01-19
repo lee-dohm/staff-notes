@@ -101,12 +101,11 @@ defmodule StaffNotes.Notes do
   [%Note{}, ...]
   ```
   """
-  @spec list_notes(Organization.t | binary) :: [Note.t]
+  @spec list_notes(Organization.t() | binary) :: [Note.t()]
   def list_notes(%Organization{} = org), do: list_notes(org.id)
+
   def list_notes(id) do
-    query =
-      from n in Note,
-        where: n.organization_id == ^id
+    query = from(n in Note, where: n.organization_id == ^id)
 
     Repo.all(query)
   end

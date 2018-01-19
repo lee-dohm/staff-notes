@@ -18,11 +18,11 @@ defmodule StaffNotes.Accounts.Organization do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "organizations" do
-    field :name, Slug
+    field(:name, Slug)
 
-    many_to_many :users, User, join_through: "organizations_users", on_delete: :delete_all
-    has_many :teams, Team, on_delete: :delete_all
-    has_many :notes, Note, on_delete: :delete_all
+    many_to_many(:users, User, join_through: "organizations_users", on_delete: :delete_all)
+    has_many(:teams, Team, on_delete: :delete_all)
+    has_many(:notes, Note, on_delete: :delete_all)
 
     timestamps()
   end
@@ -39,22 +39,22 @@ defmodule StaffNotes.Accounts.Organization do
   def create_org_changeset(attrs \\ %{}, %User{} = user) do
     changeset = Organization.changeset(%Organization{}, attrs)
 
-    Multi.new
+    Multi.new()
     |> Multi.insert(:org, changeset)
-    |> Multi.run(:team, fn(%{org: org}) ->
-         Accounts.create_team(Team.original_team_attrs(), org)
-       end)
-    |> Multi.run(:add_user_to_org, fn(%{org: org}) ->
-         Accounts.add_user_to_org(user, org)
-       end)
-    |> Multi.run(:add_user_to_team, fn(%{team: team}) ->
-         Accounts.add_user_to_team(user, team)
-       end)
+    |> Multi.run(:team, fn %{org: org} ->
+      Accounts.create_team(Team.original_team_attrs(), org)
+    end)
+    |> Multi.run(:add_user_to_org, fn %{org: org} ->
+      Accounts.add_user_to_org(user, org)
+    end)
+    |> Multi.run(:add_user_to_team, fn %{team: team} ->
+      Accounts.add_user_to_team(user, team)
+    end)
   end
 
   def with(queryable, preload \\ [])
   def with(queryable, []), do: queryable
-  def with(queryable, preload), do: from q in queryable, preload: ^preload
+  def with(queryable, preload), do: from(q in queryable, preload: ^preload)
 
   defimpl Phoenix.Param do
     def to_param(%{name: name}) do

@@ -14,12 +14,12 @@ defmodule StaffNotesWeb.LayoutView do
   @typedoc """
   The link information as a tuple of the author's name and URL to link to.
   """
-  @type link_info :: {String.t, String.t}
+  @type link_info :: {String.t(), String.t()}
 
   @typedoc """
   Represents a type that may be a user or may represent nothing.
   """
-  @type maybe_user :: User.t | nil
+  @type maybe_user :: User.t() | nil
 
   @doc """
   Renders the GitHub-style `<> with ♥ by [author link]` footer item.
@@ -49,7 +49,7 @@ defmodule StaffNotesWeb.LayoutView do
   #=> "<div><svg .../> with <svg .../> by <a href=\"https://example.com\">Author's Name</a></div>"
   ```
   """
-  @spec code_with_heart(app_name | link_info, Keyword.t) :: Phoenix.HTML.safe
+  @spec code_with_heart(app_name | link_info, Keyword.t()) :: Phoenix.HTML.safe()
   def code_with_heart(link_info, options \\ [])
 
   def code_with_heart(app_name, options) when is_atom(app_name) do
@@ -63,7 +63,7 @@ defmodule StaffNotesWeb.LayoutView do
     {link_options, options} = Keyword.pop(options, :link_options)
     link_options = Keyword.merge(link_options || [], to: location)
 
-    content_tag(:div, options) do
+    content_tag :div, options do
       [
         octicon(:code),
         gettext(" with "),
@@ -85,7 +85,7 @@ defmodule StaffNotesWeb.LayoutView do
 
   [mark-github]: https://octicons.github.com/icon/mark-github/
   """
-  @spec github_link(atom | String.t, Keyword.t) :: Phoenix.HTML.safe
+  @spec github_link(atom | String.t(), Keyword.t()) :: Phoenix.HTML.safe()
   def github_link(url, options \\ [])
 
   def github_link(app_name, options) when is_atom(app_name) do
@@ -110,11 +110,11 @@ defmodule StaffNotesWeb.LayoutView do
   When `current_user` is `nil`, the login button is displayed. When `current_user` is defined, a
   logout link and link to the user's profile page is displayed.
   """
-  @spec login_button(Plug.Conn.t, maybe_user) :: Phoenix.HTML.safe
+  @spec login_button(Plug.Conn.t(), maybe_user) :: Phoenix.HTML.safe()
   def login_button(conn, current_user)
 
   def login_button(conn, nil) do
-    link(to: auth_path(conn, :index, from: conn.request_path), class: "btn") do
+    link to: auth_path(conn, :index, from: conn.request_path), class: "btn" do
       [
         gettext("Sign in with"),
         octicon("mark-github")
@@ -124,14 +124,14 @@ defmodule StaffNotesWeb.LayoutView do
 
   def login_button(conn, %User{} = current_user) do
     [
-      link(to: auth_path(conn, :delete)) do
+      link to: auth_path(conn, :delete) do
         [
           octicon("sign-out"),
           " ",
           gettext("Sign Out")
         ]
       end,
-      link(to: user_path(conn, :show, current_user)) do
+      link to: user_path(conn, :show, current_user) do
         [
           to_string(current_user.name),
           avatar(current_user, size: 36)
@@ -149,7 +149,7 @@ defmodule StaffNotesWeb.LayoutView do
   render_flash(@conn)
   ```
   """
-  @spec render_flash(Plug.Conn.t | Map.t) :: Phoenix.HTML.safe
+  @spec render_flash(Plug.Conn.t() | Map.t()) :: Phoenix.HTML.safe()
   def render_flash(flash_info)
 
   def render_flash(%Plug.Conn{} = conn), do: render_flash(get_flash(conn))

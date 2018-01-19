@@ -9,12 +9,10 @@ defmodule StaffNotes.Accounts.OrganizationTest do
 
   setup [:setup_regular_org]
 
-  setup(context) do
+  setup context do
     {
       :ok,
-      invalid_attrs: %{name: nil},
-      org: context.regular_org,
-      valid_attrs: %{name: "some-name"}
+      invalid_attrs: %{name: nil}, org: context.regular_org, valid_attrs: %{name: "some-name"}
     }
   end
 
@@ -34,7 +32,8 @@ defmodule StaffNotes.Accounts.OrganizationTest do
     end
 
     test "returns an error changeset when given invalid attributes", context do
-      {:error, :org, changeset, _} = Accounts.create_org(context.invalid_attrs, context.regular_user)
+      {:error, :org, changeset, _} =
+        Accounts.create_org(context.invalid_attrs, context.regular_user)
 
       refute changeset.valid?
       assert %{name: ["can't be blank"]} = errors_on(changeset)

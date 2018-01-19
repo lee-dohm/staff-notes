@@ -2,39 +2,40 @@ defmodule StaffNotesWeb.Router do
   use StaffNotesWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug :assign_current_user
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(:assign_current_user)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", StaffNotesWeb do
-    pipe_through :browser # Use the default browser stack
+    # Use the default browser stack
+    pipe_through(:browser)
 
-    get "/", PageController, :index
-    get "/about", PageController, :about
+    get("/", PageController, :index)
+    get("/about", PageController, :about)
 
-    resources "/users", UserController, only: [:show], param: "name"
+    resources("/users", UserController, only: [:show], param: "name")
 
     resources "/orgs", OrganizationController, except: [:index], param: "name" do
-      resources "/notes", NoteController
-      resources "/staff", StaffController, only: [:index]
-      resources "/teams", TeamController, param: "name"
+      resources("/notes", NoteController)
+      resources("/staff", StaffController, only: [:index])
+      resources("/teams", TeamController, param: "name")
     end
   end
 
   scope "/auth", StaffNotesWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", AuthController, :index
-    get "/callback", AuthController, :callback
-    get "/logout", AuthController, :delete
+    get("/", AuthController, :index)
+    get("/callback", AuthController, :callback)
+    get("/logout", AuthController, :delete)
   end
 
   # Fetch the current user from the session and add it to `conn.assigns`. This

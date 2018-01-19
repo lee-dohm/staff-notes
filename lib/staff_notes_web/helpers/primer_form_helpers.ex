@@ -33,14 +33,16 @@ defmodule StaffNotesWeb.PrimerHelpers do
     label_opts = []
     input_opts = [class: "form-control #{options[:class]}"]
 
-    content_tag(:dl, wrapper_opts) do
-      label = content_tag(:dt) do
-        label(form, field, humanize(field), label_opts)
-      end
+    content_tag :dl, wrapper_opts do
+      label =
+        content_tag :dt do
+          label(form, field, humanize(field), label_opts)
+        end
 
-      input = content_tag(:dd) do
-        apply(Form, type, [form, field, input_opts])
-      end
+      input =
+        content_tag :dd do
+          apply(Form, type, [form, field, input_opts])
+        end
 
       error = error_tag(form, field) || ""
 
@@ -57,8 +59,8 @@ defmodule StaffNotesWeb.PrimerHelpers do
   end
 
   defp error_tag(form, field) do
-    Enum.map(Keyword.get_values(form.errors, field), fn (error) ->
-      content_tag(:dd, class: "error") do
+    Enum.map(Keyword.get_values(form.errors, field), fn error ->
+      content_tag :dd, class: "error" do
         ErrorHelpers.translate_error(error)
       end
     end)

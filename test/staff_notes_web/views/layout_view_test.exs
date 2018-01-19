@@ -50,7 +50,8 @@ defmodule StaffNotesWeb.LayoutViewTest do
     end
 
     test "renders options as attributes on the link" do
-      assert github_link(foo: "bar") =~ ~r(^<a foo="bar" href="https://github.com/owner/repo">.*</a>$)
+      assert github_link(foo: "bar") =~
+               ~r(^<a foo="bar" href="https://github.com/owner/repo">.*</a>$)
     end
 
     test "uses GitHub as the link text when :text option is true" do
@@ -72,13 +73,15 @@ defmodule StaffNotesWeb.LayoutViewTest do
     end
 
     test "returns the error flash when given only error flash information" do
-      assert render_flash(%{error: "foo"}) == "<p class=\"flash flash-error\" role=\"alert\">foo</p>"
+      assert render_flash(%{error: "foo"}) ==
+               "<p class=\"flash flash-error\" role=\"alert\">foo</p>"
     end
 
     test "returns both error and info flash when given both" do
       content = render_flash(%{info: "foo", error: "bar"})
 
-      assert content == "<p class=\"flash\" role=\"alert\">foo</p><p class=\"flash flash-error\" role=\"alert\">bar</p>"
+      assert content ==
+               "<p class=\"flash\" role=\"alert\">foo</p><p class=\"flash flash-error\" role=\"alert\">bar</p>"
     end
   end
 end

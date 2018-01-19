@@ -7,15 +7,13 @@ defmodule StaffNotes.Mixfile do
     [
       app: :staff_notes,
       version: @version,
-
       name: "Staff Notes",
       homepage_url: "https://www.staffnotes.io",
       source_url: "https://github.com/lee-dohm/staff-notes",
-
       elixir: "~> 1.5",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
       docs: docs()
@@ -73,42 +71,42 @@ defmodule StaffNotes.Mixfile do
 
   defp docs do
     [
-      main: docs_main(Mix.env),
+      main: docs_main(Mix.env()),
       source_url: "https://github.com/lee-dohm/staff-notes",
       markdown_processor: ExDoc.Markdown.Cmark,
       groups_for_modules: [
-        "Accounts": [
+        Accounts: [
           ~r{^StaffNotes\.Accounts}
         ],
-        "Controllers": [
+        Controllers: [
           ~r{^StaffNotesWeb.*Controller$}
         ],
         "Ecto Types": [
           ~r{^StaffNotes.Ecto.*}
         ],
-        "Helpers": [
+        Helpers: [
           ~r{^StaffNotesWeb.*Helpers$}
         ],
-        "Localization": [
+        Localization: [
           StaffNotesWeb.Gettext
         ],
-        "Markdown": [
+        Markdown: [
           ~r{Markdown}
         ],
-        "Notes": [
+        Notes: [
           ~r{^StaffNotes.Notes}
         ],
-        "OAuth": [
+        OAuth: [
           StaffNotesWeb.GitHub
         ],
-        "Sockets": [
+        Sockets: [
           ~r{^StaffNotesWeb.*Socket$}
         ],
-        "Test": [
+        Test: [
           ~r{^StaffNotes.*(Channel|Conn|Data)Case$},
           ~r{^StaffNotes.Support}
         ],
-        "Views": [
+        Views: [
           ~r{^StaffNotesWeb.*View$}
         ]
       ],
@@ -126,7 +124,7 @@ defmodule StaffNotes.Mixfile do
           filename: "license",
           title: "License"
         ]
-      ],
+      ]
     ]
   end
 
@@ -136,5 +134,5 @@ defmodule StaffNotes.Mixfile do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 end

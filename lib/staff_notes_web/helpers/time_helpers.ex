@@ -36,7 +36,7 @@ defmodule StaffNotesWeb.TimeHelpers do
   = timeago(~N[2018-01-01 12:00:00])
   ```
   """
-  @spec timeago(NaiveDateTime.t) :: Phoenix.HTML.safe
+  @spec timeago(NaiveDateTime.t()) :: Phoenix.HTML.safe()
   def timeago(time) do
     time = format(time)
 

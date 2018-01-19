@@ -32,7 +32,7 @@ defmodule StaffNotes.Ecto.Slug do
 
   @behaviour Ecto.Type
 
-  @type t :: %__MODULE__{text: String.t}
+  @type t :: %__MODULE__{text: String.t()}
 
   defstruct text: ""
 
@@ -103,7 +103,7 @@ defmodule StaffNotes.Ecto.Slug do
   @doc """
   Determines whether the given value is valid to be used as a slug.
   """
-  @spec valid?(t | String.t) :: boolean
+  @spec valid?(t | String.t()) :: boolean
   def valid?(binary) when is_binary(binary), do: binary =~ @pattern
   def valid?(%__MODULE__{text: binary}) when is_binary(binary), do: binary =~ @pattern
   def valid?(_), do: false

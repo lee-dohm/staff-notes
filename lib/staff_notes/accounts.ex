@@ -26,27 +26,27 @@ defmodule StaffNotes.Accounts do
   @doc """
   Adds the user to the organization.
   """
-  @spec add_user_to_org(User.t, Organization.t) :: {:ok, User.t} | {:error, Changeset.t}
+  @spec add_user_to_org(User.t(), Organization.t()) :: {:ok, User.t()} | {:error, Changeset.t()}
   def add_user_to_org(%User{} = user, %Organization{} = org) do
     user
-    |> update_assoc_changeset(:organizations, &Accounts.change_user/1, fn(orgs) -> [org | orgs] end)
+    |> update_assoc_changeset(:organizations, &Accounts.change_user/1, fn orgs -> [org | orgs] end)
     |> Repo.update()
   end
 
   @doc """
   Adds the user to the team.
   """
-  @spec add_user_to_team(User.t, Team.t) :: {:ok, User.t} | {:error, Changeset.t}
+  @spec add_user_to_team(User.t(), Team.t()) :: {:ok, User.t()} | {:error, Changeset.t()}
   def add_user_to_team(%User{} = user, %Team{} = team) do
     user
-    |> update_assoc_changeset(:teams, &Accounts.change_user/1, fn(teams) -> [team | teams] end)
+    |> update_assoc_changeset(:teams, &Accounts.change_user/1, fn teams -> [team | teams] end)
     |> Repo.update()
   end
 
   @doc """
   Creates an `Ecto.Changeset` for tracking organization changes.
   """
-  @spec change_org(Organization.t) :: Changeset.t
+  @spec change_org(Organization.t()) :: Changeset.t()
   def change_org(%Organization{} = org) do
     Organization.changeset(org, %{})
   end
@@ -61,7 +61,7 @@ defmodule StaffNotes.Accounts do
   %Ecto.Changeset{source: %Team{}}
   ```
   """
-  @spec change_team(Team.t) :: Changeset.t
+  @spec change_team(Team.t()) :: Changeset.t()
   def change_team(%Team{} = team) do
     Team.changeset(team, %{})
   end
@@ -76,7 +76,7 @@ defmodule StaffNotes.Accounts do
   %Ecto.Changeset{source: %User{}}
   ```
   """
-  @spec change_user(User.t) :: Changeset.t
+  @spec change_user(User.t()) :: Changeset.t()
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end
@@ -94,7 +94,7 @@ defmodule StaffNotes.Accounts do
 
   All of this is executed in a database transaction so if any step fails, it all gets rolled back.
   """
-  @spec create_org(Map.t, User.t) :: {:ok, Organization.t} | {:error, Changeset.t}
+  @spec create_org(Map.t(), User.t()) :: {:ok, Organization.t()} | {:error, Changeset.t()}
   def create_org(attrs \\ %{}, %User{} = user) do
     attrs
     |> Organization.create_org_changeset(user)
@@ -106,7 +106,7 @@ defmodule StaffNotes.Accounts do
 
   See `StaffNotes.Accounts.Team.create_team_changeset/2` for applicable business rules.
   """
-  @spec create_team(Map.t, Organization.t) :: {:ok, Team.t} | {:error, Changeset.t}
+  @spec create_team(Map.t(), Organization.t()) :: {:ok, Team.t()} | {:error, Changeset.t()}
   def create_team(team_attrs \\ %{}, %Organization{} = org) do
     team_attrs
     |> Map.put(:organization_id, org.id)
@@ -134,7 +134,7 @@ defmodule StaffNotes.Accounts do
   {:error, %Ecto.Changeset{}}
   ```
   """
-  @spec create_user(Map.t) :: {:ok, User.t} | {:error, Changeset.t}
+  @spec create_user(Map.t()) :: {:ok, User.t()} | {:error, Changeset.t()}
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
@@ -147,7 +147,7 @@ defmodule StaffNotes.Accounts do
   This also deletes all teams within the organization and disassociates all users from the
   organization and its teams.
   """
-  @spec delete_org(Organization.t) :: {:ok, Organization.t} | {:error, Changeset.t}
+  @spec delete_org(Organization.t()) :: {:ok, Organization.t()} | {:error, Changeset.t()}
   def delete_org(%Organization{} = org) do
     Repo.delete(org)
   end
@@ -157,7 +157,7 @@ defmodule StaffNotes.Accounts do
 
   See `StaffNotes.Accounts.Team.delete_team_changeset/1` for applicable business rules.
   """
-  @spec delete_team(Team.t) :: {:ok, Team.t} | {:error, Changeset.t}
+  @spec delete_team(Team.t()) :: {:ok, Team.t()} | {:error, Changeset.t()}
   def delete_team(%Team{} = team) do
     team
     |> Team.delete_team_changeset()
@@ -179,7 +179,7 @@ defmodule StaffNotes.Accounts do
   {:error, %Ecto.Changeset{}}
   ```
   """
-  @spec delete_user(User.t) :: {:ok, User.t} | {:error, Changeset.t}
+  @spec delete_user(User.t()) :: {:ok, User.t()} | {:error, Changeset.t()}
   def delete_user(%User{} = user) do
     Repo.delete(user)
   end
@@ -190,7 +190,7 @@ defmodule StaffNotes.Accounts do
   Works the same as `get_org!/1` but returns `nil` instead of raising an error when the organization
   is not found.
   """
-  @spec get_org(String.t, Keyword.t) :: Organization.t | nil
+  @spec get_org(String.t(), Keyword.t()) :: Organization.t() | nil
   def get_org(name, options \\ []), do: Repo.one(get_org_query(name, options))
 
   @doc """
@@ -217,12 +217,12 @@ defmodule StaffNotes.Accounts do
   Accounts.get_org!("org-name", with: [:users])
   ```
   """
-  @spec get_org!(String.t, Keyword.t) :: Organization.t | no_return
+  @spec get_org!(String.t(), Keyword.t()) :: Organization.t() | no_return
   def get_org!(name, options \\ []), do: Repo.one!(get_org_query(name, options))
 
   defp get_org_query(name, options) do
     preload = Keyword.get(options, :with)
-    query = from o in Organization, where: o.name == ^name
+    query = from(o in Organization, where: o.name == ^name)
     query = if preload, do: Organization.with(query, preload), else: query
 
     query
@@ -233,15 +233,18 @@ defmodule StaffNotes.Accounts do
 
   Raises `Ecto.NoResultsError` if the team does not exist.
   """
-  @spec get_team!(String.t) :: Team.t | no_return
+  @spec get_team!(String.t()) :: Team.t() | no_return
   def get_team!(name), do: Repo.get_by!(Team, name: name)
 
   def get_team!(org_name, team_name) do
     query =
-      from t in Team,
-      join: o in Organization, on: o.id == t.organization_id,
-      where: o.name == ^org_name,
-      where: t.name == ^team_name
+      from(
+        t in Team,
+        join: o in Organization,
+        on: o.id == t.organization_id,
+        where: o.name == ^org_name,
+        where: t.name == ^team_name
+      )
 
     Repo.one!(query)
   end
@@ -252,7 +255,7 @@ defmodule StaffNotes.Accounts do
   Works the same as `get_user!/1` but returns `nil` instead of raising an error when the user is not
   found.
   """
-  @spec get_user(String.t | integer) :: User.t | nil
+  @spec get_user(String.t() | integer) :: User.t() | nil
   def get_user(name_or_id)
   def get_user(binary) when is_binary(binary), do: Repo.get_by(User, name: binary)
   def get_user(id) when is_integer(id), do: Repo.get(User, id)
@@ -285,7 +288,7 @@ defmodule StaffNotes.Accounts do
   ** (Ecto.NoResultsError)
   ```
   """
-  @spec get_user!(String.t | integer) :: User.t | no_return
+  @spec get_user!(String.t() | integer) :: User.t() | no_return
   def get_user!(name_or_id)
   def get_user!(binary) when is_binary(binary), do: Repo.get_by!(User, name: binary)
   def get_user!(id) when is_integer(id), do: Repo.get!(User, id)
@@ -300,7 +303,7 @@ defmodule StaffNotes.Accounts do
   [%Organization{}, ...]
   ```
   """
-  @spec list_orgs :: [Organization.t]
+  @spec list_orgs :: [Organization.t()]
   def list_orgs do
     Repo.all(Organization)
   end
@@ -308,11 +311,9 @@ defmodule StaffNotes.Accounts do
   @doc """
   Lists all teams within the organization.
   """
-  @spec list_teams(Organization.t) :: [Team.t]
+  @spec list_teams(Organization.t()) :: [Team.t()]
   def list_teams(%Organization{} = org) do
-    query =
-      from team in Team,
-        where: team.organization_id == ^org.id
+    query = from(team in Team, where: team.organization_id == ^org.id)
 
     Repo.all(query)
   end
@@ -327,7 +328,7 @@ defmodule StaffNotes.Accounts do
   [%User{}, ...]
   ```
   """
-  @spec list_users :: [User.t]
+  @spec list_users :: [User.t()]
   def list_users do
     Repo.all(User)
   end
@@ -335,7 +336,7 @@ defmodule StaffNotes.Accounts do
   @doc """
   List the users in an organization.
   """
-  @spec list_users(Organization.t) :: [User.t]
+  @spec list_users(Organization.t()) :: [User.t()]
   def list_users(%Organization{} = org) do
     org
     |> Ecto.assoc(:users)
@@ -345,7 +346,7 @@ defmodule StaffNotes.Accounts do
   @doc """
   List the users on a team.
   """
-  @spec list_users(Team.t) :: [User.t]
+  @spec list_users(Team.t()) :: [User.t()]
   def list_users(%Team{} = team) do
     team
     |> Ecto.assoc(:users)
@@ -358,12 +359,14 @@ defmodule StaffNotes.Accounts do
   This shouldn't be susceptible to race conditions so long as the original team is **always**
   created along with the organization.
   """
-  @spec original_team(String.t) :: Team.t | nil
+  @spec original_team(String.t()) :: Team.t() | nil
   def original_team(organization_id) do
     query =
-      from team in Team,
-      where: team.organization_id == ^organization_id,
-      where: team.original
+      from(
+        team in Team,
+        where: team.organization_id == ^organization_id,
+        where: team.original
+      )
 
     Repo.one(query)
   end
@@ -371,7 +374,8 @@ defmodule StaffNotes.Accounts do
   @doc """
   Removes the user from the organization.
   """
-  @spec remove_user_from_org(User.t, Organization.t) :: {:ok, User.t} | {:error, Changeset.t}
+  @spec remove_user_from_org(User.t(), Organization.t()) ::
+          {:ok, User.t()} | {:error, Changeset.t()}
   def remove_user_from_org(%User{} = user, %Organization{} = org) do
     if list_users(org) == [user] do
       do_remove_last_user_error(user)
@@ -383,36 +387,39 @@ defmodule StaffNotes.Accounts do
   defp do_remove_last_user_error(user) do
     user
     |> Accounts.change_user()
-    |> generate_error(:organizations, "Cannot remove the last user in the organization. The organization must be deleted instead.")
+    |> generate_error(
+      :organizations,
+      "Cannot remove the last user in the organization. The organization must be deleted instead."
+    )
   end
 
   defp do_remove_user_from_org(user, org) do
     org = Repo.preload(org, :teams)
 
-    Multi.new
+    Multi.new()
     |> Multi.update(
-         :organization,
-         update_assoc_changeset(user, :organizations, &Accounts.change_user/1, fn(orgs) ->
-           Enum.reject(orgs, &(&1.id == org.id))
-         end)
-       )
+      :organization,
+      update_assoc_changeset(user, :organizations, &Accounts.change_user/1, fn orgs ->
+        Enum.reject(orgs, &(&1.id == org.id))
+      end)
+    )
     |> Multi.update(
-         :teams,
-         update_assoc_changeset(user, :teams, &Accounts.change_user/1, fn(teams) ->
-           ids =
-             org
-             |> Ecto.assoc(:teams)
-             |> Repo.all()
-             |> Enum.map(&(&1.id))
+      :teams,
+      update_assoc_changeset(user, :teams, &Accounts.change_user/1, fn teams ->
+        ids =
+          org
+          |> Ecto.assoc(:teams)
+          |> Repo.all()
+          |> Enum.map(& &1.id)
 
-           Enum.reject(teams, &(&1.id in ids))
-         end)
-       )
+        Enum.reject(teams, &(&1.id in ids))
+      end)
+    )
     |> Repo.transaction()
     |> case do
-         {:ok, %{teams: user}} -> {:ok, user}
-         {:error, _, value, _} -> {:error, value}
-       end
+      {:ok, %{teams: user}} -> {:ok, user}
+      {:error, _, value, _} -> {:error, value}
+    end
   end
 
   defp generate_error(changeset, key, message) do
@@ -424,19 +431,19 @@ defmodule StaffNotes.Accounts do
   @doc """
   Removes the user from the team.
   """
-  @spec remove_user_from_team(User.t, Team.t) :: {:ok, User.t} | {:error, Changeset.t}
+  @spec remove_user_from_team(User.t(), Team.t()) :: {:ok, User.t()} | {:error, Changeset.t()}
   def remove_user_from_team(%User{} = user, %Team{} = team) do
     user
-    |> update_assoc_changeset(:teams, &Accounts.change_user/1, fn(teams) ->
-         Enum.reject(teams, &(&1.id == team.id))
-       end)
+    |> update_assoc_changeset(:teams, &Accounts.change_user/1, fn teams ->
+      Enum.reject(teams, &(&1.id == team.id))
+    end)
     |> Repo.update()
   end
 
   @doc """
   Updates the organization.
   """
-  @spec update_org(Organization.t, Map.t) :: {:ok, Organization.t} | {:error, Changeset.t}
+  @spec update_org(Organization.t(), Map.t()) :: {:ok, Organization.t()} | {:error, Changeset.t()}
   def update_org(%Organization{} = org, attrs) do
     org
     |> Organization.changeset(attrs)
@@ -448,7 +455,7 @@ defmodule StaffNotes.Accounts do
 
   See `StaffNotes.Accounts.Team.update_team_changeset/2` for applicable business rules.
   """
-  @spec update_team(Team.t, Map.t) :: {:ok, Team.t} | {:error, Changeset.t}
+  @spec update_team(Team.t(), Map.t()) :: {:ok, Team.t()} | {:error, Changeset.t()}
   def update_team(%Team{} = team, attrs) do
     team
     |> Team.update_team_changeset(attrs)
@@ -471,7 +478,7 @@ defmodule StaffNotes.Accounts do
   ```
 
   """
-  @spec update_user(User.t, Map.t) :: {:ok, User.t} | {:error, Changeset.t}
+  @spec update_user(User.t(), Map.t()) :: {:ok, User.t()} | {:error, Changeset.t()}
   def update_user(%User{} = user, attrs) do
     user
     |> User.changeset(attrs)

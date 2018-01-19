@@ -20,7 +20,7 @@ defmodule StaffNotesWeb do
   @typedoc """
   Parameters passed to a controller action.
   """
-  @type params :: Map.t
+  @type params :: Map.t()
 
   def controller do
     quote do
@@ -33,8 +33,9 @@ defmodule StaffNotesWeb do
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/staff_notes_web/templates",
-                        namespace: StaffNotesWeb
+      use Phoenix.View,
+        root: "lib/staff_notes_web/templates",
+        namespace: StaffNotesWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 1, view_module: 1]

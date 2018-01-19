@@ -53,11 +53,10 @@ defmodule StaffNotesWeb.UserViewTest do
   describe "organization block" do
     setup [:setup_regular_org]
 
-    setup(context) do
+    setup context do
       {
         :ok,
-        org: context.regular_org,
-        user: context.regular_user
+        org: context.regular_org, user: context.regular_user
       }
     end
 

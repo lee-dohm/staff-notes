@@ -15,13 +15,27 @@ defmodule StaffNotes.Accounts.User do
   @primary_key {:id, :id, autogenerate: false}
   @foreign_key_type :id
   schema "users" do
-    field :avatar_url, :string
-    field :name, Slug
-    field :site_admin, :boolean, default: false, null: false
+    field(:avatar_url, :string)
+    field(:name, Slug)
+    field(:site_admin, :boolean, default: false, null: false)
 
-    has_many :notes, Note, foreign_key: :author_id
-    many_to_many :organizations, Organization, join_through: "organizations_users", on_replace: :delete, on_delete: :delete_all
-    many_to_many :teams, Team, join_through: "teams_users", on_replace: :delete, on_delete: :delete_all
+    has_many(:notes, Note, foreign_key: :author_id)
+
+    many_to_many(
+      :organizations,
+      Organization,
+      join_through: "organizations_users",
+      on_replace: :delete,
+      on_delete: :delete_all
+    )
+
+    many_to_many(
+      :teams,
+      Team,
+      join_through: "teams_users",
+      on_replace: :delete,
+      on_delete: :delete_all
+    )
 
     timestamps()
   end

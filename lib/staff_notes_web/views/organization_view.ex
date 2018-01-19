@@ -7,7 +7,8 @@ defmodule StaffNotesWeb.OrganizationView do
   alias StaffNotes.Notes
 
   def create_note_button(conn, org, options \\ []) do
-    link_options = Keyword.merge(options, to: organization_note_path(conn, :new, org), type: "button")
+    link_options =
+      Keyword.merge(options, to: organization_note_path(conn, :new, org), type: "button")
 
     link(gettext("Create staff note"), link_options)
   end
