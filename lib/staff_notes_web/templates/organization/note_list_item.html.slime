@@ -1,0 +1,9 @@
+li.Box-row.Box-row--hover-gray
+  .TableObject
+    .TableObject-item.TableObject-item--primary
+      a href="#{organization_note_path(@conn, :show, @org, @note)}" class="Box-row-link"
+        = @note.id
+    .TableObject-item
+      = gettext("Last updated")
+      '
+      = timeago(@note.updated_at)

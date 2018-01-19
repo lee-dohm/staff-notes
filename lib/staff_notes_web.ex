@@ -51,7 +51,7 @@ defmodule StaffNotesWeb do
       import PhoenixOcticons
 
       import StaffNotesWeb.AvatarHelpers
-      import StaffNotesWeb.PrimerFormHelpers
+      import StaffNotesWeb.PrimerHelpers
       import StaffNotesWeb.SharedHelpers
       import StaffNotesWeb.TabNavHelpers
       import StaffNotesWeb.TimeHelpers

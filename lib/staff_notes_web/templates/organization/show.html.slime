@@ -2,7 +2,4 @@ h2 = @org.name
 
 = render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :notes)
 
-.blankslate
-  h3 = gettext("This organization doesn't have any notes")
-  p = gettext("Click here to create one")
-  = create_note_button(@conn, @org, class: "btn btn-primary")
+= render_note_list(@conn, @org)

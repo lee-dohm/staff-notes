@@ -1,7 +1,6 @@
-defmodule StaffNotesWeb.PrimerFormHelpers do
+defmodule StaffNotesWeb.PrimerHelpers do
   @moduledoc """
-  Helper functions for generating forms that work with
-  [Primer](https://github.com/primer/primer/tree/master/modules/primer-forms).
+  Helper functions for generating elements that work with [Primer](https://primer.github.io/).
   """
   use Phoenix.HTML
 
@@ -9,9 +8,23 @@ defmodule StaffNotesWeb.PrimerFormHelpers do
   alias StaffNotesWeb.ErrorHelpers
 
   @doc """
+  Generates a link button with the given text and options.
+
+  ## Options
+
+  * **required** `:to` -- the URL to link to
+  """
+  def link_button(text, options \\ []) do
+    options = Keyword.merge(options, type: "button")
+
+    link(text, options)
+  end
+
+  @doc """
   Displays the appropriate input control for the given field.
 
-  See: http://blog.plataformatec.com.br/2016/09/dynamic-forms-with-phoenix/
+  See:
+  [Dynamic forms with Phoenix](http://blog.plataformatec.com.br/2016/09/dynamic-forms-with-phoenix/)
   """
   def input(form, field, options \\ []) do
     type = options[:using] || Form.input_type(form, field)
