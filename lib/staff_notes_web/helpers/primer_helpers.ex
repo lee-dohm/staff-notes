@@ -56,9 +56,7 @@ defmodule StaffNotesWeb.PrimerHelpers do
       |> Form.input_value(field)
       |> Map.get(:text)
 
-    opts =
-      input_opts
-      |> Keyword.merge(id: Form.input_id(form, field), name: Form.input_name(form, field))
+    opts = Keyword.merge(input_opts, id: Form.input_id(form, field), name: Form.input_name(form, field))
 
     content_tag(:textarea, content <> "\n", opts)
   end
