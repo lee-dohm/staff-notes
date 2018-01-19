@@ -35,9 +35,10 @@ defmodule StaffNotes.Support.Helpers do
   @doc """
   Determines whether the appropriate module and template was rendered for the given error.
   """
-  @spec error_rendered?(Plug.Conn.t, atom | integer) :: boolean
+  @spec error_rendered?(Plug.Conn.t(), atom | integer) :: boolean
   def error_rendered?(conn, error)
   def error_rendered?(conn, atom) when is_atom(atom), do: error_rendered?(conn, Status.code(atom))
+
   def error_rendered?(conn, integer) when is_integer(integer) do
     rendered?(conn, ErrorView, "#{integer}.html")
   end
@@ -87,9 +88,10 @@ defmodule StaffNotes.Support.Helpers do
   @doc """
   Determines whether the given view module and template were rendered.
   """
-  @spec rendered?(Plug.Conn.t, module | nil, String.t) :: boolean
+  @spec rendered?(Plug.Conn.t(), module | nil, String.t()) :: boolean
   def rendered?(conn, module \\ nil, template)
   def rendered?(conn, nil, template), do: view_template(conn) == template
+
   def rendered?(conn, module, template) do
     view_module(conn) == module && rendered?(conn, template)
   end
@@ -157,5 +159,8 @@ defmodule StaffNotes.Support.Helpers do
   defp note_attrs, do: %{text: "some text"}
   defp org_attrs, do: %{name: "org-name"}
   defp team_attrs, do: %{name: "team-name", permission: :write, original: false}
-  defp user_attrs, do: %{avatar_url: "some avatar_url", id: 42, name: "user-name", site_admin: false}
+
+  defp user_attrs do
+    %{avatar_url: "some avatar_url", id: 42, name: "user-name", site_admin: false}
+  end
 end

@@ -18,8 +18,7 @@ config :staff_notes, StaffNotesWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "zb9dt/VPhENEdWX7Vi9gjy/1i66u0bqu+HwgcbyqBijV2CQsQDVNgw/sIrRIPsIO",
   render_errors: [view: StaffNotesWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: StaffNotes.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: StaffNotes.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -36,4 +35,4 @@ config :slime, :embedded_engines, %{
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

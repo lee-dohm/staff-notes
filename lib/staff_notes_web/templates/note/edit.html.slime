@@ -1,0 +1,6 @@
+= form_for @changeset, organization_note_path(@conn, :update, @org, @id), fn f ->
+  = input(f, :text, using: :markdown, class: "input-monospace")
+
+  .form-actions
+    = submit(gettext("Update note"), class: "btn btn-primary")
+    = link_button(gettext("Cancel"), class: "btn btn-danger", to: organization_note_path(@conn, :show, @org, @id))

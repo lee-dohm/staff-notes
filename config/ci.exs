@@ -1,4 +1,3 @@
 use Mix.Config
 
-config :staff_notes, StaffNotes.Repo,
-  password: ""
+config :staff_notes, StaffNotes.Repo, password: ""

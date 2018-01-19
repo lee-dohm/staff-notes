@@ -28,7 +28,7 @@ defmodule StaffNotesWeb.TabNavHelpers do
   ```
   """
   def tabnav(do: block) do
-    content_tag(:div, class: "tabnav") do
+    content_tag :div, class: "tabnav" do
       content_tag(:nav, block, class: "tabnav-tabs", "aria-label": "Navigation bar")
     end
   end
@@ -66,6 +66,7 @@ defmodule StaffNotesWeb.TabNavHelpers do
     content_tag(:a, contents, options)
   end
 
+  defp build_class(false, right), do: build_class(nil, right)
   defp build_class(nil, nil), do: "tabnav-tab"
   defp build_class(nil, _), do: "tabnav-tab float-right"
   defp build_class(_, nil), do: "tabnav-tab selected"
@@ -73,7 +74,10 @@ defmodule StaffNotesWeb.TabNavHelpers do
 
   defp build_contents(nil, text, nil), do: [text]
   defp build_contents(icon, text, nil), do: [octicon(icon), text]
-  defp build_contents(nil, text, counter), do: [text, content_tag(:span, counter, class: "Counter")]
+
+  defp build_contents(nil, text, counter),
+    do: [text, content_tag(:span, counter, class: "Counter")]
+
   defp build_contents(icon, text, counter) do
     [
       octicon(icon),

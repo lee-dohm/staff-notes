@@ -5,6 +5,6 @@
         = @user.name
   .TableObject-item
     strong
-      = gettext("Permiission level")
+      = gettext("Permission level")
       ':
     |Owner

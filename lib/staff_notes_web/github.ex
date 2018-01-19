@@ -7,7 +7,7 @@ defmodule StaffNotesWeb.GitHub do
   # Public API
 
   def client do
-    OAuth2.Client.new([
+    OAuth2.Client.new(
       strategy: __MODULE__,
       client_id: System.get_env("GITHUB_CLIENT_ID"),
       client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
@@ -15,7 +15,7 @@ defmodule StaffNotesWeb.GitHub do
       site: "https://api.github.com",
       authorize_url: "https://github.com/login/oauth/authorize",
       token_url: "https://github.com/login/oauth/access_token"
-    ])
+    )
   end
 
   def authorize_url! do

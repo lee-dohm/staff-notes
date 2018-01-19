@@ -14,7 +14,7 @@ defmodule StaffNotes.Application do
       # Start the Ecto repository
       supervisor(StaffNotes.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(StaffNotesWeb.Endpoint, []),
+      supervisor(StaffNotesWeb.Endpoint, [])
       # Start your own worker by calling: StaffNotes.Worker.start_link(arg1, arg2, arg3)
       # worker(StaffNotes.Worker, [arg1, arg2, arg3]),
     ]

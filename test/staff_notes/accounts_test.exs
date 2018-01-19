@@ -8,7 +8,7 @@ defmodule StaffNotes.AccountsTest do
 
   setup [:setup_regular_org]
 
-  setup(context) do
+  setup context do
     other_user = user_fixture(%{name: "other-user", id: 43})
     other_org = org_fixture(%{name: "other-org"}, other_user)
 

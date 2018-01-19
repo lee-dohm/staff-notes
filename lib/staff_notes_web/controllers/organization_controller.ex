@@ -15,6 +15,7 @@ defmodule StaffNotesWeb.OrganizationController do
     case Accounts.create_org(org, conn.assigns.current_user) do
       {:ok, results} ->
         redirect(conn, to: organization_path(conn, :show, results.org))
+
       {:error, :org, changeset, %{}} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -53,8 +54,9 @@ defmodule StaffNotesWeb.OrganizationController do
   @doc """
   Renders an organization by name.
   """
-  @spec show(Plug.Conn.t, StaffNotesWeb.params) :: Plug.Conn.t
+  @spec show(Plug.Conn.t(), StaffNotesWeb.params()) :: Plug.Conn.t()
   def show(conn, params)
+
   def show(conn, %{"name" => name}) do
     org =
       name

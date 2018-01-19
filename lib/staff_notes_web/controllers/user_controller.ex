@@ -11,8 +11,9 @@ defmodule StaffNotesWeb.UserController do
 
   Raises `Ecto.NoResultsError` if the user is not found.
   """
-  @spec show(Plug.Conn.t, Map.t) :: Plug.Conn.t
+  @spec show(Plug.Conn.t(), Map.t()) :: Plug.Conn.t()
   def show(conn, params)
+
   def show(conn, %{"name" => name}) do
     user = Accounts.get_user!(name)
 

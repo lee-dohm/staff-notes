@@ -3,6 +3,6 @@ defmodule StaffNotes.Repo.Migrations.UniqueNames do
 
   def change do
     # Ensures that each team name is unique within its organization
-    create unique_index(:teams, [:organization_id, :name])
+    create(unique_index(:teams, [:organization_id, :name]))
   end
 end

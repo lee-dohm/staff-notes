@@ -9,7 +9,7 @@ defmodule StaffNotes.Accounts.UserTest do
 
   setup [:setup_regular_org]
 
-  setup(context) do
+  setup context do
     {
       :ok,
       user: context.regular_user
@@ -48,7 +48,13 @@ defmodule StaffNotes.Accounts.UserTest do
 
   describe "create_user/1" do
     test "creates a user when given valid data" do
-      {:ok, %User{} = user} = Accounts.create_user(%{name: "some-user-name", id: 43, avatar_url: "url", site_admin: false})
+      {:ok, %User{} = user} =
+        Accounts.create_user(%{
+          name: "some-user-name",
+          id: 43,
+          avatar_url: "url",
+          site_admin: false
+        })
 
       assert user.avatar_url == "url"
       assert user.name == %Slug{text: "some-user-name"}
@@ -57,7 +63,8 @@ defmodule StaffNotes.Accounts.UserTest do
     end
 
     test "returns an error changeset when given invalid data" do
-      {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(%{name: nil, id: nil, avatar_url: nil, site_admin: nil})
+      {:error, %Ecto.Changeset{} = changeset} =
+        Accounts.create_user(%{name: nil, id: nil, avatar_url: nil, site_admin: nil})
 
       refute changeset.valid?
       assert errors_on(changeset).name

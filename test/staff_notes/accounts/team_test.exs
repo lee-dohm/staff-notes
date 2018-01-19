@@ -9,7 +9,7 @@ defmodule StaffNotes.Accounts.TeamTest do
 
   setup [:setup_regular_org]
 
-  setup(context) do
+  setup context do
     org = context.regular_org
 
     {
@@ -47,8 +47,9 @@ defmodule StaffNotes.Accounts.TeamTest do
       assert errors_on(changeset).original
     end
 
-    test "returns an error changeset when creating a second original team in the same org", context do
-      {:error, %Ecto.Changeset{} = changeset} = Accounts.create_team(%{original: true}, context.org)
+    test "returns an error changeset when creating a second original team in the org", context do
+      {:error, %Ecto.Changeset{} = changeset} =
+        Accounts.create_team(%{original: true}, context.org)
 
       refute changeset.valid?
       assert errors_on(changeset).original
@@ -99,9 +100,12 @@ defmodule StaffNotes.Accounts.TeamTest do
   describe "original_team/1" do
     test "returns the original team for the given organization", context do
       query =
-        from t in Team,
+        from(
+          t in Team,
           where: t.organization_id == ^context.org.id,
           where: t.original
+        )
+
       team = Repo.one(query)
 
       assert Accounts.original_team(context.org.id) == team
@@ -140,7 +144,7 @@ defmodule StaffNotes.Accounts.TeamTest do
       assert %{name: ["can't be blank"]} = errors_on(changeset)
     end
 
-    test "returns an error changeset when trying to mark an original team as not original", context do
+    test "returns an error changeset when marking an original team as not original", context do
       team = Accounts.original_team(context.org.id)
       {:error, changeset} = Accounts.update_team(team, %{original: false})
 
@@ -148,19 +152,21 @@ defmodule StaffNotes.Accounts.TeamTest do
       assert %{original: ["A team's original field cannot be changed"]} = errors_on(changeset)
     end
 
-    test "returns an error changeset when trying to mark an unoriginal team as original", context do
+    test "returns an error changeset when marking an unoriginal team as original", context do
       {:error, changeset} = Accounts.update_team(context.team, %{original: true})
 
       refute changeset.valid?
       assert %{original: ["A team's original field cannot be changed"]} = errors_on(changeset)
     end
 
-    test "returns an error changeset when trying to change permission level of original team", context do
+    test "returns an error changeset when trying to change permissions of original team", context do
       team = Accounts.original_team(context.org.id)
       {:error, changeset} = Accounts.update_team(team, %{permission: :read})
 
       refute changeset.valid?
-      assert %{permission: ["Cannot change the permission level of the original team"]} = errors_on(changeset)
+
+      assert %{permission: ["Cannot change the permission level of the original team"]} =
+               errors_on(changeset)
     end
   end
 end

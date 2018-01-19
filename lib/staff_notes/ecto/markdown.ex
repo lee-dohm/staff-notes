@@ -20,10 +20,10 @@ defmodule StaffNotes.Ecto.Markdown do
 
   [beyond-functions]: https://blog.usejournal.com/beyond-functions-in-elixir-refactoring-for-maintainability-5c73daba77f3
   """
-  @type t :: %__MODULE__{text: String.t, html: nil | String.t}
+  @type t :: %__MODULE__{text: String.t(), html: nil | String.t()}
   defstruct text: "", html: nil
 
-  @type markdown :: %__MODULE__{} | String.t
+  @type markdown :: %__MODULE__{} | String.t()
 
   @behaviour Ecto.Type
 
@@ -79,7 +79,7 @@ defmodule StaffNotes.Ecto.Markdown do
   "<p>foo</p>"
   ```
   """
-  @spec to_html(markdown) :: String.t
+  @spec to_html(markdown) :: String.t()
   def to_html(markdown)
 
   def to_html(%__MODULE__{html: html}) when is_binary(html), do: html

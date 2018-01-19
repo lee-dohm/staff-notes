@@ -20,7 +20,8 @@ defmodule StaffNotes.NotesTest do
     end
 
     test "create_note/3 with invalid data returns error changeset", context do
-      assert {:error, %Ecto.Changeset{}} = Notes.create_note(%{text: nil}, context.author, context.regular_org)
+      assert {:error, %Ecto.Changeset{}} =
+               Notes.create_note(%{text: nil}, context.author, context.regular_org)
     end
 
     test "update_note/2 with valid data updates the note", context do
