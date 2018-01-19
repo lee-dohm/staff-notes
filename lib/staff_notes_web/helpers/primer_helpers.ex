@@ -41,13 +41,30 @@ defmodule StaffNotesWeb.PrimerHelpers do
 
       input =
         content_tag :dd do
-          apply(Form, type, [form, field, input_opts])
+          input(type, form, field, input_opts)
         end
 
       error = error_tag(form, field) || ""
 
       [label, input, error]
     end
+  end
+
+  defp input(:markdown, form, field, input_opts) do
+    content =
+      form
+      |> Form.input_value(field)
+      |> Map.get(:text)
+
+    opts =
+      input_opts
+      |> Keyword.merge(id: Form.input_id(form, field), name: Form.input_name(form, field))
+
+    content_tag(:textarea, content <> "\n", opts)
+  end
+
+  defp input(type, form, field, input_opts) do
+    apply(Form, type, [form, field, input_opts])
   end
 
   defp error_class(form, field) do

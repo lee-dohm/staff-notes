@@ -8,6 +8,7 @@ defmodule StaffNotesWeb.NoteController do
   alias StaffNotes.Notes
   alias StaffNotes.Notes.Note
   alias StaffNotes.Repo
+  alias StaffNotesWeb.NoteController
 
   @doc """
   Receives parameters for creating a new note for an organization and stores it in the database.
@@ -32,8 +33,15 @@ defmodule StaffNotesWeb.NoteController do
   @doc """
   Receives a note and renders a form for editing it.
   """
-  def edit(conn, _params) do
-    conn
+  def edit(conn, %{"organization_name" => org_name, "id" => id}) do
+    org = Accounts.get_org!(org_name)
+
+    changeset =
+      id
+      |> Notes.get_note!()
+      |> Notes.change_note()
+
+    render(conn, "edit.html", changeset: changeset, id: id, org: org)
   end
 
   @doc """
@@ -68,7 +76,13 @@ defmodule StaffNotesWeb.NoteController do
   @doc """
   Receives parameters for updating a note and saves it to the database.
   """
-  def update(conn, _params) do
-    conn
+  def update(conn, %{"organization_name" => org_name, "id" => id, "note" => attrs}) do
+    org = Accounts.get_org!(org_name)
+    note = Notes.get_note!(id)
+
+    case Notes.update_note(note, attrs) do
+      {:ok, updated} -> redirect(conn, to: organization_note_path(conn, :show, org, updated))
+      {:error, changeset} -> render(conn, "edit.html", changeset: changeset, id: id, org: org)
+    end
   end
 end
