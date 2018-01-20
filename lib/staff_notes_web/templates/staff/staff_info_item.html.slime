@@ -1,10 +1,10 @@
-.team-info-item.TableObject
-  .TableObject-item.TableObject-item--primary
-    h3
-      a href="#{user_path(@conn, :show, @user)}"
+li.Box-row.Box-row--hover-gray
+  .TableObject
+    .TableObject-item.TableObject-item--primary
+      a href="#{user_path(@conn, :show, @user)}" class="Box-row-link"
         = @user.name
-  .TableObject-item
-    strong
-      = gettext("Permission level")
-      ':
-    |Owner
+    .TableObject-item
+      strong
+        = gettext("Permission level")
+        ':
+      |Owner

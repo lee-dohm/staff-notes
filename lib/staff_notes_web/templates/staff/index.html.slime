@@ -2,5 +2,4 @@ h2 = @org.name
 
 = render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :staff)
 
-.staff-info-list
-  = render_staff_info_list(@conn, @org.users)
+= render_list(@org.users, view_module(@conn), "staff_info", conn: @conn, as: :user)
