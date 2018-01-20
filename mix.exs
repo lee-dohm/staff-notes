@@ -20,9 +20,6 @@ defmodule StaffNotes.Mixfile do
     ]
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
   def application do
     [
       mod: {StaffNotes.Application, []},
@@ -30,12 +27,6 @@ defmodule StaffNotes.Mixfile do
     ]
   end
 
-  # Aliases are shortcuts or tasks specific to the current project.
-  # For example, to create, migrate and run the seeds file at once:
-  #
-  #     $ mix ecto.setup
-  #
-  # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
       "ecto.ci": ["ecto.create", "ecto.migrate"],
@@ -44,9 +35,6 @@ defmodule StaffNotes.Mixfile do
     ]
   end
 
-  # Specifies your project dependencies.
-  #
-  # Type `mix help deps` for examples and options.
   defp deps do
     [
       {:cmark, "~> 0.7"},
@@ -62,7 +50,7 @@ defmodule StaffNotes.Mixfile do
       {:phoenix_slime, "~> 0.9"},
       {:postgrex, ">= 0.0.0"},
       {:timex, "~> 3.1"},
-      {:dotenv, "~> 2.0", only: :dev},
+      {:dotenv, "~> 3.0", only: :dev},
       {:ex_doc, "~> 0.18", only: [:dev, :test], runtime: false},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:floki, "~> 0.19", only: [:dev, :test]}
