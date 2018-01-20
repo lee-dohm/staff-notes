@@ -65,22 +65,29 @@ defmodule StaffNotes.Ecto.Markdown do
   Render Markdown from a string:
 
   ```
-  iex> StaffNotes.Markdown.to_html("# Foo")
+  iex> StaffNotes.Ecto.Markdown.to_html("# Foo")
   "<h1>Foo</h1>\n"
   ```
 
-  Render Markdown from a `StaffNotes.Markdown` struct:
+  Render Markdown from a `Markdown` struct:
 
   ```
-  iex> StaffNotes.Markdown.to_html(%StaffNotes.Markdown{text: "# Foo"})
+  iex> StaffNotes.Ecto.Markdown.to_html(%StaffNotes.Ecto.Markdown{text: "# Foo"})
   "<h1>Foo</h1>\n"
   ```
 
-  Passes HTML through unchanged:
+  Passes already rendered Markdown through unchanged:
 
   ```
-  iex> StaffNotes.Markdown.to_html(%StaffNotes.Markdown{html: "<p>foo</p>"})
+  iex> StaffNotes.Ecto.Markdown.to_html(%StaffNotes.Ecto.Markdown{html: "<p>foo</p>"})
   "<p>foo</p>"
+  ```
+
+  Returns an empty string for anything that isn't a string or a `Markdown` struct:
+
+  ```
+  iex> StaffNotes.Ecto.Markdown.to_html(5)
+  ""
   ```
   """
   @spec to_html(markdown) :: String.t()
