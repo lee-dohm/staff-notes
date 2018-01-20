@@ -96,9 +96,9 @@ defmodule StaffNotesWeb.PrimerHelpers do
   collection is non-empty.
   """
   def render_list(collection, module, template_root, assigns \\ %{}) do
-    content_tag(:div, class: "Box") do
-      content_tag(:div, class: "Box-body") do
-        content_tag(:ul) do
+    content_tag :div, class: "Box" do
+      content_tag :div, class: "Box-body" do
+        content_tag :ul do
           render_items(collection, module, template_root, assigns)
         end
       end
@@ -209,7 +209,12 @@ defmodule StaffNotesWeb.PrimerHelpers do
       |> Form.input_value(field)
       |> Map.get(:text)
 
-    opts = Keyword.merge(input_opts, id: Form.input_id(form, field), name: Form.input_name(form, field))
+    opts =
+      Keyword.merge(
+        input_opts,
+        id: Form.input_id(form, field),
+        name: Form.input_name(form, field)
+      )
 
     content_tag(:textarea, content <> "\n", opts)
   end
