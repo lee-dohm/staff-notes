@@ -8,7 +8,6 @@ defmodule StaffNotesWeb.OrganizationController do
 
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
-  alias StaffNotes.Notes
   alias StaffNotes.Notes.Note
   alias StaffNotes.Repo
 

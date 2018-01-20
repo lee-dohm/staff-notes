@@ -8,7 +8,6 @@ defmodule StaffNotesWeb.NoteController do
   alias StaffNotes.Notes
   alias StaffNotes.Notes.Note
   alias StaffNotes.Repo
-  alias StaffNotesWeb.NoteController
 
   @doc """
   Receives parameters for creating a new note for an organization and stores it in the database.
