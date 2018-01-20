@@ -1,4 +1,0 @@
-.Box
-  .Box-body
-    ul
-      = render_many(@notes, __MODULE__, "note_list_item.html", conn: @conn, org: @org, as: :note)

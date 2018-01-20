@@ -4,6 +4,8 @@ defmodule StaffNotesWeb.PrimerHelpers do
   """
   use Phoenix.HTML
 
+  import Phoenix.View, only: [render: 3, render_many: 4]
+
   alias Phoenix.HTML.Form
   alias StaffNotesWeb.ErrorHelpers
 
@@ -75,6 +77,32 @@ defmodule StaffNotesWeb.PrimerHelpers do
 
       [label, input, error]
     end
+  end
+
+  @doc """
+  Renders a standard list of items.
+
+  Takes the same parameters and options as `Phoenix.View.render_many/4` except that the
+  `template_root` parameter is the root name of the template. This root name will have either
+  `_blankslate.html` appended if `collection` is empty or have `_item.html` appended if the
+  collection is non-empty.
+  """
+  def render_list(collection, module, template_root, assigns \\ %{}) do
+    content_tag(:div, class: "Box") do
+      content_tag(:div, class: "Box-body") do
+        content_tag(:ul) do
+          render_items(collection, module, template_root, assigns)
+        end
+      end
+    end
+  end
+
+  defp render_items(collection, module, template, assigns) when length(collection) == 0 do
+    render(module, "#{template}_blankslate.html", assigns)
+  end
+
+  defp render_items(collection, module, template, assigns) do
+    render_many(collection, module, "#{template}_item.html", assigns)
   end
 
   defp input(:markdown, form, field, input_opts) do
