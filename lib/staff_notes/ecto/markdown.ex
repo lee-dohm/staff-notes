@@ -69,7 +69,7 @@ defmodule StaffNotes.Ecto.Markdown do
   "<h1>Foo</h1>\n"
   ```
 
-  Render Markdown from a `Markdown` struct:
+  Render Markdown from an unrendered `Markdown` struct:
 
   ```
   iex> StaffNotes.Ecto.Markdown.to_html(%StaffNotes.Ecto.Markdown{text: "# Foo"})
