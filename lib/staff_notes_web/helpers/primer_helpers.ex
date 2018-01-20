@@ -8,6 +8,33 @@ defmodule StaffNotesWeb.PrimerHelpers do
   alias StaffNotesWeb.ErrorHelpers
 
   @doc """
+  Displays the avatar for the `StaffNotes.Accounts.User`.
+
+  ## Options
+
+  Valid options are:
+
+  * `:size` -- the value in pixels to use for both the width and height of the avatar image
+  """
+  @spec avatar(User.t(), keyword) :: Phoenix.HTML.safe()
+  def avatar(user, options \\ [])
+
+  def avatar(user, []) do
+    content_tag(:img, "", class: "avatar", src: user.avatar_url)
+  end
+
+  def avatar(user, size: size) do
+    content_tag(
+      :img,
+      "",
+      class: "avatar",
+      src: "#{user.avatar_url}&s=#{size}",
+      width: size,
+      height: size
+    )
+  end
+
+  @doc """
   Generates a link button with the given text and options.
 
   ## Options
