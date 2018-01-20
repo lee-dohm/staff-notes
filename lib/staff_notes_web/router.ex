@@ -38,10 +38,14 @@ defmodule StaffNotesWeb.Router do
     get("/logout", AuthController, :delete)
   end
 
-  # Fetch the current user from the session and add it to `conn.assigns`. This
-  # will allow you to have access to the current user in your views with
-  # `@current_user`.
-  defp assign_current_user(conn, _) do
+  @doc """
+  Fetch the current user from the session and add it to the assigns of the `Plug.Conn`.
+
+  This will allow access to the currently signed in user in views as `@current_user`. If no user is
+  logged in, `@current_user` will be `nil`.
+  """
+  @spec assign_current_user(Plug.Conn.t(), any) :: Plug.Conn.t()
+  def assign_current_user(conn, _) do
     assign(conn, :current_user, get_session(conn, :current_user))
   end
 end
