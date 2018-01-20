@@ -4,8 +4,38 @@ defmodule StaffNotesWeb.PrimerHelpers do
   """
   use Phoenix.HTML
 
+  import Phoenix.View, only: [render: 3, render_many: 4]
+  import PhoenixOcticons
+
   alias Phoenix.HTML.Form
   alias StaffNotesWeb.ErrorHelpers
+
+  @doc """
+  Displays the avatar for the `StaffNotes.Accounts.User`.
+
+  ## Options
+
+  Valid options are:
+
+  * `:size` -- the value in pixels to use for both the width and height of the avatar image
+  """
+  @spec avatar(User.t(), keyword) :: Phoenix.HTML.safe()
+  def avatar(user, options \\ [])
+
+  def avatar(user, []) do
+    content_tag(:img, "", class: "avatar", src: user.avatar_url)
+  end
+
+  def avatar(user, size: size) do
+    content_tag(
+      :img,
+      "",
+      class: "avatar",
+      src: "#{user.avatar_url}&s=#{size}",
+      width: size,
+      height: size
+    )
+  end
 
   @doc """
   Generates a link button with the given text and options.
@@ -48,6 +78,114 @@ defmodule StaffNotesWeb.PrimerHelpers do
 
       [label, input, error]
     end
+  end
+
+  @doc """
+  Renders a standard list of items.
+
+  Takes the same parameters and options as `Phoenix.View.render_many/4` except that the
+  `template_root` parameter is the root name of the template. This root name will have either
+  `_blankslate.html` appended if `collection` is empty or have `_item.html` appended if the
+  collection is non-empty.
+  """
+  def render_list(collection, module, template_root, assigns \\ %{}) do
+    content_tag(:div, class: "Box") do
+      content_tag(:div, class: "Box-body") do
+        content_tag(:ul) do
+          render_items(collection, module, template_root, assigns)
+        end
+      end
+    end
+  end
+
+  defp render_items(collection, module, template, assigns) when length(collection) == 0 do
+    render(module, "#{template}_blankslate.html", assigns)
+  end
+
+  @doc """
+  Renders the tabnav element.
+
+  ## Examples
+
+  In Elixir code:
+
+  ```
+  tabnav do
+    [
+      tabnav_item("Text", "https://example.com")
+    ]
+  end
+  ```
+
+  In Slime template:
+
+  ```
+  = tabnav do
+    = tabnav_item("Text", "https://example.com")
+  ```
+  """
+  def tabnav(do: block) do
+    content_tag :div, class: "tabnav" do
+      content_tag(:nav, block, class: "tabnav-tabs", "aria-label": "Navigation bar")
+    end
+  end
+
+  @doc """
+  Generates a tabnav item to be rendered inside a tabnav element.
+
+  ## Examples
+
+  Rendering a tabnav item with an icon, counter, aligned right, and selected:
+
+  ```
+  tabnav_item(
+    "Settings",
+    "https://example.com",
+    counter: 5,
+    icon: :gear,
+    right: true,
+    selected: true
+  )
+  ```
+  """
+  def tabnav_item(text, path, options \\ []) do
+    selected = Keyword.get(options, :selected)
+    icon = Keyword.get(options, :icon)
+    right = Keyword.get(options, :right)
+    counter = Keyword.get(options, :counter)
+
+    contents = build_contents(icon, text, counter)
+    class = build_class(selected, right)
+
+    options = [href: path, class: class]
+    options = if selected, do: Keyword.put(options, :"aria-current", "page"), else: options
+
+    content_tag(:a, contents, options)
+  end
+
+  defp build_class(false, right), do: build_class(nil, right)
+  defp build_class(nil, nil), do: "tabnav-tab"
+  defp build_class(nil, _), do: "tabnav-tab float-right"
+  defp build_class(_, nil), do: "tabnav-tab selected"
+  defp build_class(_, _), do: "tabnav-tab float-right selected"
+
+  defp build_contents(nil, text, nil), do: [text]
+  defp build_contents(icon, text, nil), do: [octicon(icon), text]
+
+  defp build_contents(nil, text, counter) do
+    [text, content_tag(:span, counter, class: "Counter")]
+  end
+
+  defp build_contents(icon, text, counter) do
+    [
+      octicon(icon),
+      text,
+      content_tag(:span, counter, class: "Counter")
+    ]
+  end
+
+  defp render_items(collection, module, template, assigns) do
+    render_many(collection, module, "#{template}_item.html", assigns)
   end
 
   defp input(:markdown, form, field, input_opts) do

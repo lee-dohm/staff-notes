@@ -22,6 +22,19 @@ defmodule StaffNotesWeb do
   """
   @type params :: Map.t()
 
+  @doc """
+  Adds alias, import and use directives for `Phoenix.Channel` modules.
+  """
+  def channel do
+    quote do
+      use Phoenix.Channel
+      import StaffNotesWeb.Gettext
+    end
+  end
+
+  @doc """
+  Adds alias, import and use directives for `Phoenix.Controller` modules.
+  """
   def controller do
     quote do
       use Phoenix.Controller, namespace: StaffNotesWeb
@@ -31,6 +44,22 @@ defmodule StaffNotesWeb do
     end
   end
 
+  @doc """
+  Adds alias, import and use directives for modules intended to create helper functions for
+  `Phoenix.View` modules.
+  """
+  def helper do
+    quote do
+      use Phoenix.HTML
+
+      import PhoenixOcticons
+      import StaffNotesWeb.Gettext
+    end
+  end
+
+  @doc """
+  Adds alias, import and use directives for `Phoenix.View` modules.
+  """
   def view do
     quote do
       use Phoenix.View,
@@ -51,10 +80,8 @@ defmodule StaffNotesWeb do
       # Project-specific view helpers
       import PhoenixOcticons
 
-      import StaffNotesWeb.AvatarHelpers
       import StaffNotesWeb.PrimerHelpers
       import StaffNotesWeb.SharedHelpers
-      import StaffNotesWeb.TabNavHelpers
       import StaffNotesWeb.TimeHelpers
     end
   end
@@ -64,22 +91,6 @@ defmodule StaffNotesWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
-    end
-  end
-
-  def channel do
-    quote do
-      use Phoenix.Channel
-      import StaffNotesWeb.Gettext
-    end
-  end
-
-  def helper do
-    quote do
-      use Phoenix.HTML
-
-      import PhoenixOcticons
-      import StaffNotesWeb.Gettext
     end
   end
 

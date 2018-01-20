@@ -1,9 +1,9 @@
-h2 = @org.name
+h2.mb-3 = @org.name
 
 = render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :teams)
 
-.team-info-list
-  = render_team_info_list(@conn, @org.teams)
+.subnav
+  .float-right
+    button.btn.btn-primary = gettext("Create team")
 
-.float-right.mt-5
-  button.btn.btn-primary = gettext("Create team")
+= render_list(@org.teams, view_module(@conn), "team_info", conn: @conn, as: :team)
