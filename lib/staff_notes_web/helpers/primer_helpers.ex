@@ -53,9 +53,16 @@ defmodule StaffNotesWeb.PrimerHelpers do
   @doc """
   Displays the appropriate input control for the given field.
 
+  ## Options
+
+  * `:using` -- override the built-in selection of input field based on data type. Can be any of the
+    `Phoenix.HTML.Form` input function names or the special value `:markdown` which displays a
+    specially-formatted `textarea`
+
   See:
   [Dynamic forms with Phoenix](http://blog.plataformatec.com.br/2016/09/dynamic-forms-with-phoenix/)
   """
+  @spec input(Phoenix.HTML.FormData.t(), atom, keyword) :: Phoenix.HTML.safe()
   def input(form, field, options \\ []) do
     type = options[:using] || Form.input_type(form, field)
 
@@ -96,10 +103,6 @@ defmodule StaffNotesWeb.PrimerHelpers do
         end
       end
     end
-  end
-
-  defp render_items(collection, module, template, assigns) when length(collection) == 0 do
-    render(module, "#{template}_blankslate.html", assigns)
   end
 
   @doc """
@@ -184,8 +187,20 @@ defmodule StaffNotesWeb.PrimerHelpers do
     ]
   end
 
-  defp render_items(collection, module, template, assigns) do
-    render_many(collection, module, "#{template}_item.html", assigns)
+  defp error_class(form, field) do
+    cond do
+      !form.source.action -> ""
+      form.errors[field] -> "errored"
+      true -> ""
+    end
+  end
+
+  defp error_tag(form, field) do
+    Enum.map(Keyword.get_values(form.errors, field), fn error ->
+      content_tag :dd, class: "error" do
+        ErrorHelpers.translate_error(error)
+      end
+    end)
   end
 
   defp input(:markdown, form, field, input_opts) do
@@ -203,19 +218,11 @@ defmodule StaffNotesWeb.PrimerHelpers do
     apply(Form, type, [form, field, input_opts])
   end
 
-  defp error_class(form, field) do
-    cond do
-      !form.source.action -> ""
-      form.errors[field] -> "errored"
-      true -> ""
-    end
+  defp render_items(collection, module, template, assigns) when length(collection) == 0 do
+    render(module, "#{template}_blankslate.html", assigns)
   end
 
-  defp error_tag(form, field) do
-    Enum.map(Keyword.get_values(form.errors, field), fn error ->
-      content_tag :dd, class: "error" do
-        ErrorHelpers.translate_error(error)
-      end
-    end)
+  defp render_items(collection, module, template, assigns) do
+    render_many(collection, module, "#{template}_item.html", assigns)
   end
 end

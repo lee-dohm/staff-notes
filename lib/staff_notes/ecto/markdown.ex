@@ -16,6 +16,10 @@ defmodule StaffNotes.Ecto.Markdown do
   end
   ```
 
+  This type requires special handling in forms because Phoenix's form builder functions call
+  `Phoenix.HTML.html_escape/1` on all field values, which returns the `html` field on this type. But
+  what we want when we show an `t:StaffNotes.Ecto.Markdown.t/0` value in a form is the `text` field.
+
   See: [Beyond Functions in Elixir: Refactoring for Maintainability][beyond-functions]
 
   [beyond-functions]: https://blog.usejournal.com/beyond-functions-in-elixir-refactoring-for-maintainability-5c73daba77f3
