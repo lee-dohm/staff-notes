@@ -10,10 +10,15 @@ defmodule StaffNotes.Mixfile do
       name: "Staff Notes",
       homepage_url: "https://www.staffnotes.io",
       source_url: "https://github.com/lee-dohm/staff-notes",
+
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+
+      preferred_cli_env: [coveralls: :test],
       start_permanent: Mix.env() == :prod,
+      test_coverage: [tool: ExCoveralls],
+
       aliases: aliases(),
       deps: deps(),
       docs: docs()
@@ -52,6 +57,7 @@ defmodule StaffNotes.Mixfile do
       {:timex, "~> 3.1"},
       {:dotenv, "~> 3.0", only: :dev},
       {:ex_doc, "~> 0.18", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.8", only: :test},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:floki, "~> 0.19", only: [:dev, :test]}
     ]
