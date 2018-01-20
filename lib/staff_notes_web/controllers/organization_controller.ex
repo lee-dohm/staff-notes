@@ -4,8 +4,12 @@ defmodule StaffNotesWeb.OrganizationController do
   """
   use StaffNotesWeb, :controller
 
+  import Ecto.Query
+
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.Organization
+  alias StaffNotes.Notes
+  alias StaffNotes.Notes.Note
   alias StaffNotes.Repo
 
   @doc """
@@ -52,18 +56,22 @@ defmodule StaffNotesWeb.OrganizationController do
   end
 
   @doc """
-  Renders an organization by name.
+  Renders an organization given its name.
   """
   @spec show(Plug.Conn.t(), StaffNotesWeb.params()) :: Plug.Conn.t()
   def show(conn, params)
 
   def show(conn, %{"name" => name}) do
-    org =
-      name
-      |> Accounts.get_org!()
-      |> Repo.preload([:teams, :users])
+    org = Accounts.get_org!(name)
+    notes =
+      from(
+        n in Note,
+        where: n.organization_id == ^org.id,
+        order_by: [desc: :inserted_at]
+      )
+      |> Repo.all()
 
-    render(conn, "show.html", org: org)
+    render(conn, "show.html", org: org, notes: notes)
   end
 
   @doc """

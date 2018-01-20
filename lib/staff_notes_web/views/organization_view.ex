@@ -13,9 +13,7 @@ defmodule StaffNotesWeb.OrganizationView do
     link(gettext("Create staff note"), link_options)
   end
 
-  def render_note_list(conn, org) do
-    notes = Notes.list_notes(org)
-
+  def render_note_list(conn, org, notes) do
     do_render_note_list(conn, org, notes)
   end
 

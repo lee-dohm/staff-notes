@@ -6,4 +6,4 @@ h2.mb-3 = @org.name
   .float-right
     = link_button(gettext("Create note"), to: organization_note_path(@conn, :new, @org), class: "btn btn-primary")
 
-= render_note_list(@conn, @org)
+= render_note_list(@conn, @org, @notes)
