@@ -82,7 +82,6 @@ defmodule StaffNotesWeb do
 
       import StaffNotesWeb.PrimerHelpers
       import StaffNotesWeb.SharedHelpers
-      import StaffNotesWeb.TabNavHelpers
       import StaffNotesWeb.TimeHelpers
     end
   end
