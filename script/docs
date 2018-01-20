@@ -27,5 +27,5 @@ mix docs
 
 if [ -n "$open" ]; then
   echo "==> Open documentation in primary browser..."
-  open doc/index.html
+  open docs/index.html
 fi

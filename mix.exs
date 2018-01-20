@@ -62,6 +62,7 @@ defmodule StaffNotes.Mixfile do
       main: docs_main(Mix.env()),
       source_url: "https://github.com/lee-dohm/staff-notes",
       markdown_processor: ExDoc.Markdown.Cmark,
+      output: "docs",
       groups_for_modules: [
         Accounts: [
           ~r{^StaffNotes\.Accounts}
