@@ -40,7 +40,7 @@ defmodule StaffNotesWeb.TimeHelpers do
   def timeago(time) do
     time = format(time)
 
-    content_tag(:span, time, class: "timeago", datetime: time, title: time)
+    content_tag(:"relative-time", time, datetime: time, title: time)
   end
 
   defp format(time) do
