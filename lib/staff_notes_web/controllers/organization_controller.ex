@@ -64,12 +64,11 @@ defmodule StaffNotesWeb.OrganizationController do
   def show(conn, %{"name" => name}) do
     org = Accounts.get_org!(name)
     notes =
-      from(
+      Repo.all(from(
         n in Note,
         where: n.organization_id == ^org.id,
         order_by: [desc: :inserted_at]
-      )
-      |> Repo.all()
+      ))
 
     render(conn, "show.html", org: org, notes: notes)
   end
