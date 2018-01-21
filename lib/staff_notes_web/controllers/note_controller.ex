@@ -43,15 +43,15 @@ defmodule StaffNotesWeb.NoteController do
   @doc """
   Receives a note and renders a form for editing it.
   """
-  def edit(conn, %{"organization_name" => org_name, "id" => id}) do
-    org = Accounts.get_org!(org_name)
-
-    changeset =
+  def edit(conn, %{"id" => id}) do
+    note =
       id
       |> Notes.get_note!()
-      |> Notes.change_note()
+      |> Repo.preload([:member, :organization])
 
-    render(conn, "edit.html", changeset: changeset, id: id, org: org)
+    changeset = Notes.change_note(note)
+
+    render(conn, "edit.html", changeset: changeset, id: id, org: note.organization, member: note.member)
   end
 
   @doc """
