@@ -3,7 +3,7 @@
 
 .Box
   .Box-header
-    strong = @note.author.name
+    = staff_link(@conn, @note.author)
     '
     = gettext("wrote")
     '
@@ -11,7 +11,7 @@
     '
     = gettext("about")
     '
-    strong = @note.member.name
+    = member_link(@conn, @note.member)
     = link_button(octicon(:pencil), to: organization_note_path(@conn, :edit, @note.organization, @note), class: "float-right")
   .Box-body.markdown-body
     = @note.text
