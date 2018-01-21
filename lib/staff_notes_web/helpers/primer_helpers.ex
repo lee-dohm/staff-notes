@@ -8,6 +8,7 @@ defmodule StaffNotesWeb.PrimerHelpers do
   import PhoenixOcticons
 
   alias Phoenix.HTML.Form
+  alias StaffNotes.Ecto.Markdown
   alias StaffNotesWeb.ErrorHelpers
 
   @doc """
@@ -205,9 +206,10 @@ defmodule StaffNotesWeb.PrimerHelpers do
 
   defp input(:markdown, form, field, input_opts) do
     content =
-      form
-      |> Form.input_value(field)
-      |> Map.get(:text)
+      case Form.input_value(form, field) do
+        nil -> nil
+        %Markdown{} = markdown -> markdown.text
+      end
 
     opts =
       Keyword.merge(
@@ -216,7 +218,7 @@ defmodule StaffNotesWeb.PrimerHelpers do
         name: Form.input_name(form, field)
       )
 
-    content_tag(:textarea, content <> "\n", opts)
+    content_tag(:textarea, "#{content}\n", opts)
   end
 
   defp input(type, form, field, input_opts) do
