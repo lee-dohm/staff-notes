@@ -1,5 +1,4 @@
-h2.pb-3 = @note.organization.name
-
+= render_shared("organization_header.html", org: @note.organization)
 = render_shared("organization_tabnav.html", conn: @conn, org: @note.organization, selected: :notes)
 
 .Box

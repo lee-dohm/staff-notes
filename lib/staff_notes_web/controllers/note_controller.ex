@@ -55,13 +55,6 @@ defmodule StaffNotesWeb.NoteController do
   end
 
   @doc """
-  Displays the list of notes for an organization.
-  """
-  def index(conn, %{"organization_name" => _name}) do
-    conn
-  end
-
-  @doc """
   Renders a form for creating a new note for an organization.
   """
   def new(conn, %{"organization_name" => name}) do

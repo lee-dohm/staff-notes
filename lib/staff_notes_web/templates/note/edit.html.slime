@@ -1,5 +1,8 @@
+= render_shared("organization_header.html", org: @org)
+= render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :notes)
+
 = form_for @changeset, organization_note_path(@conn, :update, @org, @id), fn f ->
-  = input(f, :text, using: :markdown, class: "input-monospace")
+  = input(f, :text, using: :markdown)
 
   .form-actions
     = submit(gettext("Update note"), class: "btn btn-primary")

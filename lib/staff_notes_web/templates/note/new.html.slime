@@ -1,3 +1,6 @@
+= render_shared("organization_header.html", org: @org)
+= render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :notes)
+
 h2 = gettext("Create a new staff note")
 p = gettext("A staff note is for recording information about a member of your community")
 
