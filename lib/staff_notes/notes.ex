@@ -66,6 +66,10 @@ defmodule StaffNotes.Notes do
     Repo.get_by(Member, organization_id: org.id, name: name)
   end
 
+  def get_member!(id) do
+    Repo.get!(Member, id)
+  end
+
   @doc """
   Deletes a Note.
 
