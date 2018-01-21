@@ -2,6 +2,7 @@
 = render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :notes)
 
 = form_for @changeset, organization_note_path(@conn, :update, @org, @id), fn f ->
+  = static(f, :name, value: @member.name)
   = input(f, :text, using: :markdown)
 
   .form-actions

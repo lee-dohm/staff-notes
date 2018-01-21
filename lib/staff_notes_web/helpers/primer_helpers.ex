@@ -88,6 +88,29 @@ defmodule StaffNotesWeb.PrimerHelpers do
     end
   end
 
+  def static(form, field, options \\ []) do
+    wrapper_opts = [class: "form-group"]
+    label_opts = []
+    static_opts = []
+    value = options[:value] || Form.input_value(form, field)
+
+    content_tag :dl, wrapper_opts do
+      label =
+        content_tag :dt do
+          label(form, field, humanize(field), label_opts)
+        end
+
+      static =
+        content_tag :dd do
+          content_tag :div, static_opts do
+            value
+          end
+        end
+
+      [label, static]
+    end
+  end
+
   @doc """
   Renders a standard list of items.
 
