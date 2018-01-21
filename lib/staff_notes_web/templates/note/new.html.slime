@@ -1,8 +1,12 @@
+= render_shared("organization_header.html", org: @org)
+= render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :notes)
+
 h2 = gettext("Create a new staff note")
 p = gettext("A staff note is for recording information about a member of your community")
 
 = form_for @changeset, organization_note_path(@conn, :create, @org), fn f ->
-  = input(f, :text, using: :textarea, class: "input-monospace")
+  = input(f, :name)
+  = input(f, :text, using: :markdown)
 
   .form-actions
     = submit(gettext("Create staff note"), class: "btn btn-primary")

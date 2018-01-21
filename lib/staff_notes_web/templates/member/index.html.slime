@@ -1,0 +1,8 @@
+= render_shared("organization_header.html", org: @org)
+= render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :members)
+
+.subnav
+  .float-right
+    button.btn.btn-primary = gettext("Create member")
+
+= render_list(@org.members, view_module(@conn), "member_info", conn: @conn, as: :member)

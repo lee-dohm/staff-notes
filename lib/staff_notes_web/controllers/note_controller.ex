@@ -15,10 +15,21 @@ defmodule StaffNotesWeb.NoteController do
   def create(conn, %{"organization_name" => org_name, "note" => note}) do
     author = conn.assigns.current_user
     org = Accounts.get_org!(org_name)
+    member = get_or_create_member(org, note["name"])
 
-    case Notes.create_note(note, author, org) do
+    case Notes.create_note(note, author, member, org) do
       {:ok, note} -> redirect(conn, to: organization_note_path(conn, :show, org, note))
-      {:error, changeset} -> render(conn, "new.html", changeset: changeset, org: org)
+      {:error, changeset} -> render(conn, "new.html", changeset: changeset, member: member, org: org)
+    end
+  end
+
+  defp get_or_create_member(org, name) do
+    case Notes.find_organization_member(org, name) do
+      nil ->
+        {:ok, member} = Notes.create_member(%{name: name}, org)
+        member
+
+      member -> member
     end
   end
 
@@ -44,13 +55,6 @@ defmodule StaffNotesWeb.NoteController do
   end
 
   @doc """
-  Displays the list of notes for an organization.
-  """
-  def index(conn, %{"organization_name" => _name}) do
-    conn
-  end
-
-  @doc """
   Renders a form for creating a new note for an organization.
   """
   def new(conn, %{"organization_name" => name}) do
@@ -67,7 +71,7 @@ defmodule StaffNotesWeb.NoteController do
     note =
       id
       |> Notes.get_note!()
-      |> Repo.preload([:author, :organization])
+      |> Repo.preload([:author, :member, :organization])
 
     render(conn, "show.html", note: note)
   end

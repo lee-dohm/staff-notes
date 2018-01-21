@@ -14,6 +14,7 @@ defmodule StaffNotes.Notes do
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.User
   alias StaffNotes.Repo
+  alias StaffNotes.Notes.Member
   alias StaffNotes.Notes.Note
 
   @doc """
@@ -45,12 +46,28 @@ defmodule StaffNotes.Notes do
   {:error, %Ecto.Changeset{}}
   ```
   """
-  def create_note(attrs \\ %{}, %User{} = author, %Organization{} = org) do
+  def create_note(attrs \\ %{}, %User{} = author, %Member{} = member, %Organization{} = org) do
     %Note{}
     |> Map.put(:author_id, author.id)
+    |> Map.put(:member_id, member.id)
     |> Map.put(:organization_id, org.id)
     |> Note.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_member(attrs \\ %{}, %Organization{} = org) do
+    %Member{}
+    |> Map.put(:organization_id, org.id)
+    |> Member.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def find_organization_member(%Organization{} = org, name) do
+    Repo.get_by(Member, organization_id: org.id, name: name)
+  end
+
+  def get_member!(id) do
+    Repo.get!(Member, id)
   end
 
   @doc """

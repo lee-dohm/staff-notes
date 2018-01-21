@@ -1,0 +1,5 @@
+li.Box-row.Box-row--hover-gray
+  .TableObject
+    .TableObject-item.TableObject-item--primary
+      a href="#{organization_member_path(@conn, :show, to_string(@member.organization.name), @member)}" class="Box-row-link"
+        = @member.name

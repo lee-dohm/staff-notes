@@ -1,5 +1,4 @@
-h2 = @note.organization.name
-
+= render_shared("organization_header.html", org: @note.organization)
 = render_shared("organization_tabnav.html", conn: @conn, org: @note.organization, selected: :notes)
 
 .Box
@@ -9,6 +8,10 @@ h2 = @note.organization.name
     = gettext("wrote")
     '
     = timeago(@note.inserted_at)
+    '
+    = gettext("about")
+    '
+    strong = @note.member.name
     = link_button(octicon(:pencil), to: organization_note_path(@conn, :edit, @note.organization, @note), class: "float-right")
   .Box-body.markdown-body
     = @note.text

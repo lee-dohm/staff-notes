@@ -13,6 +13,7 @@ defmodule StaffNotes.Accounts.Organization do
   alias StaffNotes.Accounts.Team
   alias StaffNotes.Accounts.User
   alias StaffNotes.Ecto.Slug
+  alias StaffNotes.Notes.Member
   alias StaffNotes.Notes.Note
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -23,6 +24,7 @@ defmodule StaffNotes.Accounts.Organization do
     many_to_many(:users, User, join_through: "organizations_users", on_delete: :delete_all)
     has_many(:teams, Team, on_delete: :delete_all)
     has_many(:notes, Note, on_delete: :delete_all)
+    has_many(:members, Member, on_delete: :delete_all)
 
     timestamps()
   end
