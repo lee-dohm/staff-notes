@@ -2,5 +2,5 @@
   = tabnav_item(gettext("Notes"), organization_path(@conn, :show, @org), icon: :"file-text", selected: @selected == :notes)
   = tabnav_item(gettext("Staff"), organization_staff_path(@conn, :index, @org), icon: :organization, selected: @selected == :staff)
   = tabnav_item(gettext("Teams"), organization_team_path(@conn, :index, @org), icon: :jersey, selected: @selected == :teams)
-  = tabnav_item(gettext("Members"), "#", icon: :person, selected: @selected == :members)
+  = tabnav_item(gettext("Members"), organization_member_path(@conn, :index, @org), icon: :person, selected: @selected == :members)
   = tabnav_item(gettext("Settings"), organization_path(@conn, :edit, @org), icon: :gear, right: true, selected: @selected == :settings)
