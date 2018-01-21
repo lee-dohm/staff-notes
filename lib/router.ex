@@ -1,4 +1,7 @@
 defmodule StaffNotesWeb.Router do
+  @moduledoc """
+  Router for the `StaffNotesWeb` application.
+  """
   use StaffNotesWeb, :router
 
   pipeline :browser do
@@ -30,6 +33,12 @@ defmodule StaffNotesWeb.Router do
     end
   end
 
+  scope "/api", StaffNotesApi do
+    pipe_through(:api)
+
+    post("/markdown", MarkdownController, :render)
+  end
+
   scope "/auth", StaffNotesWeb do
     pipe_through(:browser)
 
@@ -41,7 +50,7 @@ defmodule StaffNotesWeb.Router do
   @doc """
   Fetch the current user from the session and add it to the assigns of the `Plug.Conn`.
 
-  This will allow access to the currently signed in user in views as `@current_user`. If no user is
+  This allows access to the currently signed in user in views as `@current_user`. If no user is
   logged in, `@current_user` will be `nil`.
   """
   @spec assign_current_user(Plug.Conn.t(), any) :: Plug.Conn.t()
