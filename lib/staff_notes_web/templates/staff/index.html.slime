@@ -1,5 +1,4 @@
-h2.mb-3 = @org.name
-
+= render_shared("organization_header.html", org: @org)
 = render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :staff)
 
 = render_list(@org.users, view_module(@conn), "staff_info", conn: @conn, as: :user)
