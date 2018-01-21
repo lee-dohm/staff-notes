@@ -1,5 +1,4 @@
-h2 = @name
-
+= render_shared("organization_header.html", org: @org)
 = render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :settings)
 
 = form_for @changeset, organization_path(@conn, :update, @name), fn f ->
