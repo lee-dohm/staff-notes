@@ -7,6 +7,8 @@ alias StaffNotes.Accounts.Organization
 alias StaffNotes.Accounts.Team
 alias StaffNotes.Accounts.User
 alias StaffNotes.Ecto.Markdown
+alias StaffNotes.Notes.Member
+alias StaffNotes.Notes.Note
 alias StaffNotes.Repo
 alias StaffNotesWeb.AuthController
 alias StaffNotesWeb.PageController
