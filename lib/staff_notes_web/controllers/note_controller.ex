@@ -78,7 +78,7 @@ defmodule StaffNotesWeb.NoteController do
     note =
       id
       |> Notes.get_note!()
-      |> Repo.preload([:author, :organization])
+      |> Repo.preload([:author, :member, :organization])
 
     render(conn, "show.html", note: note)
   end
