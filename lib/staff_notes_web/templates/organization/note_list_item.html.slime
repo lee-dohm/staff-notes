@@ -6,4 +6,4 @@ li.Box-row.Box-row--hover-gray
     .TableObject-item
       = gettext("Created")
       '
-      = timeago(@note.inserted_at)
+      = relative_time(@note.inserted_at)

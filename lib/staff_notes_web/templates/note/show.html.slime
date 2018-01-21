@@ -7,7 +7,7 @@
     '
     = gettext("wrote")
     '
-    = timeago(@note.inserted_at)
+    = relative_time(@note.inserted_at)
     '
     = gettext("about")
     '
