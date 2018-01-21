@@ -1,6 +1,4 @@
-h3
-  = @team.organization.name
-
+= render_shared("organization_header.html", org: @team.organization)
 = render_shared("organization_tabnav.html", conn: @conn, org: @team.organization, selected: :teams)
 
 h4 = @team.name
