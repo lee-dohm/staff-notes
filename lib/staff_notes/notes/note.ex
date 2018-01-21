@@ -9,6 +9,7 @@ defmodule StaffNotes.Notes.Note do
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Accounts.User
   alias StaffNotes.Ecto.Markdown
+  alias StaffNotes.Notes.Member
   alias StaffNotes.Notes.Note
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -17,6 +18,7 @@ defmodule StaffNotes.Notes.Note do
     field(:text, Markdown)
 
     belongs_to(:author, User, type: :id)
+    belongs_to(:member, Member)
     belongs_to(:organization, Organization)
 
     timestamps()
@@ -25,7 +27,7 @@ defmodule StaffNotes.Notes.Note do
   @doc false
   def changeset(%Note{} = note, attrs) do
     note
-    |> cast(attrs, [:text, :author_id, :organization_id])
-    |> validate_required([:text, :author_id, :organization_id])
+    |> cast(attrs, [:text, :author_id, :member_id, :organization_id])
+    |> validate_required([:text, :author_id, :member_id, :organization_id])
   end
 end
