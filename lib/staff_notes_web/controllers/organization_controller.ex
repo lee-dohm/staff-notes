@@ -68,7 +68,8 @@ defmodule StaffNotesWeb.OrganizationController do
         from(
           n in Note,
           where: n.organization_id == ^org.id,
-          order_by: [desc: :inserted_at]
+          order_by: [desc: :inserted_at],
+          preload: [:author, :member]
         )
       )
 
