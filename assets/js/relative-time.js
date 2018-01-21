@@ -1,6 +1,6 @@
 const timeago = require('timeago.js')
 
-function timestampsToLocale(nodes) {
+function timestampsToLocale (nodes) {
   for (let node of nodes) {
     let title = node.getAttribute('title')
     if (title && title.length > 0) {
