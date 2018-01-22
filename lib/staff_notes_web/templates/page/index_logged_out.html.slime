@@ -1,0 +1,3 @@
+.jumbotron
+  h1 = gettext("Welcome to Staff Notes!")
+  p = gettext("A web application for Community Managers to keep track of information about the members of their communities.")
