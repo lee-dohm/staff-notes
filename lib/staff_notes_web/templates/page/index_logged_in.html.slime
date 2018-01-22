@@ -1,0 +1,1 @@
+= render_list(@notes, view_module(@conn), "note_list", conn: @conn, as: :note)
