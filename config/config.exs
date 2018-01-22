@@ -11,8 +11,7 @@ config :staff_notes,
   author_url: "http://www.lee-dohm.com",
   ecto_repos: [StaffNotes.Repo],
   generators: [binary_id: true],
-  github_url: "https://github.com/lee-dohm/staff-notes",
-  s3_bucket: "staffnotes-io"
+  github_url: "https://github.com/lee-dohm/staff-notes"
 
 # Configures the endpoint
 config :staff_notes, StaffNotesWeb.Endpoint,
@@ -20,6 +19,10 @@ config :staff_notes, StaffNotesWeb.Endpoint,
   secret_key_base: "zb9dt/VPhENEdWX7Vi9gjy/1i66u0bqu+HwgcbyqBijV2CQsQDVNgw/sIrRIPsIO",
   render_errors: [view: StaffNotesWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: StaffNotes.PubSub, adapter: Phoenix.PubSub.PG2]
+
+config :staff_notes, StaffNotes.Files,
+  base_path: "images/",
+  s3_bucket: "staffnotes-io"
 
 # Configures Elixir's Logger
 config :logger, :console,

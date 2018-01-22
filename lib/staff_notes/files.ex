@@ -2,6 +2,7 @@ defmodule StaffNotes.Files do
   @moduledoc """
   Represents the business-logic layer of handling files.
   """
+  require Logger
 
   alias ExAws.S3
   alias StaffNotes.ConfigurationError
@@ -19,25 +20,35 @@ defmodule StaffNotes.Files do
   def upload_image(base64_data) do
     case Base.decode64(base64_data) do
       :error -> {:error, "Error decoding base64 image data"}
-      {:ok, binary} ->
-        bucket = Application.get_env(:staff_notes, :s3_bucket)
-
-        do_upload(bucket, binary, image_extension(binary))
+      {:ok, binary} -> do_upload(config(:s3_bucket), binary, image_extension(binary))
     end
+  end
+
+  defp config(key, default \\ nil) do
+    Keyword.get(
+      Application.get_env(:staff_notes, __MODULE__),
+      key,
+      default
+    )
   end
 
   defp do_upload(nil, _, _), do: raise ConfigurationError, message: "No :s3_bucket configured for #{Mix.env()} in application :staff_notes"
   defp do_upload(_, _, {:error, _} = error), do: error
 
   defp do_upload(bucket, binary, {:ok, extension}) do
-    filename = unique_filename(extension)
+    filename = Path.join(config(:base_path, ""), unique_filename(extension))
 
-    {:ok, response} =
+    {:ok, result} =
       bucket
       |> S3.put_object(filename, binary)
       |> ExAws.request()
 
-    {:ok, "https://#{bucket}.s3.amazonaws.com/#{filename}"}
+    url = Path.join("https://#{bucket}.s3.amazonaws.com", filename)
+
+    Logger.debug(fn -> "S3 upload result: #{inspect(result)}" end)
+    Logger.debug(fn -> "File uploaded: #{url}" end)
+
+    {:ok, url}
   end
 
   defp image_extension(<<0x47, 0x49, 0x46, _::binary>>), do: {:ok, ".gif"}

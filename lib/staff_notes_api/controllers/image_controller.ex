@@ -36,19 +36,21 @@ defmodule StaffNotesApi.ImageController do
   ```
   """
   def create(conn, %{"image" => base64_data}) do
-    base64_data
-    |> String.trim()
-    |> Files.upload_image()
-    |> handle_result()
+    result =
+      base64_data
+      |> String.trim()
+      |> Files.upload_image()
+
+    handle_result(conn, result)
   end
 
-  defp handle_result({:error, message}) do
+  defp handle_result(conn, {:error, message}) do
     conn
     |> put_status(:bad_request)
     |> json(%{"reason" => message})
   end
 
-  defp handle_result({:ok, url}) do
+  defp handle_result(conn, {:ok, url}) do
     conn
     |> put_status(:created)
     |> json(%{"url" => url})
