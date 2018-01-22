@@ -39,6 +39,7 @@ defmodule StaffNotesWeb.Router do
   scope "/api", StaffNotesApi do
     pipe_through(:api)
 
+    post("/images", ImageController, :create)
     post("/markdown", MarkdownController, :render)
   end
 

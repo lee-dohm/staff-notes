@@ -11,7 +11,8 @@ config :staff_notes,
   author_url: "http://www.lee-dohm.com",
   ecto_repos: [StaffNotes.Repo],
   generators: [binary_id: true],
-  github_url: "https://github.com/lee-dohm/staff-notes"
+  github_url: "https://github.com/lee-dohm/staff-notes",
+  s3_bucket: "staffnotes-io"
 
 # Configures the endpoint
 config :staff_notes, StaffNotesWeb.Endpoint,
