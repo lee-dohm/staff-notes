@@ -45,6 +45,8 @@ defmodule StaffNotes.Mixfile do
       {:cmark, "~> 0.7"},
       {:cowboy, "~> 1.0"},
       {:ecto_enum, "~> 1.1"},
+      {:ex_aws, "~> 2.0"},
+      {:ex_aws_s3, "~> 2.0"},
       {:gettext, "~> 0.11"},
       {:oauth2, "~> 0.9"},
       {:phoenix_ecto, "~> 3.2"},
