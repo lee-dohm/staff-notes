@@ -23,6 +23,8 @@ defmodule StaffNotesWeb.Router do
 
     get("/", PageController, :index)
     get("/about", PageController, :about)
+    get("/upload", UploadController, :upload_form)
+    post("/upload", UploadController, :upload)
 
     resources("/users", UserController, only: [:show], param: "name")
 
