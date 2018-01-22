@@ -1,10 +1,11 @@
 li.Box-row.Box-row--hover-gray
   .TableObject
-    .TableObject-item.TableObject-item--primary
-      a href="#{organization_note_path(@conn, :show, @note.organization, @note)}" class="Box-row-link f3"
-        = octicon(:"file-text", class: "mr-2", height: 24, width: 24)
+    .TableObject-item.TableObject-item--primary.f3
+      = octicon(:"file-text", class: "mr-2", height: 24, width: 24)
+      a href="#{organization_path(@conn, :show, @note.organization)}" class="Box-row-link"
         = @note.organization.name
-        '  /
+      '  /
+      a href="#{organization_note_path(@conn, :show, @note.organization, @note)}" class="Box-row-link"
         = @note.member.name
     .TableObject-item
       = gettext("Created")
