@@ -17,11 +17,18 @@ defmodule StaffNotes.Files do
   "https://image_bucket.s3.amazonaws.com/dbaaee81609747ba82bea2453cc33b83.png"
   ```
   """
-  def upload_image(base64_data) do
+  def upload_image(base64_data) when is_binary(base64_data) do
     case Base.decode64(base64_data) do
       :error -> {:error, "Error decoding base64 image data"}
       {:ok, binary} -> do_upload(config(:s3_bucket), binary, image_extension(binary))
     end
+  end
+
+  @doc """
+  Accepts an image as a `t:Plug.Upload.t/0` and uploads it to S3.
+  """
+  def upload_image(%Plug.Upload{} = upload) do
+    do_upload(config(:s3_bucket), File.read!(upload.path), {:ok, Path.extname(upload.filename)})
   end
 
   defp config(key, default \\ nil) do

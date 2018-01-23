@@ -3,10 +3,18 @@ defmodule StaffNotesWeb.UploadController do
 
   require Logger
 
+  alias StaffNotes.Files
+
+  @doc """
+  Renders the file upload form.
+  """
   def upload_form(conn, _params) do
     render(conn, "upload.html")
   end
 
+  @doc """
+  Receives the file uploads, stores them in S3, and renders the upload form agan.
+  """
   def upload(conn, %{"upload" => %{"file" => files}}) when is_list(files) do
     upload_files(files)
 
@@ -22,21 +30,8 @@ defmodule StaffNotesWeb.UploadController do
   defp upload_files(files) do
     files
     |> Enum.map(&(upload_file(&1)))
-    |> Enum.map(fn(url) -> Logger.debug(fn -> "File uploaded to #{url}" end) end)
+    |> Enum.map(fn({:ok, url}) -> Logger.debug(fn -> "File uploaded to #{url}" end) end)
   end
 
-  defp upload_file(%Plug.Upload{} = file) do
-    extension = Path.extname(file.filename)
-    uuid = Ecto.UUID.generate()
-    filename = "#{uuid}.#{extension}"
-    bucket = "staffnotes-io"
-    {:ok, binary} = File.read(file.path)
-
-    {:ok, _} =
-      bucket
-      |> ExAws.S3.put_object(filename, binary)
-      |> ExAws.request()
-
-    "https://#{bucket}.s3.amazonaws.com/#{filename}"
-  end
+  defp upload_file(%Plug.Upload{} = file), do: Files.upload_image(file)
 end

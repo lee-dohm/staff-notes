@@ -1,4 +1,4 @@
-= form_for @conn, upload_path(@conn, :upload), [as: "upload", multipart: :true], fn f ->
+= form_for @conn, upload_path(@conn, :upload), [as: "upload", multipart: :true, id: 'comment-form'], fn f ->
   = file_input f, :file, accept: "image/*", multiple: true, class: "image-drop"
   button class="btn btn-primary" type="submit"
     = gettext("Upload")
