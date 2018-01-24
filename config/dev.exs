@@ -47,6 +47,10 @@ config :staff_notes, StaffNotesWeb.Endpoint,
     ]
   ]
 
+# Upload files to a development directory whch can be wiped out any time
+config :staff_notes, StaffNotes.Files,
+  base_path: "development/images/"
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 

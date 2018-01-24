@@ -20,10 +20,17 @@ config :staff_notes, StaffNotesWeb.Endpoint,
   render_errors: [view: StaffNotesWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: StaffNotes.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :staff_notes, StaffNotes.Files,
+  base_path: "images/",
+  s3_bucket: "staffnotes-io"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
+config :phoenix,
+  filter_parameters: ["base64", "password"]
 
 config :phoenix, :template_engines,
   slim: PhoenixSlime.Engine,

@@ -235,11 +235,9 @@ defmodule StaffNotesWeb.PrimerHelpers do
       end
 
     opts =
-      Keyword.merge(
-        input_opts,
-        id: Form.input_id(form, field),
-        name: Form.input_name(form, field)
-      )
+      input_opts
+      |> Keyword.merge(id: Form.input_id(form, field), name: Form.input_name(form, field))
+      |> Keyword.put(:class, (input_opts[:class] || "") <> " image-drop")
 
     content_tag(:textarea, "#{content}\n", opts)
   end
