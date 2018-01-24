@@ -6,7 +6,7 @@ p = gettext("A staff note is for recording information about a member of your co
 
 = form_for @changeset, organization_note_path(@conn, :create, @org), [id: 'comment-form'], fn f ->
   = input(f, :name)
-  = input(f, :text, using: :markdown, class: 'image-drop')
+  = input(f, :text, using: :markdown)
 
   .form-actions
     = submit(gettext("Create staff note"), class: "btn btn-primary")

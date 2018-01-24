@@ -1,6 +1,6 @@
 let droppedFiles
 const imageDropElement = document.querySelector('.image-drop')
-const form = document.getElementById('comment-form')
+const submitButton = document.getElementById('.form-actions button[type="submit"]')
 
 /**
  * Callback to add styles indicating that the element can accept dropped data when hovering over it.
@@ -30,9 +30,9 @@ function arrayBufferToBase64 (buffer) {
 async function drop (event) {
   event.preventDefault()
 
-  form.setAttribute('disabled', 'disabled')
+  submitButton.setAttribute('disabled', 'disabled')
   await uploadFiles(event.dataTransfer.files)
-  form.removeAttribute('disabled')
+  submitButton.removeAttribute('disabled')
 }
 
 /**
