@@ -27,11 +27,12 @@ function arrayBufferToBase64 (buffer) {
 /**
  * Callback for when files are dropped in the target element.
  */
-function drop (event) {
+async function drop (event) {
   event.preventDefault()
 
-  droppedFiles = event.dataTransfer.files
-  uploadFiles()
+  form.setAttribute('disabled', 'disabled')
+  await uploadFiles(event.dataTransfer.files)
+  form.removeAttribute('disabled')
 }
 
 /**
@@ -113,17 +114,26 @@ async function uploadFile (file) {
   const response = JSON.parse(json)
   console.log(`Received upload response: ${response.url}`)
 
-  replacePlaceholder(imageDropElement, file.name, response.url)
+  return response.url
 }
 
 /**
  * Uploads the dropped files.
  */
-function uploadFiles () {
-  for (let file of droppedFiles) {
+function uploadFiles (files) {
+  let promises = []
+
+  for (let file of files) {
     insertPlaceholder(imageDropElement, file.name)
-    uploadFile(file)
+
+    let promise = uploadFile(file).then((url) => {
+      replacePlaceholder(imageDropElement, file.name, url)
+    })
+
+    promises.push(promise)
   }
+
+  return Promise.all(promises)
 }
 
 if (imageDropElement) {
