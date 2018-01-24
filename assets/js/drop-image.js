@@ -1,4 +1,3 @@
-let droppedFiles
 const imageDropElement = document.querySelector('.image-drop')
 const submitButton = document.querySelector('.form-actions button[type="submit"]')
 
@@ -13,15 +12,15 @@ function addDragHover (event) {
  * Convert an `ArrayBuffer` to a base64-encoded `String`.
  */
 function arrayBufferToBase64 (buffer) {
-  let binary = '';
-  let bytes = new Uint8Array(buffer);
-  let len = bytes.byteLength;
+  let binary = ''
+  let bytes = new Uint8Array(buffer)
+  let len = bytes.byteLength
 
   for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
+    binary += String.fromCharCode(bytes[i])
   }
 
-  return window.btoa(binary);
+  return window.btoa(binary)
 }
 
 /**
@@ -77,7 +76,7 @@ function readFile (file) {
  */
 function replacePlaceholder (el, filename, url) {
   let oldText = el.value
-  let fileroot = filename.replace(/\.[^/.]+$/, "")
+  let fileroot = filename.replace(/\.[^/.]+$/, '')
   let newText = oldText.replace(`![Uploading ${filename}...]()`, `![${fileroot}](${url})`)
 
   el.value = newText
