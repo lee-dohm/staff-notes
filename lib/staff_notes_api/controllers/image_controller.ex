@@ -11,11 +11,15 @@ defmodule StaffNotesApi.ImageController do
 
   ## Accepts
 
-  Accepts a JSON object with a key of `base64` containing the base64-encoded image data:
+  Accepts a JSON object consisting of the following:
+
+  * `base64` &mdash; base64-encoded image data
+  * `mimeType` &mdash; MIME type of the data
 
   ```json
   {
-    "base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+    "base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+    "mimeType": "image/png"
   }
   ```
 
@@ -37,11 +41,11 @@ defmodule StaffNotesApi.ImageController do
   }
   ```
   """
-  def create(conn, %{"base64" => base64_data}) do
+  def create(conn, %{"base64" => base64_data, "mimeType" => mime_type}) do
     result =
       base64_data
       |> String.trim()
-      |> Files.upload_image()
+      |> Files.upload_image(mime_type)
 
     handle_result(conn, result)
   end

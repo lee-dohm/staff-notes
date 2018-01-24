@@ -17,10 +17,10 @@ defmodule StaffNotes.Files do
   "https://image_bucket.s3.amazonaws.com/dbaaee81609747ba82bea2453cc33b83.png"
   ```
   """
-  def upload_image(base64_data) when is_binary(base64_data) do
+  def upload_image(base64_data, mime_type) when is_binary(base64_data) do
     case Base.decode64(base64_data) do
       :error -> {:error, "Error decoding base64 image data"}
-      {:ok, binary} -> do_upload(config(:s3_bucket), binary, image_extension(binary))
+      {:ok, binary} -> do_upload(config(:s3_bucket), binary, image_extension(mime_type))
     end
   end
 
@@ -57,6 +57,10 @@ defmodule StaffNotes.Files do
 
     {:ok, url}
   end
+
+  defp image_extension("image/gif"), do: {:ok, ".gif"}
+  defp image_extension("image/jpeg"), do: {:ok, ".jpg"}
+  defp image_extension("image/png"), do: {:ok, ".png"}
 
   defp image_extension(<<0x47, 0x49, 0x46, _::binary>>), do: {:ok, ".gif"}
   defp image_extension(<<0xff, 0xD8, _::binary>>), do: {:ok, ".jpg"}
