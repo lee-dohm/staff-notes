@@ -1,6 +1,6 @@
 let droppedFiles
 const imageDropElement = document.querySelector('.image-drop')
-const submitButton = document.getElementById('.form-actions button[type="submit"]')
+const submitButton = document.querySelector('.form-actions button[type="submit"]')
 
 /**
  * Callback to add styles indicating that the element can accept dropped data when hovering over it.
@@ -121,13 +121,17 @@ async function uploadFile (file) {
  * Uploads the dropped files.
  */
 function uploadFiles (files) {
-  const promises = files.map((file) => {
+  let promises = []
+
+  for (let file of files) {
     insertPlaceholder(imageDropElement, file.name)
 
-    return uploadFile(file).then((url) => {
+    let promise = uploadFile(file).then((url) => {
       replacePlaceholder(imageDropElement, file.name, url)
     })
-  })
+
+    promises.push(promise)
+  }
 
   return Promise.all(promises)
 }
