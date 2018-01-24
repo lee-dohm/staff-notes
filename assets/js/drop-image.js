@@ -104,18 +104,16 @@ function request (method, url, json) {
 /**
  * Uploads the given `File` asynchronously.
  */
-function uploadFile (file) {
-  return readFile(file).then((buffer) => {
-    const base64 = arrayBufferToBase64(buffer)
-    const payload = {base64: base64, mimeType: file.type}
+async function uploadFile (file) {
+  const buffer = await readFile(file)
+  const base64 = arrayBufferToBase64(buffer)
+  const payload = {base64: base64, mimeType: file.type}
 
-    return request('POST', '/api/images', JSON.stringify(payload)).then((json) => {
-      const response = JSON.parse(json)
-      console.log(`Received upload response: ${response.url}`)
+  const json = await request('POST', '/api/images', JSON.stringify(payload))
+  const response = JSON.parse(json)
+  console.log(`Received upload response: ${response.url}`)
 
-      replacePlaceholder(imageDropElement, file.name, response.url)
-    })
-  })
+  replacePlaceholder(imageDropElement, file.name, response.url)
 }
 
 /**
