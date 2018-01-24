@@ -31,7 +31,15 @@ function drop (event) {
   event.preventDefault()
 
   droppedFiles = event.dataTransfer.files
-  console.log('Ready to submit!')
+  uploadFiles()
+}
+
+function insertText (el, filename) {
+  let pos = el.selectionStart > el.selectionEnd ? el.selectionStart : el.selectionEnd
+  let oldText = el.value
+  let newText = oldText.substring(0, pos) + `![Uploading ${filename}...]()` + oldText.substring(pos)
+
+  el.value = newText
 }
 
 /**
@@ -60,6 +68,14 @@ function readFile (file) {
   })
 }
 
+function replaceText (el, filename, url) {
+  let oldText = el.value
+  let fileroot = filename.replace(/\.[^/.]+$/, "")
+  let newText = oldText.replace(`![Uploading ${filename}...]()`, `![${fileroot}](${url})`)
+
+  el.value = newText
+}
+
 // Executes an XMLHttpRequest given the parameters and returns a Promise
 
 /**
@@ -85,14 +101,15 @@ function request (method, url, json) {
  * Uploads the given file asynchronously.
  */
 function uploadFile (file) {
-  readFile(file).then((buffer) => {
+  return readFile(file).then((buffer) => {
     const base64 = arrayBufferToBase64(buffer)
     const payload = {base64: base64, mimeType: file.type}
 
-    request('POST', '/api/images', JSON.stringify(payload)).then((json) => {
+    return request('POST', '/api/images', JSON.stringify(payload)).then((json) => {
       const response = JSON.parse(json)
-
       console.log(`Received upload response: ${response.url}`)
+
+      replaceText(imageDropElement, file.name, response.url)
     })
   })
 }
@@ -101,23 +118,14 @@ function uploadFile (file) {
  * Uploads the dropped files.
  */
 function uploadFiles () {
-  // TODO: Disable form to prevent multiple submissions
-
   for (let file of droppedFiles) {
+    insertText(imageDropElement, file.name)
     uploadFile(file)
   }
-
-  // TODO: Enable form to allow more form interaction
 }
 
 if (imageDropElement) {
   imageDropElement.addEventListener('dragenter', addDragHover)
   imageDropElement.addEventListener('dragleave', removeDragHover)
   imageDropElement.addEventListener('drop', drop)
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault()
-
-    uploadFiles()
-  })
 }
