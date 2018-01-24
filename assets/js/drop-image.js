@@ -110,12 +110,14 @@ function uploadFiles () {
   // TODO: Enable form to allow more form interaction
 }
 
-imageDropElement.addEventListener('dragenter', addDragHover)
-imageDropElement.addEventListener('dragleave', removeDragHover)
-imageDropElement.addEventListener('drop', drop)
+if (imageDropElement) {
+  imageDropElement.addEventListener('dragenter', addDragHover)
+  imageDropElement.addEventListener('dragleave', removeDragHover)
+  imageDropElement.addEventListener('drop', drop)
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault()
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
 
-  uploadFiles()
-})
+    uploadFiles()
+  })
+}
