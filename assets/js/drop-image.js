@@ -34,7 +34,10 @@ function drop (event) {
   uploadFiles()
 }
 
-function insertText (el, filename) {
+/**
+ * Inserts placeholder text into the `HTMLTextAreaElement` while the file is uploading.
+ */
+function insertPlaceholder (el, filename) {
   let pos = el.selectionStart > el.selectionEnd ? el.selectionStart : el.selectionEnd
   let oldText = el.value
   let newText = oldText.substring(0, pos) + `![Uploading ${filename}...]()` + oldText.substring(pos)
@@ -68,15 +71,16 @@ function readFile (file) {
   })
 }
 
-function replaceText (el, filename, url) {
+/**
+ * Replaces the previously inserted placeholder image links in the `HTMLTextAreaElement`.
+ */
+function replacePlaceholder (el, filename, url) {
   let oldText = el.value
   let fileroot = filename.replace(/\.[^/.]+$/, "")
   let newText = oldText.replace(`![Uploading ${filename}...]()`, `![${fileroot}](${url})`)
 
   el.value = newText
 }
-
-// Executes an XMLHttpRequest given the parameters and returns a Promise
 
 /**
  * Executes an `XMLHttpRequest` to send the given `json` to the `url` via the `method`.
@@ -98,7 +102,7 @@ function request (method, url, json) {
 }
 
 /**
- * Uploads the given file asynchronously.
+ * Uploads the given `File` asynchronously.
  */
 function uploadFile (file) {
   return readFile(file).then((buffer) => {
@@ -109,7 +113,7 @@ function uploadFile (file) {
       const response = JSON.parse(json)
       console.log(`Received upload response: ${response.url}`)
 
-      replaceText(imageDropElement, file.name, response.url)
+      replacePlaceholder(imageDropElement, file.name, response.url)
     })
   })
 }
@@ -119,7 +123,7 @@ function uploadFile (file) {
  */
 function uploadFiles () {
   for (let file of droppedFiles) {
-    insertText(imageDropElement, file.name)
+    insertPlaceholder(imageDropElement, file.name)
     uploadFile(file)
   }
 }
