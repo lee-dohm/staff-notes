@@ -121,17 +121,13 @@ async function uploadFile (file) {
  * Uploads the dropped files.
  */
 function uploadFiles (files) {
-  let promises = []
-
-  for (let file of files) {
+  const promises = files.map((file) => {
     insertPlaceholder(imageDropElement, file.name)
 
-    let promise = uploadFile(file).then((url) => {
+    return uploadFile(file).then((url) => {
       replacePlaceholder(imageDropElement, file.name, url)
     })
-
-    promises.push(promise)
-  }
+  })
 
   return Promise.all(promises)
 }
