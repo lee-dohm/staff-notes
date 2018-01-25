@@ -1,16 +1,16 @@
 import timeago from 'timeago.js'
 
-function timestampsToLocale(nodes: NodeListOf<Element>): void {
-  for (let node of nodes as any as Element[]) {
-    let title = node.getAttribute('title')
+function timestampsToLocale(elements: NodeListOf<Element>): void {
+  for (const element of elements as any as Element[]) {
+    const title = element.getAttribute('title')
     if (title && title.length > 0) {
-      let date = new Date(title)
+      const date = new Date(title)
 
-      node.setAttribute('title', date.toLocaleString())
+      element.setAttribute('title', date.toLocaleString())
     }
   }
 }
 
-let nodes = document.querySelectorAll('relative-time')
+const nodes = document.querySelectorAll('relative-time')
 timeago().render(nodes)
 timestampsToLocale(nodes)

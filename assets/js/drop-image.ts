@@ -6,7 +6,7 @@ interface XMLHttpRequestEvent extends UIEvent {
   target: XMLHttpRequest
 }
 
-const imageDropElement: HTMLTextAreaElement | null = document.querySelector('.image-drop')
+const imageDropElement: HTMLTextAreaElement | null = document.querySelector('image-drop')
 const submitButton = document.querySelector('.form-actions button[type="submit"]')
 
 /**
@@ -23,8 +23,8 @@ function addDragHover(event: DragEvent): void {
  */
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
   let binary = ''
-  let bytes = new Uint8Array(buffer)
-  let len = bytes.byteLength
+  const bytes = new Uint8Array(buffer)
+  const len = bytes.byteLength
 
   for (let i = 0; i < len; i++) {
     binary += String.fromCharCode(bytes[i])
@@ -54,9 +54,9 @@ async function drop(event: DragEvent): Promise<void> {
  * Inserts placeholder text into the `HTMLTextAreaElement` while the file is uploading.
  */
 function insertPlaceholder(el: HTMLTextAreaElement, filename: string): void {
-  let pos = el.selectionStart > el.selectionEnd ? el.selectionStart : el.selectionEnd
-  let oldText = el.value
-  let newText = oldText.substring(0, pos) + `![Uploading ${filename}...]()` + oldText.substring(pos)
+  const pos = el.selectionStart > el.selectionEnd ? el.selectionStart : el.selectionEnd
+  const oldText = el.value
+  const newText = oldText.substring(0, pos) + `![Uploading ${filename}...]()` + oldText.substring(pos)
 
   el.value = newText
 }
@@ -93,9 +93,9 @@ function readFile(file: File): Promise<ArrayBuffer> {
  * Replaces the previously inserted placeholder image links in the `HTMLTextAreaElement`.
  */
 function replacePlaceholder(el: HTMLTextAreaElement, filename: string, url: string): void {
-  let oldText = el.value
-  let fileroot = filename.replace(/\.[^/.]+$/, '')
-  let newText = oldText.replace(`![Uploading ${filename}...]()`, `![${fileroot}](${url})`)
+  const oldText = el.value
+  const fileroot = filename.replace(/\.[^/.]+$/, '')
+  const newText = oldText.replace(`![Uploading ${filename}...]()`, `![${fileroot}](${url})`)
 
   el.value = newText
 }
@@ -127,11 +127,10 @@ function request(method: string, url: string, json: string): Promise<string> {
 async function uploadFile(file: File): Promise<string> {
   const buffer = await readFile(file)
   const base64 = arrayBufferToBase64(buffer)
-  const payload = {base64: base64, mimeType: file.type}
+  const payload = {base64, mimeType: file.type}
 
   const json = await request('POST', '/api/images', JSON.stringify(payload))
   const response = JSON.parse(json)
-  console.log(`Received upload response: ${response.url}`)
 
   return response.url
 }
@@ -142,13 +141,13 @@ async function uploadFile(file: File): Promise<string> {
  * Returns a `Promise` that resolves when all uploads are complete.
  */
 function uploadFiles(files: FileList): Promise<void[]> {
-  let promises = []
+  const promises = []
 
   if (imageDropElement) {
-    for (let file of files as any as File[]) {
+    for (const file of files as any as File[]) {
       insertPlaceholder(imageDropElement, file.name)
 
-      let promise = uploadFile(file).then((url) => {
+      const promise = uploadFile(file).then((url) => {
         replacePlaceholder(imageDropElement, file.name, url)
       })
 
