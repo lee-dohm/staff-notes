@@ -2,7 +2,7 @@
   "repository": {},
   "license": "MIT",
   "scripts": {
-    "deploy": "webpack -p",
+    "deploy": "tslint --project . && webpack -p",
     "watch": "webpack --watch-stdin --progress --color"
   },
   "dependencies": {
