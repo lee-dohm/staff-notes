@@ -6,16 +6,19 @@ styleguide: plataformatec/linters
 engines:
   credo:
     enabled: true
-  fixme:
+  csslint:
     enabled: true
   eslint:
     enabled: true
-  csslint:
-    enabled: true
-  scss-lint:
+  fixme:
     enabled: true
   remark-lint:
     enabled: true
+  scss-lint:
+    enabled: true
+  tslint:
+    enabled: true
+    channel: beta
 exclude_paths:
 - config
 - docs
