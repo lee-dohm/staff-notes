@@ -12,12 +12,5 @@
     "timeago.js": "^3.0.2"
   },
   "devDependencies": {
-    "babel-brunch": "6.1.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "brunch": "2.10.9",
-    "clean-css-brunch": "2.10.0",
-    "sass-brunch": "^2.10.4",
-    "uglify-js-brunch": "2.10.0"
   }
 }
