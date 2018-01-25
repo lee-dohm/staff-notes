@@ -6,8 +6,8 @@ const env = process.env.MIX_ENV || 'dev'
 const isProduction = (env === 'prod')
 
 module.exports = {
-  devtool: "source-map",
-  entry: ["./js/app.js", "./css/app.scss"],
+  devtool: 'source-map',
+  entry: ['./js/app.js', './css/app.scss'],
   module: {
     rules: [
       {
@@ -41,15 +41,15 @@ module.exports = {
           {loader: 'ts-loader'}
         ]
       }
-    ],
+    ]
   },
   output: {
-    path: path.resolve(__dirname, "../priv/static"),
-    filename: "js/app.js"
+    path: path.resolve(__dirname, '../priv/static'),
+    filename: 'js/app.js'
   },
   plugins: [
     new CopyWebpackPlugin([{from: './static'}]),
-    new ExtractTextPlugin('css/app.css'),
+    new ExtractTextPlugin('css/app.css')
   ],
   resolve: {
     extensions: [
@@ -59,8 +59,8 @@ module.exports = {
       '.tsx'
     ],
     modules: [
-      "node_modules",
-      path.resolve(__dirname, "./js")
+      'node_modules',
+      path.resolve(__dirname, './js')
     ]
   }
 }
