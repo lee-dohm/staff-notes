@@ -2,7 +2,9 @@
   "compilerOptions": {
     "lib": ["DOM", "ES2015"],
     "moduleResolution": "Node",
-    "outDir": "ts-build"
+    "noImplicitAny": true,
+    "outDir": "ts-build",
+    "strictNullChecks": true
   },
   "exclude": [
     "node_modules",
