@@ -1,9 +1,15 @@
 type MaybeHTMLTextAreaElement = HTMLTextAreaElement | null
 
+/**
+ * An `UIEvent` that is raised by a `FileReader` object.
+ */
 interface FileReaderEvent extends UIEvent {
   target: FileReader
 }
 
+/**
+ * An `UIEvent` that is raised by an `XMLHttpRequest` object.
+ */
 interface XMLHttpRequestEvent extends UIEvent {
   target: XMLHttpRequest
 }
