@@ -6,9 +6,31 @@ const env = process.env.MIX_ENV || 'dev'
 const isProduction = (env === 'prod')
 
 module.exports = {
-  entry: "./js/app.js",
+  devtool: "source-map",
+  entry: ["./js/app.js", "./css/app.scss"],
   module: {
     rules: [
+      {
+        test: /\.scss$/,
+        include: /css/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader'
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                includePaths: [
+                  path.resolve(__dirname, 'node_modules')
+                ],
+                sourceComments: !isProduction
+              }
+            }
+          ]
+        })
+      },
       {
         test: /\.tsx?$/,
         use: [
@@ -22,7 +44,8 @@ module.exports = {
     filename: "js/app.js"
   },
   plugins: [
-    new CopyWebpackPlugin([{from: './static'}])
+    new CopyWebpackPlugin([{from: './static'}]),
+    new ExtractTextPlugin('css/app.css'),
   ],
   resolve: {
     extensions: [
