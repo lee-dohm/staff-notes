@@ -38,6 +38,8 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 async function drop(event: DragEvent): Promise<void> {
   event.preventDefault()
 
+  const submitButton = document.querySelector('.form-actions button[type="submit"]')
+
   if (submitButton) {
     submitButton.setAttribute('disabled', 'disabled')
 
@@ -157,10 +159,7 @@ function uploadFiles(files: FileList): Promise<void[]> {
   return Promise.all(promises)
 }
 
-const imageDropElement: MaybeHTMLTextAreaElement =
-  document.querySelector('.image-drop') as MaybeHTMLTextAreaElement
-
-const submitButton = document.querySelector('.form-actions button[type="submit"]')
+const imageDropElement = document.querySelector('.image-drop') as MaybeHTMLTextAreaElement
 
 if (imageDropElement) {
   imageDropElement.addEventListener('dragenter', addDragHover)
