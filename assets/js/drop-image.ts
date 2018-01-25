@@ -1,3 +1,5 @@
+type MaybeHTMLTextAreaElement = HTMLTextAreaElement | null
+
 interface FileReaderEvent extends UIEvent {
   target: FileReader
 }
@@ -5,9 +7,6 @@ interface FileReaderEvent extends UIEvent {
 interface XMLHttpRequestEvent extends UIEvent {
   target: XMLHttpRequest
 }
-
-const imageDropElement: HTMLTextAreaElement | null = document.querySelector('image-drop')
-const submitButton = document.querySelector('.form-actions button[type="submit"]')
 
 /**
  * Callback to add styles indicating that the element can accept dropped data when hovering over it.
@@ -157,6 +156,11 @@ function uploadFiles(files: FileList): Promise<void[]> {
 
   return Promise.all(promises)
 }
+
+const imageDropElement: MaybeHTMLTextAreaElement =
+  document.querySelector('.image-drop') as MaybeHTMLTextAreaElement
+
+const submitButton = document.querySelector('.form-actions button[type="submit"]')
 
 if (imageDropElement) {
   imageDropElement.addEventListener('dragenter', addDragHover)
