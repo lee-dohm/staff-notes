@@ -1,7 +1,7 @@
 import timeago from 'timeago.js'
 
 function timestampsToLocale(nodes: NodeListOf<Element>): void {
-  for (let node of <Element[]><any>nodes) {
+  for (let node of nodes as any as Element[]) {
     let title = node.getAttribute('title')
     if (title && title.length > 0) {
       let date = new Date(title)

@@ -1,6 +1,10 @@
-type DataTransferEvent = CustomEvent & { dataTransfer?: DataTransfer }
-type FileReaderEvent = CustomEvent & { target: FileReader }
-type XMLHttpRequestEvent = CustomEvent & { target: XMLHttpRequest }
+interface FileReaderEvent extends UIEvent {
+  target: FileReader
+}
+
+interface XMLHttpRequestEvent extends UIEvent {
+  target: XMLHttpRequest
+}
 
 const imageDropElement: HTMLTextAreaElement | null = document.querySelector('.image-drop')
 const submitButton = document.querySelector('.form-actions button[type="submit"]')
@@ -8,7 +12,7 @@ const submitButton = document.querySelector('.form-actions button[type="submit"]
 /**
  * Callback to add styles indicating that the element can accept dropped data when hovering over it.
  */
-function addDragHover(event: Event): void {
+function addDragHover(event: DragEvent): void {
   if (imageDropElement) {
     imageDropElement.classList.add('is-drag-hover')
   }
@@ -32,7 +36,7 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 /**
  * Callback for when files are dropped in the target element.
  */
-async function drop(event: DataTransferEvent): Promise<void> {
+async function drop(event: DragEvent): Promise<void> {
   event.preventDefault()
 
   if (submitButton) {
@@ -137,7 +141,7 @@ function uploadFiles(files: FileList): Promise<void[]> {
   let promises = []
 
   if (imageDropElement) {
-    for (let file of <File[]><any>files) {
+    for (let file of files as any as File[]) {
       insertPlaceholder(imageDropElement, file.name)
 
       let promise = uploadFile(file).then((url) => {
