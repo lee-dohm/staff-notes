@@ -17,7 +17,10 @@ module.exports = {
           fallback: 'style-loader',
           use: [
             {
-              loader: 'css-loader'
+              loader: 'css-loader',
+              options: {
+                minimize: isProduction
+              }
             },
             {
               loader: 'sass-loader',
@@ -25,6 +28,7 @@ module.exports = {
                 includePaths: [
                   path.resolve(__dirname, 'node_modules')
                 ],
+                outputStyle: 'expanded',
                 sourceComments: !isProduction
               }
             }
