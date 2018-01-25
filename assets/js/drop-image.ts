@@ -121,6 +121,8 @@ function request(method: string, url: string, json: string): Promise<string> {
 
 /**
  * Uploads the given `File` asynchronously.
+ *
+ * Returns a `Promise` that resolves to the URL where the file can be downloaded from.
  */
 async function uploadFile(file: File): Promise<string> {
   const buffer = await readFile(file)
@@ -136,6 +138,8 @@ async function uploadFile(file: File): Promise<string> {
 
 /**
  * Uploads the dropped files.
+ *
+ * Returns a `Promise` that resolves when all uploads are complete.
  */
 function uploadFiles(files: FileList): Promise<void[]> {
   let promises = []
