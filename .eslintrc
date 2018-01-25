@@ -1,5 +1,7 @@
 {
-  "env": "browser",
+  "env": {
+    "browser": true
+  },
   "extends": "standard",
   "rules": {
     "semi": [2, "never"]

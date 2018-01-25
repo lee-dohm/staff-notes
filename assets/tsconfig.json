@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "es2015"],
+    "moduleResolution": "Node",
+    "noImplicitAny": true,
+    "outDir": "ts-build",
+    "strictNullChecks": true
+  },
+  "exclude": [
+    "node_modules",
+    "ts-build"
+  ]
+}
