@@ -1,4 +1,4 @@
-const timeago = require('timeago.js')
+import timeago from 'timeago.js'
 
 function timestampsToLocale (nodes) {
   for (let node of nodes) {

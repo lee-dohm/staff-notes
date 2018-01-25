@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "lib": ["DOM", "ES2015"],
+    "moduleResolution": "Node",
+    "outDir": "ts-build"
+  },
+  "exclude": [
+    "node_modules",
+    "ts-build"
+  ]
+}

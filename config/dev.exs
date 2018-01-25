@@ -13,9 +13,10 @@ config :staff_notes, StaffNotesWeb.Endpoint,
   check_origin: false,
   watchers: [
     node: [
-      "node_modules/brunch/bin/brunch",
-      "watch",
-      "--stdin",
+      "node_modules/webpack/bin/webpack.js",
+      "--watch-stdin",
+      "--progress",
+      "--color",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
