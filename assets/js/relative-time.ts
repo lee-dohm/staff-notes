@@ -1,5 +1,9 @@
 import timeago from 'timeago.js'
 
+/**
+ * Accepts a list of relative time elements and updates their `title` attribute to use the browser's
+ * locale-specific date format.
+ */
 function timestampsToLocale(elements: NodeListOf<Element>): void {
   for (const element of elements as any as Element[]) {
     const title = element.getAttribute('title')
