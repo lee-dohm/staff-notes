@@ -1,17 +1,29 @@
 const path = require('path')
 
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const env = process.env.MIX_ENV || 'dev'
+const isProduction = (env === 'prod')
+
 module.exports = {
   entry: "./js/app.js",
   module: {
-    loaders: [{
-      test: /\.tsx?$/,
-      loader: 'ts-loader'
-    }]
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: [
+          {loader: 'ts-loader'}
+        ]
+      }
+    ],
   },
   output: {
-    path: path.resolve(__dirname, "../priv/static/js"),
-    filename: "app.js"
+    path: path.resolve(__dirname, "../priv/static"),
+    filename: "js/app.js"
   },
+  plugins: [
+    new CopyWebpackPlugin([{from: './static'}])
+  ],
   resolve: {
     extensions: [
       '.js',
