@@ -25,3 +25,5 @@ exclude_paths:
 - priv/repo
 - script
 - test
+pull_requests:
+  comments: false
