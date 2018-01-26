@@ -15,10 +15,15 @@ defmodule StaffNotesWeb.ApiTokenHelpers do
   end
 
   @doc """
-  Renders a hidden input tag containing the currently-logged-in user's API token.
+  Renders a `meta` tag containing the currently-logged-in user's API token.
+
+  If nobody is logged in, no tag is rendered.
   """
-  def token_hidden_input(conn) do
-    tag(:input, type: "hidden", name: "_api_token", value: generate_api_token(conn))
+  def token_meta_tag(conn) do
+    case current_user_id(conn) do
+      nil -> nil
+      _ -> tag(:meta, name: "api-access-token", content: generate_api_token(conn))
+    end
   end
 
   defp current_user_id(conn) do
