@@ -13,16 +13,28 @@ defmodule StaffNotes.Files do
   ## Examples
 
   ```
-  iex> upload_file(...)
+  iex> upload_file(..., "image/png")
   "https://image_bucket.s3.amazonaws.com/dbaaee81609747ba82bea2453cc33b83.png"
   ```
   """
   @spec upload_file(String.t, String.t) :: {:ok, String.t} | {:error, String.t} | no_return()
-  def upload_file(base64_data, mime_type) when is_binary(base64_data) and is_binary(mime_type) do
+  def upload_file(base64_data, mime_type), do: upload_file(base64_data, mime_type, [])
+
+  @doc false
+  def upload_file(base64_data, mime_type, options)
+      when is_binary(base64_data) and is_binary(mime_type) do
+    options = Keyword.merge(defaults(), options)
+
     case Base.decode64(base64_data) do
-      :error -> {:error, "Error decoding base64 image data"}
-      {:ok, binary} -> do_upload(config(:s3_bucket), binary, image_extension(mime_type))
+      :error -> {:error, "Error decoding base64 data"}
+      {:ok, binary} -> do_upload(config(:s3_bucket), binary, image_extension(mime_type), options)
     end
+  end
+
+  defp defaults do
+    [
+      ex_aws_module: ExAws
+    ]
   end
 
   defp config(key, default \\ nil) do
@@ -33,20 +45,26 @@ defmodule StaffNotes.Files do
     )
   end
 
-  defp do_upload(nil, _, _), do: raise ConfigurationError, message: "No :s3_bucket configured for #{Mix.env()} in application :staff_notes"
-  defp do_upload(_, _, {:error, _} = error), do: error
+  defp do_upload(nil, _, _, _) do
+    raise ConfigurationError, message: "No :s3_bucket configured for #{Mix.env()} in application :staff_notes"
+  end
 
-  defp do_upload(bucket, binary, {:ok, extension}) do
+  defp do_upload(_, _, {:error, _} = error, _), do: error
+
+  defp do_upload(bucket, binary, {:ok, extension}, options) do
     filename = Path.join(config(:base_path, ""), unique_filename(extension))
 
-    {:ok, result} =
-      bucket
-      |> S3.put_object(filename, binary)
-      |> ExAws.request()
+    bucket
+    |> S3.put_object(filename, binary)
+    |> options[:ex_aws_module].request()
+    |> handle_response(bucket, filename)
+  end
 
+  defp handle_response({:error, _} = error, _, _), do: error
+  defp handle_response({:ok, response}, bucket, filename) do
     url = Path.join("https://#{bucket}.s3.amazonaws.com", filename)
 
-    Logger.debug(fn -> "S3 upload result: #{inspect(result)}" end)
+    Logger.debug(fn -> "S3 upload result: #{inspect(response)}" end)
     Logger.debug(fn -> "File uploaded: #{url}" end)
 
     {:ok, url}
