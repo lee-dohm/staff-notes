@@ -97,14 +97,19 @@ function readFile(file: File): Promise<ArrayBuffer> {
 }
 
 /**
+ * Removes the previously inserted placeholder image link from the element.
+ */
+function removePlaceholder(el: HTMLTextAreaElement, filename: string): void {
+  el.value = el.value.replace(`![Uploading ${filename}...]()`, '')
+}
+
+/**
  * Replaces the previously inserted placeholder image links in the `HTMLTextAreaElement`.
  */
 function replacePlaceholder(el: HTMLTextAreaElement, filename: string, url: string): void {
-  const oldText = el.value
   const fileroot = filename.replace(/\.[^/.]+$/, '')
-  const newText = oldText.replace(`![Uploading ${filename}...]()`, `![${fileroot}](${url})`)
 
-  el.value = newText
+  el.value = el.value.replace(`![Uploading ${filename}...]()`, `![${fileroot}](${url})`)
 }
 
 /**
@@ -160,6 +165,10 @@ function uploadFiles(files: FileList): Promise<void[]> {
 
       const promise = uploadFile(file).then((url) => {
         replacePlaceholder(imageDropElement, file.name, url)
+      }).catch((error) => {
+        removePlaceholder(imageDropElement, file.name)
+
+        alert(error)
       })
 
       promises.push(promise)
