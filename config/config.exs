@@ -17,7 +17,7 @@ config :staff_notes,
 config :staff_notes, StaffNotesWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "zb9dt/VPhENEdWX7Vi9gjy/1i66u0bqu+HwgcbyqBijV2CQsQDVNgw/sIrRIPsIO",
-  render_errors: [view: StaffNotesWeb.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: StaffNotesWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub: [name: StaffNotes.PubSub, adapter: Phoenix.PubSub.PG2]
 
 config :staff_notes, StaffNotes.Files,
