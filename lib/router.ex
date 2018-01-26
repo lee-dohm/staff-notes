@@ -23,8 +23,6 @@ defmodule StaffNotesWeb.Router do
 
     get("/", PageController, :index)
     get("/about", PageController, :about)
-    get("/upload", UploadController, :upload_form)
-    post("/upload", UploadController, :upload)
 
     resources("/users", UserController, only: [:show], param: "name")
 
@@ -39,7 +37,7 @@ defmodule StaffNotesWeb.Router do
   scope "/api", StaffNotesApi do
     pipe_through(:api)
 
-    post("/images", ImageController, :create)
+    post("/files", FileController, :create)
     post("/markdown", MarkdownController, :render)
   end
 

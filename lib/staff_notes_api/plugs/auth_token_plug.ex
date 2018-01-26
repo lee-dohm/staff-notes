@@ -17,6 +17,8 @@ defmodule StaffNotesApi.AuthTokenPlug do
   """
   import Plug.Conn, only: [get_req_header: 2]
 
+  require Logger
+
   alias Phoenix.Token
 
   alias StaffNotes.Accounts
@@ -24,6 +26,22 @@ defmodule StaffNotesApi.AuthTokenPlug do
 
   @doc """
   Initialize the plug with the supplied options.
+
+  ## Examples
+
+  Default options:
+
+  ```
+  iex> StaffNotesApi.AuthTokenPlug.init()
+  [api_access_salt: "api-access-salt", max_age: 86_400]
+  ```
+
+  Overriding options:
+
+  ```
+  iex> StaffNotesApi.AuthTokenPlug.init(api_access_salt: "test", max_age: 1_000)
+  [api_access_salt: "test", max_age: 1_000]
+  ```
   """
   def init(options \\ []) do
     default_options()

@@ -5,6 +5,7 @@
       true,
       "never-prefix"
     ],
+    "no-reference": false,
     "quotemark": [
       true,
       "single",
