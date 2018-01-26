@@ -18,7 +18,9 @@ config :staff_notes, StaffNotesWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "zb9dt/VPhENEdWX7Vi9gjy/1i66u0bqu+HwgcbyqBijV2CQsQDVNgw/sIrRIPsIO",
   render_errors: [view: StaffNotesWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: StaffNotes.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: StaffNotes.PubSub, adapter: Phoenix.PubSub.PG2],
+  api_access_salt: "api-access-salt",
+  token_max_age: 86_400  # One day
 
 config :staff_notes, StaffNotes.Files,
   base_path: "images/",

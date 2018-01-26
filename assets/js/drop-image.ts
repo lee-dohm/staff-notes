@@ -134,7 +134,10 @@ function request(method: string, url: string, json: string): Promise<string> {
 async function uploadFile(file: File): Promise<string> {
   const buffer = await readFile(file)
   const base64 = arrayBufferToBase64(buffer)
-  const payload = {base64, mimeType: file.type}
+  const apiTokenElement = document.querySelector('input[name="_api_token"]') as HTMLInputElement
+
+  const token = apiTokenElement ? apiTokenElement.value : null
+  const payload = {base64, mimeType: file.type, token}
 
   const json = await request('POST', '/api/images', JSON.stringify(payload))
   const response = JSON.parse(json)

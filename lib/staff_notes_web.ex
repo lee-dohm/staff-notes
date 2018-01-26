@@ -80,6 +80,7 @@ defmodule StaffNotesWeb do
       # Project-specific view helpers
       import PhoenixOcticons
 
+      import StaffNotesWeb.ApiTokenHelpers
       import StaffNotesWeb.LinkHelpers
       import StaffNotesWeb.PrimerHelpers
       import StaffNotesWeb.SharedHelpers
