@@ -8,17 +8,17 @@ defmodule StaffNotes.Files do
   alias StaffNotes.ConfigurationError
 
   @doc """
-  Accepts a Base64-encoded image and uploads it to S3.
+  Accepts a Base64-encoded file and uploads it to S3.
 
   ## Examples
 
   ```
-  iex> upload_image(...)
+  iex> upload_file(...)
   "https://image_bucket.s3.amazonaws.com/dbaaee81609747ba82bea2453cc33b83.png"
   ```
   """
-  @spec upload_image(String.t, String.t) :: {:ok, String.t} | {:error, String.t} | no_return()
-  def upload_image(base64_data, mime_type) when is_binary(base64_data) and is_binary(mime_type) do
+  @spec upload_file(String.t, String.t) :: {:ok, String.t} | {:error, String.t} | no_return()
+  def upload_file(base64_data, mime_type) when is_binary(base64_data) and is_binary(mime_type) do
     case Base.decode64(base64_data) do
       :error -> {:error, "Error decoding base64 image data"}
       {:ok, binary} -> do_upload(config(:s3_bucket), binary, image_extension(mime_type))

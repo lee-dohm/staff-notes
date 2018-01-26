@@ -1,6 +1,6 @@
 defmodule StaffNotesApi.ImageController do
   @moduledoc """
-  Handles requests for image resources.
+  Handles requests for file resources.
   """
   use StaffNotesApi, :controller
 
@@ -9,7 +9,7 @@ defmodule StaffNotesApi.ImageController do
   plug StaffNotesApi.AuthTokenPlug
 
   @doc """
-  Accepts a base64-encoded image, uploads it to S3, and returns the URL where it can be viewed.
+  Accepts a base64-encoded file, uploads it to S3, and returns the URL where it can be viewed.
 
   ## Accepts
 
@@ -49,7 +49,7 @@ defmodule StaffNotesApi.ImageController do
     result =
       base64_data
       |> String.trim()
-      |> Files.upload_image(mime_type)
+      |> Files.upload_file(mime_type)
 
     handle_result(conn, result)
   end
