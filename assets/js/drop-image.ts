@@ -129,6 +129,7 @@ function request(method: string, url: string, payload: string, token?: string): 
     xhr.open(method, url)
 
     xhr.setRequestHeader('Authorization', `token ${token}`)
+    xhr.setRequestHeader('Accept', 'application/json')
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
     xhr.onload = (e: XMLHttpRequestEvent) => {
       resolve({status: e.target.status, responseText: e.target.responseText})
