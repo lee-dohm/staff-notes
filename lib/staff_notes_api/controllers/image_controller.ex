@@ -4,7 +4,6 @@ defmodule StaffNotesApi.ImageController do
   """
   use StaffNotesApi, :controller
 
-  alias StaffNotes.Accounts
   alias StaffNotes.Files
 
   plug StaffNotesApi.AuthTokenPlug

@@ -1,6 +1,17 @@
 defmodule StaffNotesApi.AuthTokenPlug do
   @moduledoc """
-  A `Plug` for validating the API token in the authorization request header.
+  A module `Plug` for validating the API token in the authorization request header.
+
+  Looks for the token in the request `Authorization` header in the format
+  `token [big-long-token-thing]`. When found, it verifies the token (using
+  `Phoenix.Token.verify/4`). If the token is valid, it extracts the user ID from the token and
+  verifies that there is a user in the database with the given user ID. If any step fails,
+  `401 Unauthorized` is returned and the request is halted.
+
+  ## Options
+
+  * `:api_access_salt` -- Salt to use when verifying the token _(default: "api-access-salt")_
+  * `:max_age` -- Maximum allowable age of the token in seconds _(default: one day)_
   """
   import Plug.Conn, only: [get_req_header: 2, halt: 1, send_resp: 3]
 
@@ -10,11 +21,6 @@ defmodule StaffNotesApi.AuthTokenPlug do
 
   @doc """
   Initialize the plug with the supplied options.
-
-  ## Options
-
-  * `:api_access_salt` -- Salt to use when verifying the token _(default: "api-access-salt")_
-  * `:max_age` -- Maximum allowable age of the token in seconds _(default: one day)_
   """
   def init(options) do
     default_options()
@@ -24,10 +30,6 @@ defmodule StaffNotesApi.AuthTokenPlug do
 
   @doc """
   Call the plug with the initialized options.
-
-  Looks for the token in the request `Authorization` header in the format
-  `token [big-long-token-thing]`. When found, it verifies the token and the user ID of the user the
-  token was issued to. If any step fails, `401 Unauthorized` is returned and the request is halted.
   """
   def call(conn, options) do
     case valid_token?(conn, options) do
