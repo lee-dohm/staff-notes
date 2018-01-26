@@ -1,4 +1,4 @@
-/// <reference path="./http" />
+import './http'
 
 /**
  * Thrown when a non-2xx response is returned from an HTTP request.

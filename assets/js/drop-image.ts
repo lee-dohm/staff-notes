@@ -1,5 +1,4 @@
-/// <reference path="./http" />
-
+import './http'
 import HTTPError from './http-error'
 
 type MaybeHTMLTextAreaElement = HTMLTextAreaElement | null
