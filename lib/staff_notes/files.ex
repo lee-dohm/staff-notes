@@ -17,18 +17,12 @@ defmodule StaffNotes.Files do
   "https://image_bucket.s3.amazonaws.com/dbaaee81609747ba82bea2453cc33b83.png"
   ```
   """
-  def upload_image(base64_data, mime_type) when is_binary(base64_data) do
+  @spec upload_image(String.t, String.t) :: {:ok, String.t} | {:error, String.t} | no_return()
+  def upload_image(base64_data, mime_type) when is_binary(base64_data) and is_binary(mime_type) do
     case Base.decode64(base64_data) do
       :error -> {:error, "Error decoding base64 image data"}
       {:ok, binary} -> do_upload(config(:s3_bucket), binary, image_extension(mime_type))
     end
-  end
-
-  @doc """
-  Accepts an image as a `t:Plug.Upload.t/0` and uploads it to S3.
-  """
-  def upload_image(%Plug.Upload{} = upload) do
-    do_upload(config(:s3_bucket), File.read!(upload.path), {:ok, Path.extname(upload.filename)})
   end
 
   defp config(key, default \\ nil) do
@@ -61,10 +55,6 @@ defmodule StaffNotes.Files do
   defp image_extension("image/gif"), do: {:ok, ".gif"}
   defp image_extension("image/jpeg"), do: {:ok, ".jpg"}
   defp image_extension("image/png"), do: {:ok, ".png"}
-
-  defp image_extension(<<0x47, 0x49, 0x46, _::binary>>), do: {:ok, ".gif"}
-  defp image_extension(<<0xff, 0xD8, _::binary>>), do: {:ok, ".jpg"}
-  defp image_extension(<<0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, _::binary>>), do: {:ok, ".png"}
   defp image_extension(_), do: {:error, "Could not determine file type"}
 
   defp unique_filename(extension) do
