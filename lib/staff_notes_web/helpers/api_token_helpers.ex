@@ -12,7 +12,7 @@ defmodule StaffNotesWeb.ApiTokenHelpers do
   Generates an API access token for the currently signed-in user.
   """
   def generate_api_token(conn) do
-    Token.sign(conn, AuthTokenPlug.default_options()[:api_access_salt], current_user_id(conn))
+    Token.sign(conn, AuthTokenPlug.init()[:api_access_salt], current_user_id(conn))
   end
 
   @doc """

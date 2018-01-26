@@ -36,10 +36,7 @@ defmodule StaffNotesApi.AuthTokenPlug do
   """
   def call(conn, options), do: validate_token!(conn, options)
 
-  @doc """
-  Gets the default options.
-  """
-  def default_options do
+  defp default_options do
     [
       api_access_salt: "api-access-salt",
       max_age: 86_400
