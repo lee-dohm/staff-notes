@@ -1,4 +1,4 @@
-defmodule StaffNotesApi.ImageController do
+defmodule StaffNotesApi.FileController do
   @moduledoc """
   Handles requests for file resources.
   """
