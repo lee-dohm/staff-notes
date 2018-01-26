@@ -6,6 +6,8 @@ defmodule StaffNotesApi.MarkdownController do
 
   alias StaffNotes.Ecto.Markdown
 
+  plug StaffNotesApi.AuthTokenPlug
+
   @doc """
   Renders the Markdown received and returns an HTML fragment.
 

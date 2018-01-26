@@ -6,6 +6,7 @@ html lang="en"
     meta content="width=device-width, initial-scale=1" name="viewport"
     meta content="" name="description"
     meta content="" name="author"
+    = token_meta_tag(@conn)
 
     title = gettext "Staff Notes"
     link rel="stylesheet" href="#{static_path(@conn, "/css/app.css")}"

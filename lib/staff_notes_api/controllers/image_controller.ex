@@ -6,6 +6,8 @@ defmodule StaffNotesApi.ImageController do
 
   alias StaffNotes.Files
 
+  plug StaffNotesApi.AuthTokenPlug
+
   @doc """
   Accepts a base64-encoded image, uploads it to S3, and returns the URL where it can be viewed.
 
@@ -39,6 +41,8 @@ defmodule StaffNotesApi.ImageController do
   {
     "reason": "An error happened"
   }
+
+  Returns status code 401 with no body when the supplied API token is invalid.
   ```
   """
   def create(conn, %{"base64" => base64_data, "mimeType" => mime_type}) do

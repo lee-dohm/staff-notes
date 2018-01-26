@@ -1,9 +1,15 @@
 type MaybeHTMLTextAreaElement = HTMLTextAreaElement | null
 
+/**
+ * An `UIEvent` that is raised by a `FileReader` object.
+ */
 interface FileReaderEvent extends UIEvent {
   target: FileReader
 }
 
+/**
+ * An `UIEvent` that is raised by an `XMLHttpRequest` object.
+ */
 interface XMLHttpRequestEvent extends UIEvent {
   target: XMLHttpRequest
 }
@@ -37,6 +43,8 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
  */
 async function drop(event: DragEvent): Promise<void> {
   event.preventDefault()
+
+  const submitButton = document.querySelector('.form-actions button[type="submit"]')
 
   if (submitButton) {
     submitButton.setAttribute('disabled', 'disabled')
@@ -104,12 +112,13 @@ function replacePlaceholder(el: HTMLTextAreaElement, filename: string, url: stri
  *
  * Returns a `Promise` that resolves with the response text or rejects with the exception on errors.
  */
-function request(method: string, url: string, json: string): Promise<string> {
+function request(method: string, url: string, json: string, token?: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
 
     xhr.open(method, url)
 
+    xhr.setRequestHeader('Authorization', `token ${token}`)
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
     xhr.onload = (e: XMLHttpRequestEvent) => resolve(e.target.responseText)
     xhr.onerror = (e) => reject(e)
@@ -126,9 +135,12 @@ function request(method: string, url: string, json: string): Promise<string> {
 async function uploadFile(file: File): Promise<string> {
   const buffer = await readFile(file)
   const base64 = arrayBufferToBase64(buffer)
+  const apiTokenElement = document.querySelector('meta[name="api-access-token"]') as HTMLMetaElement
+
+  const token = apiTokenElement ? apiTokenElement.content : undefined
   const payload = {base64, mimeType: file.type}
 
-  const json = await request('POST', '/api/images', JSON.stringify(payload))
+  const json = await request('POST', '/api/images', JSON.stringify(payload), token)
   const response = JSON.parse(json)
 
   return response.url
@@ -157,10 +169,7 @@ function uploadFiles(files: FileList): Promise<void[]> {
   return Promise.all(promises)
 }
 
-const imageDropElement: MaybeHTMLTextAreaElement =
-  document.querySelector('.image-drop') as MaybeHTMLTextAreaElement
-
-const submitButton = document.querySelector('.form-actions button[type="submit"]')
+const imageDropElement = document.querySelector('.image-drop') as MaybeHTMLTextAreaElement
 
 if (imageDropElement) {
   imageDropElement.addEventListener('dragenter', addDragHover)

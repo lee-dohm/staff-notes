@@ -75,13 +75,13 @@ defmodule StaffNotes.Mixfile do
           ~r{^StaffNotes\.Accounts}
         ],
         Controllers: [
-          ~r{^StaffNotesWeb.*Controller$}
+          ~r{^StaffNotes.*Controller$}
         ],
         "Ecto Types": [
           ~r{^StaffNotes.Ecto.*}
         ],
         Helpers: [
-          ~r{^StaffNotesWeb.*Helpers$}
+          ~r{^StaffNotes.*Helpers$}
         ],
         Localization: [
           StaffNotesWeb.Gettext
@@ -94,6 +94,9 @@ defmodule StaffNotes.Mixfile do
         ],
         OAuth: [
           StaffNotesWeb.GitHub
+        ],
+        Plugs: [
+          ~r{^StaffNotes.*Plug$}
         ],
         Sockets: [
           ~r{^StaffNotesWeb.*Socket$}
