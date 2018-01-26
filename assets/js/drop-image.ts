@@ -1,4 +1,5 @@
-import './http'
+/// <references path="./http" />
+
 import HTTPError from './http-error'
 
 type MaybeHTMLTextAreaElement = HTMLTextAreaElement | null
@@ -151,7 +152,7 @@ async function uploadFile(file: File): Promise<string> {
   const token = apiTokenElement ? apiTokenElement.content : undefined
   const payload = {base64, mimeType: file.type}
 
-  const httpResponse = await request('POST', '/api/images', JSON.stringify(payload), token)
+  const httpResponse = await request('POST', '/api/files', JSON.stringify(payload), token)
 
   if (httpResponse.status !== 201) {
     throw new HTTPError(
