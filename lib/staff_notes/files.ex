@@ -17,7 +17,8 @@ defmodule StaffNotes.Files do
   "https://image_bucket.s3.amazonaws.com/dbaaee81609747ba82bea2453cc33b83.png"
   ```
   """
-  @spec upload_file(String.t, String.t) :: {:ok, String.t} | {:error, String.t} | no_return()
+  @spec upload_file(String.t(), String.t()) ::
+          {:ok, String.t()} | {:error, String.t()} | no_return()
   def upload_file(base64_data, mime_type), do: upload_file(base64_data, mime_type, [])
 
   @doc false
@@ -46,7 +47,8 @@ defmodule StaffNotes.Files do
   end
 
   defp do_upload(nil, _, _, _) do
-    raise ConfigurationError, message: "No :s3_bucket configured for #{Mix.env()} in application :staff_notes"
+    raise ConfigurationError,
+      message: "No :s3_bucket configured for #{Mix.env()} in application :staff_notes"
   end
 
   defp do_upload(_, _, {:error, _} = error, _), do: error
@@ -61,6 +63,7 @@ defmodule StaffNotes.Files do
   end
 
   defp handle_response({:error, _} = error, _, _), do: error
+
   defp handle_response({:ok, response}, bucket, filename) do
     url = Path.join("https://#{bucket}.s3.amazonaws.com", filename)
 
