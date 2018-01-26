@@ -1,3 +1,7 @@
+/// <reference path="./http" />
+
+import HTTPError from './http-error'
+
 type MaybeHTMLTextAreaElement = HTMLTextAreaElement | null
 
 /**
@@ -113,11 +117,12 @@ function replacePlaceholder(el: HTMLTextAreaElement, filename: string, url: stri
 }
 
 /**
- * Executes an `XMLHttpRequest` to send the given `json` to the `url` via the `method`.
+ * Executes an `XMLHttpRequest` to send the given `payload` to the `url` via the `method`.
  *
- * Returns a `Promise` that resolves with the response text or rejects with the exception on errors.
+ * Returns a `Promise` that resolves with the HTTP response information or rejects with the
+ * exception on errors. A non-2xx status from the server is **not** an error and will resolve.
  */
-function request(method: string, url: string, json: string, token?: string): Promise<string> {
+function request(method: string, url: string, payload: string, token?: string): Promise<HttpResponse> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
 
@@ -125,10 +130,12 @@ function request(method: string, url: string, json: string, token?: string): Pro
 
     xhr.setRequestHeader('Authorization', `token ${token}`)
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
-    xhr.onload = (e: XMLHttpRequestEvent) => resolve(e.target.responseText)
+    xhr.onload = (e: XMLHttpRequestEvent) => {
+      resolve({status: e.target.status, responseText: e.target.responseText})
+    }
     xhr.onerror = (e) => reject(e)
 
-    xhr.send(json)
+    xhr.send(payload)
   })
 }
 
@@ -145,8 +152,16 @@ async function uploadFile(file: File): Promise<string> {
   const token = apiTokenElement ? apiTokenElement.content : undefined
   const payload = {base64, mimeType: file.type}
 
-  const json = await request('POST', '/api/images', JSON.stringify(payload), token)
-  const response = JSON.parse(json)
+  const httpResponse = await request('POST', '/api/images', JSON.stringify(payload), token)
+
+  if (httpResponse.status !== 201) {
+    throw new HTTPError(
+      httpResponse,
+      `Status code ${httpResponse.status} returned by the server uploading ${file.name}`
+    )
+  }
+
+  const response = JSON.parse(httpResponse.responseText)
 
   return response.url
 }
