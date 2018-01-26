@@ -4,14 +4,15 @@ defmodule StaffNotesWeb.ApiTokenHelpers do
   """
   use StaffNotesWeb, :helper
 
+  alias Phoenix.Token
+
+  alias StaffNotesApi.AuthTokenPlug
+
   @doc """
   Generates an API access token for the currently signed-in user.
   """
   def generate_api_token(conn) do
-    config = Application.get_env(:staff_notes, StaffNotesWeb.Endpoint)
-    salt = config[:api_access_salt]
-
-    Phoenix.Token.sign(conn, salt, current_user_id(conn))
+    Token.sign(conn, AuthTokenPlug.default_options()[:api_access_salt], current_user_id(conn))
   end
 
   @doc """
