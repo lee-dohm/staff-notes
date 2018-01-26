@@ -122,7 +122,7 @@ function replacePlaceholder(el: HTMLTextAreaElement, filename: string, url: stri
  * Returns a `Promise` that resolves with the HTTP response information or rejects with the
  * exception on errors. A non-2xx status from the server is **not** an error and will resolve.
  */
-function request(method: string, url: string, payload: string, token?: string): Promise<HttpResponse> {
+function request(method: string, url: string, payload: string, token?: string): Promise<HTTPResponse> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
 

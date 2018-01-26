@@ -13,7 +13,7 @@ export default class HTTPError extends Error {
   /** HTTP status code returned from the server. */
   public status: number
 
-  constructor(response: HttpResponse, message?: string) {
+  constructor(response: HTTPResponse, message?: string) {
     super(message || `Status code ${response.status} was returned by the server`)
 
     this.status = response.status

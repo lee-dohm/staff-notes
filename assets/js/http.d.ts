@@ -1,7 +1,7 @@
 /**
  * HTTP response information.
  */
-interface HttpResponse {
+interface HTTPResponse {
   /** HTTP status code */
   status: number
 
