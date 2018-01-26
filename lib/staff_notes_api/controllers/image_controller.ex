@@ -4,6 +4,8 @@ defmodule StaffNotesApi.ImageController do
   """
   use StaffNotesApi, :controller
 
+  alias Phoenix.Token
+
   alias StaffNotes.Accounts
   alias StaffNotes.Files
 
@@ -55,36 +57,41 @@ defmodule StaffNotesApi.ImageController do
     handle_result(conn, result)
   end
 
-  defp authenticate_token(%{params: %{"token" => token}} = conn, _options) do
-    case valid_token?(conn, token) do
+  defp authenticate_token(conn, _options) do
+    case valid_token?(conn) do
       true -> conn
-      false -> send_resp(conn, :unauthorized, "")
+      false ->
+        conn
+        |> send_resp(:unauthorized, "")
+        |> halt()
     end
   end
 
-  defp authenticate_token(conn, _options) do
+  defp valid_token?(conn) do
     conn
-    |> send_resp(:unauthorized, "")
-    |> halt()
-  end
-
-  defp valid_token?(conn, token) do
-    conn
-    |> verify_token(token)
+    |> verify_token()
     |> verify_user()
   end
 
-  defp verify_token(conn, token) do
+  defp verify_token(conn) do
+    case get_req_header(conn, "authorization") do
+      ["token " <> token] -> do_verify_token(conn, token)
+      _ -> {:error, "Invalid authorization header"}
+    end
+  end
+
+  defp do_verify_token(conn, token) do
     config = Application.get_env(:staff_notes, StaffNotesWeb.Endpoint)
     salt = config[:api_access_salt]
 
-    Phoenix.Token.verify(conn, salt, token, max_age: config[:token_max_age])
+    Token.verify(conn, salt, token, max_age: config[:token_max_age])
   end
 
   # If we can't verify the token for any reason, deny the request
   defp verify_user({:error, _}), do: false
 
   # Users who aren't logged in can't use the API
+  # TODO: We should probably log this in the future since logged out users shouldn't receive a token
   defp verify_user({:ok, nil}), do: false
 
   # We got a user ID, but is it real?
