@@ -5,6 +5,7 @@ defmodule StaffNotesWeb.Router do
   use StaffNotesWeb, :router
 
   alias Plug.Ribbon
+  alias StaffNotesApi.TokenAuthentication
   alias StaffNotesWeb.SlidingSessionTimeout
 
   pipeline :browser do
@@ -20,6 +21,7 @@ defmodule StaffNotesWeb.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
+    plug(TokenAuthentication)
   end
 
   scope "/", StaffNotesWeb do

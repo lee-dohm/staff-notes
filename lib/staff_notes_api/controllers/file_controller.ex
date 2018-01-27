@@ -6,8 +6,6 @@ defmodule StaffNotesApi.FileController do
 
   alias StaffNotes.Files
 
-  plug StaffNotesApi.TokenAuthentication
-
   @doc """
   Accepts a base64-encoded file, uploads it to S3, and returns the URL where it can be viewed.
 
