@@ -55,6 +55,7 @@ defmodule StaffNotes.Mixfile do
       {:phoenix, "~> 1.3.0"},
       {:phoenix_octicons, "~> 0.2.0"},
       {:phoenix_slime, "~> 0.9"},
+      {:plug_ribbon, "~> 0.2.1"},
       {:postgrex, ">= 0.0.0"},
       {:timex, "~> 3.1"},
       {:dotenv, "~> 3.0", only: :dev},

@@ -4,6 +4,7 @@ defmodule StaffNotesWeb.Router do
   """
   use StaffNotesWeb, :router
 
+  alias Plug.Ribbon
   alias StaffNotesWeb.SlidingSessionTimeout
 
   pipeline :browser do
@@ -14,6 +15,7 @@ defmodule StaffNotesWeb.Router do
     plug(:put_secure_browser_headers)
     plug(SlidingSessionTimeout)
     plug(:assign_current_user)
+    plug(Ribbon, [:dev, :test])
   end
 
   pipeline :api do
