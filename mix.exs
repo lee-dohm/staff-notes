@@ -97,7 +97,8 @@ defmodule StaffNotes.Mixfile do
           StaffNotesWeb.GitHub
         ],
         Plugs: [
-          ~r{^StaffNotes.*Plug$}
+          StaffNotesApi.TokenAuthentication,
+          StaffNotesWeb.SlidingSessionTimeout
         ],
         Sockets: [
           ~r{^StaffNotesWeb.*Socket$}
