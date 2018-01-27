@@ -6,13 +6,13 @@ defmodule StaffNotesWeb.ApiTokenHelpers do
 
   alias Phoenix.Token
 
-  alias StaffNotesApi.AuthTokenPlug
+  alias StaffNotesApi.TokenAuthentication
 
   @doc """
   Generates an API access token for the currently signed-in user.
   """
   def generate_api_token(conn) do
-    Token.sign(conn, AuthTokenPlug.init()[:api_access_salt], current_user_id(conn))
+    Token.sign(conn, TokenAuthentication.init()[:api_access_salt], current_user_id(conn))
   end
 
   @doc """
