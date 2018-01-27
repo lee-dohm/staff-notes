@@ -17,7 +17,7 @@ defmodule StaffNotesWeb.Primer do
       element
       |> Module.split()
       |> List.last()
-      |> Phoenix.Naming.underscore()
+      |> Macro.underscore()
       |> String.to_atom()
 
     module_text =
