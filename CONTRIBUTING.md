@@ -67,6 +67,7 @@ Templates for this web application are written using [Slime](https://github.com/
 
 * **DO** name functions beginning with `render` if they render a child template -- example `StaffNotesWeb.UserView.render_user_orgs/1`
 * **DO** name functions that write elements directly for what they inject -- example `StaffNotesWeb.UserView.staff_badge/2`
+* **PREFER** to put style and structure information in templates rather than in functions
 
 ### Writing tests
 

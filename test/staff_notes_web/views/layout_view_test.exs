@@ -26,7 +26,6 @@ defmodule StaffNotesWeb.LayoutViewTest do
     test "renders the text as expected" do
       content = code_with_heart({"Author Name", "http://example.com"})
 
-      assert content =~ ~r(^<div>.*</div>$)
       assert content =~ ~s( with )
       assert content =~ ~s( by <a href="http://example.com">Author Name</a>)
     end
@@ -35,12 +34,6 @@ defmodule StaffNotesWeb.LayoutViewTest do
       content = code_with_heart({"Author Name", "http://example.com"}, link_options: [foo: "bar"])
 
       assert content =~ ~s( by <a foo="bar" href="http://example.com">Author Name</a>)
-    end
-
-    test "renders the div with supplied options" do
-      content = code_with_heart({"Author Name", "http://example.com"}, foo: "bar")
-
-      assert content =~ ~r(^<div foo="bar">.*</div>$)
     end
   end
 

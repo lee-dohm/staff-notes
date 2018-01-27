@@ -46,7 +46,7 @@ defmodule StaffNotesWeb.LayoutView do
 
   ```
   Phoenix.HTML.safe_to_string(LayoutView.code_with_heart(:app_name))
-  #=> "<div><svg .../> with <svg .../> by <a href=\"https://example.com\">Author's Name</a></div>"
+  #=> "<svg .../> with <svg .../> by <a href=\"https://example.com\">Author's Name</a>"
   ```
   """
   @spec code_with_heart(app_name | link_info, Keyword.t()) :: Phoenix.HTML.safe()
@@ -60,10 +60,10 @@ defmodule StaffNotesWeb.LayoutView do
   end
 
   def code_with_heart({name, location} = tuple, options) when is_tuple(tuple) do
-    {link_options, options} = Keyword.pop(options, :link_options)
+    {link_options, _options} = Keyword.pop(options, :link_options)
     link_options = Keyword.merge(link_options || [], to: location)
 
-    content_tag :div, options do
+    html_escape(
       [
         octicon(:code),
         gettext(" with "),
@@ -71,7 +71,7 @@ defmodule StaffNotesWeb.LayoutView do
         gettext(" by "),
         link(name, link_options)
       ]
-    end
+    )
   end
 
   @doc """
