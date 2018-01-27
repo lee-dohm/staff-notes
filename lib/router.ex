@@ -4,12 +4,15 @@ defmodule StaffNotesWeb.Router do
   """
   use StaffNotesWeb, :router
 
+  alias StaffNotesWeb.SlidingSessionTimeout
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(SlidingSessionTimeout)
     plug(:assign_current_user)
   end
 

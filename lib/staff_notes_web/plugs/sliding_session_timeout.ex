@@ -11,9 +11,9 @@ defmodule StaffNotesWeb.SlidingSessionTimeout do
   ```
   """
   import Plug.Conn
-  import StaffNotesWeb.Router.Helpers, only: [auth_path: 3]
 
   alias Phoenix.Controller
+  alias StaffNotesWeb.Router
 
   require Logger
 
@@ -29,7 +29,7 @@ defmodule StaffNotesWeb.SlidingSessionTimeout do
     if timeout_at && now() > timeout_at do
       conn
       |> logout_user
-      |> Controller.redirect(to: auth_path(conn, :index, from: conn.request_path))
+      |> Controller.redirect(to: Router.Helpers.auth_path(conn, :index, from: conn.request_path))
       |> halt
     else
       new_timeout = calculate_timeout(options[:timeout])
