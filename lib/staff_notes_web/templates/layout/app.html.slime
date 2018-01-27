@@ -4,8 +4,8 @@ html lang="en"
     meta charset="utf-8"
     meta content="IE=edge" http-equiv="X-UA-Compatible"
     meta content="width=device-width, initial-scale=1" name="viewport"
-    meta content="" name="description"
-    meta content="" name="author"
+    meta content="A web application for storing and sharing staff notes about community members" name="description"
+    meta content="Lee Dohm" name="author"
     = token_meta_tag(@conn)
 
     title = gettext "Staff Notes"
