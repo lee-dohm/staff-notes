@@ -6,8 +6,10 @@ defmodule StaffNotes.Mixfile do
   def project do
     [
       app: :staff_notes,
-      version: @version,
       name: "Staff Notes",
+      version: @version,
+      description: "A web application for storing and sharing staff notes about community members",
+
       homepage_url: "https://www.staffnotes.io",
       source_url: "https://github.com/lee-dohm/staff-notes",
 

@@ -11,10 +11,12 @@ defmodule StaffNotesApi.TokenAuthentication do
 
   ## Options
 
-  * `:api_access_salt` -- Salt to use when verifying the token _(default: "api-access-salt")_
-  * `:max_age` -- Maximum allowable age of the token in seconds _(default: one day or 86,400
-    seconds)_
+  * `:api_access_salt` &mdash; Salt to use when verifying the token _(**default:**
+    "api-access-salt")_
+  * `:max_age` &mdash; Maximum allowable age of the token in seconds _(**default:** one day or
+    86,400 seconds)_
   """
+  @behaviour Plug
   import Plug.Conn, only: [get_req_header: 2]
 
   require Logger
@@ -45,7 +47,7 @@ defmodule StaffNotesApi.TokenAuthentication do
   """
   def init(options \\ []) do
     default_options()
-    |> Keyword.merge(Application.get_env(:staff_notes, __MODULE__) || [])
+    |> Keyword.merge(Application.get_env(get_app(), __MODULE__) || [])
     |> Keyword.merge(options)
   end
 
@@ -53,6 +55,8 @@ defmodule StaffNotesApi.TokenAuthentication do
   Call the plug with the initialized options.
   """
   def call(conn, options), do: validate_token!(conn, options)
+
+  defp get_app, do: Application.get_application(__MODULE__)
 
   defp default_options do
     [
