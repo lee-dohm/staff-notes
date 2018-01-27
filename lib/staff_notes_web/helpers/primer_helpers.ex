@@ -10,6 +10,7 @@ defmodule StaffNotesWeb.PrimerHelpers do
   alias Phoenix.HTML.Form
   alias StaffNotes.Ecto.Markdown
   alias StaffNotesWeb.ErrorHelpers
+  alias StaffNotesWeb.Primer
 
   @doc """
   Displays the avatar for the `StaffNotes.Accounts.User`.
@@ -120,8 +121,8 @@ defmodule StaffNotesWeb.PrimerHelpers do
   collection is non-empty.
   """
   def render_list(collection, module, template_root, assigns \\ %{}) do
-    content_tag :div, class: "Box" do
-      content_tag :div, class: "Box-body" do
+    Primer.box do
+      Primer.box_body do
         content_tag :ul do
           render_items(collection, module, template_root, assigns)
         end

@@ -82,9 +82,12 @@ defmodule StaffNotesWeb do
 
       import StaffNotesWeb.ApiTokenHelpers
       import StaffNotesWeb.LinkHelpers
+      import StaffNotesWeb.Primer
       import StaffNotesWeb.PrimerHelpers
       import StaffNotesWeb.SharedHelpers
       import StaffNotesWeb.TimeHelpers
+
+      alias StaffNotesWeb.Primer
     end
   end
 

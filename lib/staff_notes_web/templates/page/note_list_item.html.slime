@@ -1,4 +1,4 @@
-li.Box-row.Box-row--hover-gray
+= Primer.box_row class: "Box-row--hover-gray" do
   .TableObject
     .TableObject-item.TableObject-item--primary.f3
       = octicon(:"file-text", class: "mr-2", height: 24, width: 24)

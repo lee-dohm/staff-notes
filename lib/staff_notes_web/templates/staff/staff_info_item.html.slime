@@ -1,4 +1,4 @@
-li.Box-row.Box-row--hover-gray
+= Primer.box_row class: "Box-row--hover-gray" do
   .TableObject
     .TableObject-item.TableObject-item--primary
       a href="#{user_path(@conn, :show, @user)}" class="Box-row-link"
