@@ -6,58 +6,49 @@ defmodule StaffNotesWeb.Primer do
 
   import Phoenix.HTML.Safe, only: [to_iodata: 1]
 
-  alias StaffNotesWeb.Primer.Box
-  alias StaffNotesWeb.Primer.BoxBody
-  alias StaffNotesWeb.Primer.BoxRow
+  elements = [
+    StaffNotesWeb.Primer.Box,
+    StaffNotesWeb.Primer.BoxBody,
+    StaffNotesWeb.Primer.BoxRow
+  ]
 
-  @doc """
-  Constructs a `StaffNotesWeb.Primer.Box` element.
-  """
-  def box([do: block]) do
-    box(block, [])
-  end
+  Enum.each(elements, fn(element) ->
+    fn_name =
+      element
+      |> Module.split()
+      |> List.last()
+      |> Phoenix.Naming.underscore()
+      |> String.to_atom()
 
-  def box(content) do
-    box(content, [])
-  end
+    module_text =
+      element
+      |> Module.split()
+      |> Enum.join(".")
 
-  def box(options, [do: block]) when is_list(options) do
-    box(block, options)
-  end
+    @doc """
+    Renders a `#{module_text}` element.
+    """
+    def unquote(fn_name)(content)
 
-  def box(content, options) when is_list(options) do
-    to_iodata(%Box{content: content, options: options})
-  end
+    def unquote(fn_name)([do: block]) do
+      unquote(fn_name)(block, [])
+    end
 
-  def box_body([do: block]) do
-    box_body(block, [])
-  end
+    def unquote(fn_name)(content) do
+      unquote(fn_name)(content, [])
+    end
 
-  def box_body(content) do
-    box_body(content, [])
-  end
+    @doc """
+    Renders a `#{module_text}` element.
+    """
+    def unquote(fn_name)(content, options)
 
-  def box_body(options, [do: block]) when is_list(options) do
-    box_body(block, options)
-  end
+    def unquote(fn_name)(options, [do: block]) when is_list(options) do
+      unquote(fn_name)(block, options)
+    end
 
-  def box_body(content, options) when is_list(options) do
-    to_iodata(%BoxBody{content: content, options: options})
-  end
-
-  def box_row([do: block]) do
-    box_row(block, [])
-  end
-
-  def box_row(content) do
-    box_row(content, [])
-  end
-
-  def box_row(options, [do: block]) when is_list(options) do
-    box_row(block, options)
-  end
-
-  def box_row(content, options) when is_list(options) do
-    to_iodata(%BoxRow{content: content, options: options})
-  end
+    def unquote(fn_name)(content, options) when is_list(options) do
+      to_iodata(%unquote(element){content: content, options: options})
+    end
+  end)
 end
