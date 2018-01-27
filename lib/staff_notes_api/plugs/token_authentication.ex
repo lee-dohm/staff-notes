@@ -1,4 +1,4 @@
-defmodule StaffNotesApi.AuthTokenPlug do
+defmodule StaffNotesApi.TokenAuthentication do
   @moduledoc """
   A module `Plug` for validating the API token in the authorization request header.
 
@@ -32,14 +32,14 @@ defmodule StaffNotesApi.AuthTokenPlug do
   Default options:
 
   ```
-  iex> StaffNotesApi.AuthTokenPlug.init()
+  iex> StaffNotesApi.TokenAuthentication.init()
   [api_access_salt: "api-access-salt", max_age: 86_400]
   ```
 
   Overriding options:
 
   ```
-  iex> StaffNotesApi.AuthTokenPlug.init(api_access_salt: "test", max_age: 1_000)
+  iex> StaffNotesApi.TokenAuthentication.init(api_access_salt: "test", max_age: 1_000)
   [api_access_salt: "test", max_age: 1_000]
   ```
   """
