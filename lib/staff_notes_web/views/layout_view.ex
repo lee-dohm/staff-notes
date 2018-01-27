@@ -60,16 +60,18 @@ defmodule StaffNotesWeb.LayoutView do
   end
 
   def code_with_heart({name, location} = tuple, options) when is_tuple(tuple) do
-    {link_options, options} = Keyword.pop(options, :link_options)
+    {link_options, _options} = Keyword.pop(options, :link_options)
     link_options = Keyword.merge(link_options || [], to: location)
 
-    [
-      octicon(:code),
-      gettext(" with "),
-      octicon(:heart),
-      gettext(" by "),
-      link(name, link_options)
-    ]
+    html_escape(
+      [
+        octicon(:code),
+        gettext(" with "),
+        octicon(:heart),
+        gettext(" by "),
+        link(name, link_options)
+      ]
+    )
   end
 
   @doc """
