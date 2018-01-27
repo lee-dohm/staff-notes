@@ -19,7 +19,8 @@ module.exports = {
             {
               loader: 'css-loader',
               options: {
-                minimize: isProduction
+                minimize: true,
+                sourceMap: !isProduction
               }
             },
             {
@@ -28,8 +29,8 @@ module.exports = {
                 includePaths: [
                   path.resolve(__dirname, 'node_modules')
                 ],
-                outputStyle: 'expanded',
-                sourceComments: !isProduction
+                outputStyle: 'compressed',
+                sourceMap: !isProduction
               }
             }
           ]
