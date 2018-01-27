@@ -34,6 +34,7 @@ html lang="en"
             = link(gettext("About"), to: page_path(@conn, :about), id: "about-link")
             span.mx-3
             = github_link(:staff_notes, id: "github-link", class: "link-gray-dark")
-          = code_with_heart(:staff_notes, class: "text-center small my-2", link_options: [class: "link-gray-dark"])
+          .text-center.small.my-2
+            = code_with_heart(:staff_notes, link_options: [class: "link-gray-dark"])
 
     script src="#{static_path(@conn, "/js/app.js")}"
