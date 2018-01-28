@@ -1,4 +1,7 @@
 defmodule StaffNotesWeb.Primer.BoxBody do
+  @moduledoc """
+  Represents a GitHub Primer Box body element.
+  """
   use StaffNotesWeb.Primer.Element, class: "Box-body"
 
   defimpl Phoenix.HTML.Safe do

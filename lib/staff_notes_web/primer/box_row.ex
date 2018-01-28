@@ -1,4 +1,7 @@
 defmodule StaffNotesWeb.Primer.BoxRow do
+  @moduledoc """
+  Represents a GitHub Primer Box row element.
+  """
   use StaffNotesWeb.Primer.Element, class: "Box-row", tag_name: :li
 
   defimpl Phoenix.HTML.Safe do
