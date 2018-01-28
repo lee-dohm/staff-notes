@@ -102,6 +102,9 @@ defmodule StaffNotes.Mixfile do
           StaffNotesApi.TokenAuthentication,
           StaffNotesWeb.SlidingSessionTimeout
         ],
+        Primer: [
+          ~r{^StaffNotesWeb\.Primer}
+        ],
         Sockets: [
           ~r{^StaffNotesWeb.*Socket$}
         ],

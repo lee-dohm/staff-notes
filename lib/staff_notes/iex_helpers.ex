@@ -6,6 +6,7 @@ defmodule StaffNotes.IEx.Helpers do
   necessary.
   """
   alias Ecto.Query
+  alias Phoenix.HTML
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.User
   alias StaffNotes.Repo
@@ -57,4 +58,15 @@ defmodule StaffNotes.IEx.Helpers do
   """
   @spec promote_user(User.t()) :: User.t()
   def promote_user(%User{} = user), do: Accounts.update_user(user, %{site_admin: true})
+
+  @doc """
+  Test renders the supplied `content`.
+
+  Useful for testing if new functions render the way you expect.
+  """
+  def test_render(content) do
+    content
+    |> HTML.Safe.to_iodata()
+    |> HTML.safe_to_string()
+  end
 end

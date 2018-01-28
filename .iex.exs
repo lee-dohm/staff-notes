@@ -1,6 +1,9 @@
 import_file_if_available "~/.iex.exs"
 
+use Phoenix.HTML
+
 import Ecto.Query
+import Phoenix.HTML.Safe, only: [to_iodata: 1]
 
 alias StaffNotes.Accounts
 alias StaffNotes.Accounts.Organization
@@ -17,6 +20,7 @@ alias StaffNotesWeb.AvatarHelpers
 alias StaffNotesWeb.ErrorView
 alias StaffNotesWeb.LayoutView
 alias StaffNotesWeb.PageView
+alias StaffNotesWeb.Primer
 alias StaffNotesWeb.UserView
 
 import StaffNotes.IEx.Helpers
