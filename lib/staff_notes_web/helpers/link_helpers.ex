@@ -16,7 +16,11 @@ defmodule StaffNotesWeb.LinkHelpers do
   def member_link(conn, %Member{} = member) do
     member = Repo.preload(member, [:organization])
 
-    link(member.name, to: organization_member_path(conn, :show, member.organization, member), class: "member-link link-gray")
+    link(
+      member.name,
+      to: organization_member_path(conn, :show, member.organization, member),
+      class: "member-link link-gray"
+    )
   end
 
   @doc """

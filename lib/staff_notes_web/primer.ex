@@ -40,7 +40,7 @@ defmodule StaffNotesWeb.Primer do
     StaffNotesWeb.Primer.BoxRow
   ]
 
-  Enum.each(elements, fn(element) ->
+  Enum.each(elements, fn element ->
     fn_name =
       element
       |> Module.split()
@@ -58,7 +58,7 @@ defmodule StaffNotesWeb.Primer do
     """
     def unquote(fn_name)(content)
 
-    def unquote(fn_name)([do: block]) do
+    def unquote(fn_name)(do: block) do
       unquote(fn_name)(block, [])
     end
 
@@ -71,7 +71,7 @@ defmodule StaffNotesWeb.Primer do
     """
     def unquote(fn_name)(content, options)
 
-    def unquote(fn_name)(options, [do: block]) when is_list(options) do
+    def unquote(fn_name)(options, do: block) when is_list(options) do
       unquote(fn_name)(block, options)
     end
 

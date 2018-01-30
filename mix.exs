@@ -9,18 +9,14 @@ defmodule StaffNotes.Mixfile do
       name: "Staff Notes",
       version: @version,
       description: "A web application for storing and sharing staff notes about community members",
-
       homepage_url: "https://www.staffnotes.io",
       source_url: "https://github.com/lee-dohm/staff-notes",
-
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
-
       preferred_cli_env: [coveralls: :test],
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-
       aliases: aliases(),
       deps: deps(),
       docs: docs()

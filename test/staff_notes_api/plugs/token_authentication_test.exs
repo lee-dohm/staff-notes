@@ -16,7 +16,7 @@ defmodule StaffNotesApi.TokenAuthenticationTest do
 
   setup [:setup_regular_user]
 
-  setup(context) do
+  setup context do
     id = context.regular_user.id
     salt = "api-access-salt"
     token = Token.sign(@endpoint, salt, id)
@@ -33,17 +33,21 @@ defmodule StaffNotesApi.TokenAuthenticationTest do
     end
 
     test "without an auth header", context do
-      assert_raise AuthenticationError, "`Authorization` request header missing or malformed", fn ->
-        TokenAuthentication.call(context.conn, context.options)
-      end
+      assert_raise AuthenticationError,
+                   "`Authorization` request header missing or malformed",
+                   fn ->
+                     TokenAuthentication.call(context.conn, context.options)
+                   end
     end
 
     test "with an invalid auth header", context do
       conn = put_req_header(context.conn, "authorization", "foo")
 
-      assert_raise AuthenticationError, "`Authorization` request header missing or malformed", fn ->
-        TokenAuthentication.call(conn, context.options)
-      end
+      assert_raise AuthenticationError,
+                   "`Authorization` request header missing or malformed",
+                   fn ->
+                     TokenAuthentication.call(conn, context.options)
+                   end
     end
 
     test "with an invalid token", context do
