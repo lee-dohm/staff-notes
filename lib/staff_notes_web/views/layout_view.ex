@@ -63,15 +63,13 @@ defmodule StaffNotesWeb.LayoutView do
     {link_options, _options} = Keyword.pop(options, :link_options)
     link_options = Keyword.merge(link_options || [], to: location)
 
-    html_escape(
-      [
-        octicon(:code),
-        gettext(" with "),
-        octicon(:heart),
-        gettext(" by "),
-        link(name, link_options)
-      ]
-    )
+    html_escape([
+      octicon(:code),
+      gettext(" with "),
+      octicon(:heart),
+      gettext(" by "),
+      link(name, link_options)
+    ])
   end
 
   @doc """

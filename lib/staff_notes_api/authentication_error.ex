@@ -28,5 +28,5 @@ defmodule StaffNotesApi.AuthenticationError do
   ** (StaffNotesApi.AuthenticationError) Something went wrong
   ```
   """
-  defexception [message: "Authentication failed", plug_status: 401]
+  defexception message: "Authentication failed", plug_status: 401
 end

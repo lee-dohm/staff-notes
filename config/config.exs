@@ -29,8 +29,7 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :phoenix,
-  filter_parameters: ["base64", "password"]
+config :phoenix, filter_parameters: ["base64", "password"]
 
 config :phoenix, :template_engines,
   slim: PhoenixSlime.Engine,

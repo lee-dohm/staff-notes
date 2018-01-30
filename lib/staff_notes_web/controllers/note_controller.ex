@@ -18,8 +18,11 @@ defmodule StaffNotesWeb.NoteController do
     member = get_or_create_member(org, note["name"])
 
     case Notes.create_note(note, author, member, org) do
-      {:ok, note} -> redirect(conn, to: organization_note_path(conn, :show, org, note))
-      {:error, changeset} -> render(conn, "new.html", changeset: changeset, member: member, org: org)
+      {:ok, note} ->
+        redirect(conn, to: organization_note_path(conn, :show, org, note))
+
+      {:error, changeset} ->
+        render(conn, "new.html", changeset: changeset, member: member, org: org)
     end
   end
 
@@ -29,7 +32,8 @@ defmodule StaffNotesWeb.NoteController do
         {:ok, member} = Notes.create_member(%{name: name}, org)
         member
 
-      member -> member
+      member ->
+        member
     end
   end
 
@@ -51,7 +55,14 @@ defmodule StaffNotesWeb.NoteController do
 
     changeset = Notes.change_note(note)
 
-    render(conn, "edit.html", changeset: changeset, id: id, org: note.organization, member: note.member)
+    render(
+      conn,
+      "edit.html",
+      changeset: changeset,
+      id: id,
+      org: note.organization,
+      member: note.member
+    )
   end
 
   @doc """

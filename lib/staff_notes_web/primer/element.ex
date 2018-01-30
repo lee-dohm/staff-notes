@@ -39,10 +39,10 @@ defmodule StaffNotesWeb.Primer.Element do
       def render(%__MODULE__{} = element) do
         options = Keyword.update(element.options, :class, @class, &(@class <> " " <> &1))
 
-        content_tag unquote(tag_name), element.content, options
+        content_tag(unquote(tag_name), element.content, options)
       end
 
-      defoverridable [render: 1]
+      defoverridable render: 1
     end
   end
 end

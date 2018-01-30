@@ -25,7 +25,8 @@ defmodule StaffNotesWeb.PageController do
       Repo.all(
         from(
           n in Note,
-          join: ou in "organizations_users", on: n.organization_id == ou.organization_id,
+          join: ou in "organizations_users",
+          on: n.organization_id == ou.organization_id,
           where: ou.user_id == ^user.id,
           order_by: [desc: n.inserted_at],
           preload: [:member, :organization]

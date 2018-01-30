@@ -81,13 +81,17 @@ defmodule StaffNotesApi.TokenAuthentication do
 
   defp get_token!(conn, options) do
     case get_req_header(conn, "authorization") do
-      ["token " <> token] -> Token.verify(conn, options[:api_access_salt], token, options)
-      _ -> raise AuthenticationError, message: "`Authorization` request header missing or malformed"
+      ["token " <> token] ->
+        Token.verify(conn, options[:api_access_salt], token, options)
+
+      _ ->
+        raise AuthenticationError, message: "`Authorization` request header missing or malformed"
     end
   end
 
-  defp do_verify_token!({:ok, nil}), do: raise AuthenticationError, message: "Not logged in"
+  defp do_verify_token!({:ok, nil}), do: raise(AuthenticationError, message: "Not logged in")
   defp do_verify_token!({:ok, user_id}), do: user_id
+
   defp do_verify_token!({:error, reason}) do
     raise AuthenticationError, message: "Authentication token is #{reason}"
   end
