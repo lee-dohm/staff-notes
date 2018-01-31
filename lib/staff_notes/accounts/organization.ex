@@ -21,7 +21,10 @@ defmodule StaffNotes.Accounts.Organization do
   schema "organizations" do
     field(:name, Slug)
 
+    # Delete all here only deletes the many-to-many relationships, not the record on the other side
     many_to_many(:users, User, join_through: "organizations_users", on_delete: :delete_all)
+
+    # These delete alls do delete the actual records since they belong to the organization
     has_many(:teams, Team, on_delete: :delete_all)
     has_many(:notes, Note, on_delete: :delete_all)
     has_many(:members, Member, on_delete: :delete_all)
