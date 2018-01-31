@@ -4,7 +4,7 @@ defmodule StaffNotesApi.MarkdownController do
   """
   use StaffNotesApi, :controller
 
-  alias StaffNotes.Ecto.Markdown
+  alias StaffNotes.Markdown
 
   @doc """
   Renders the Markdown received and returns an HTML fragment.

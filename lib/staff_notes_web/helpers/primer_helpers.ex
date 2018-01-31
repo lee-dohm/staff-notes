@@ -8,7 +8,7 @@ defmodule StaffNotesWeb.PrimerHelpers do
   import PhoenixOcticons
 
   alias Phoenix.HTML.Form
-  alias StaffNotes.Ecto.Markdown
+  alias StaffNotes.Markdown
   alias StaffNotesWeb.ErrorHelpers
   alias StaffNotesWeb.Primer
 

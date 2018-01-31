@@ -4,7 +4,7 @@ defmodule StaffNotesWeb.MarkdownEngine do
   """
   @behaviour Slime.Parser.EmbeddedEngine
 
-  alias StaffNotes.Ecto.Markdown
+  alias StaffNotes.Markdown
 
   def render(text, _options), do: Markdown.to_html(text)
 end

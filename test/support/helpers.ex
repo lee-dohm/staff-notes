@@ -25,7 +25,7 @@ defmodule StaffNotes.Support.Helpers do
   alias StaffNotes.Accounts
   alias StaffNotes.Accounts.User
   alias StaffNotes.Accounts.Organization
-  alias StaffNotes.Ecto.Markdown
+  alias StaffNotes.Markdown
   alias StaffNotes.Notes
   alias StaffNotes.Notes.Note
   alias StaffNotesWeb.ErrorView
