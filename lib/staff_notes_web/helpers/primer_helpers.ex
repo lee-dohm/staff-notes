@@ -233,6 +233,7 @@ defmodule StaffNotesWeb.PrimerHelpers do
       case Form.input_value(form, field) do
         nil -> nil
         %Markdown{} = markdown -> markdown.text
+        value -> value
       end
 
     opts =
