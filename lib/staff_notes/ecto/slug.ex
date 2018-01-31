@@ -38,12 +38,16 @@ defmodule StaffNotes.Ecto.Slug do
 
   @doc """
   Returns the underlying schema type for a slug.
+
+  See: `c:Ecto.Type.type/0`
   """
   @impl Ecto.Type
   def type, do: :string
 
   @doc """
   Casts the given value into a slug.
+
+  See: `c:Ecto.Type.cast/1`
   """
   @impl Ecto.Type
   def cast(%__MODULE__{} = slug) do
@@ -60,6 +64,8 @@ defmodule StaffNotes.Ecto.Slug do
 
   @doc """
   Loads the given value into a slug.
+
+  See: `c:Ecto.Type.load/1`
   """
   @impl Ecto.Type
   def load(binary) when is_binary(binary) do
@@ -74,6 +80,8 @@ defmodule StaffNotes.Ecto.Slug do
 
   @doc """
   Dumps the given value into an `Ecto` native type.
+
+  See: `c:Ecto.Type.dump/1`
   """
   @impl Ecto.Type
   def dump(%__MODULE__{} = slug), do: dump(slug.text)

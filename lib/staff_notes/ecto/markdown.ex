@@ -27,9 +27,19 @@ defmodule StaffNotes.Ecto.Markdown do
   """
   @behaviour Ecto.Type
 
+  @doc """
+  Returns the underlying schema type for the custom type.
+
+  See: `c:Ecto.Type.type/0`
+  """
   @impl Ecto.Type
   def type, do: :string
 
+  @doc """
+  Casts the given input to the custom type.
+
+  See: `c:Ecto.Type.cast/1`
+  """
   @impl Ecto.Type
   def cast(binary) when is_binary(binary) do
     {:ok, %StaffNotes.Markdown{text: binary}}
@@ -38,6 +48,11 @@ defmodule StaffNotes.Ecto.Markdown do
   def cast(%StaffNotes.Markdown{} = markdown), do: {:ok, markdown}
   def cast(_other), do: :error
 
+  @doc """
+  Loads the given term into a custom type.
+
+  See: `c:Ecto.Type.load/1`
+  """
   @impl Ecto.Type
   def load(binary) when is_binary(binary) do
     {:ok, %StaffNotes.Markdown{text: binary, html: StaffNotes.Markdown.to_html(binary)}}
@@ -45,6 +60,11 @@ defmodule StaffNotes.Ecto.Markdown do
 
   def load(_other), do: :error
 
+  @doc """
+  Dumps the given term into an Ecto native type.
+
+  See: `c:Ecto.Type.dump/1`
+  """
   @impl Ecto.Type
   def dump(%StaffNotes.Markdown{text: binary}) when is_binary(binary) do
     {:ok, binary}
