@@ -3,6 +3,6 @@
 
 .subnav
   .float-right
-    button.btn.btn-primary = gettext("Create team")
+    = link_button(gettext("Create team"), to: organization_team_path(@conn, :new, @org), class: "btn btn-primary")
 
 = render_list(@org.teams, view_module(@conn), "team_info", conn: @conn, as: :team)

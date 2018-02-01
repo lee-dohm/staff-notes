@@ -109,13 +109,7 @@ defmodule StaffNotes.Accounts do
   @spec create_team(Map.t(), Organization.t()) :: {:ok, Team.t()} | {:error, Changeset.t()}
   def create_team(team_attrs \\ %{}, %Organization{} = org) do
     team_attrs
-    |> Map.put(:organization_id, org.id)
-    |> do_create_team()
-  end
-
-  defp do_create_team(attrs) when is_map(attrs) do
-    %Team{}
-    |> Team.create_team_changeset(attrs)
+    |> Team.create_team_changeset(org)
     |> Repo.insert()
   end
 

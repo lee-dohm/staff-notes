@@ -98,8 +98,9 @@ defmodule StaffNotes.Accounts.Team do
   * Prevents creating an original team if one already exists in the organization
   """
   @spec create_team_changeset(t, %{}) :: Ecto.Changeset.t()
-  def create_team_changeset(%Team{} = team, attrs \\ %{}) do
-    team
+  def create_team_changeset(attrs \\ %{}, %Organization{} = org) do
+    %Team{}
+    |> Map.put(:organization_id, org.id)
     |> changeset(attrs)
     |> validate_not_creating_second_original_team()
   end

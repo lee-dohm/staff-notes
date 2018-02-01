@@ -1,0 +1,12 @@
+= render_shared("organization_header.html", org: @org)
+= render_shared("organization_tabnav.html", conn: @conn, org: @org, selected: :teams)
+
+h2 = gettext("Create a team")
+p = gettext("A team is a list of staff members that share the same permission level")
+
+= form_for @changeset, organization_team_path(@conn, :create, @org), fn f ->
+  = input(f, :name)
+  = input(f, :permission, using: :permission_select)
+
+  .form-actions
+    = submit(gettext("Create team"), class: "btn btn-primary")
