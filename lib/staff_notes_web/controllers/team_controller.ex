@@ -16,6 +16,7 @@ defmodule StaffNotesWeb.TeamController do
   """
   def create(conn, %{"organization_name" => org_name, "team" => team}) do
     org = Accounts.get_org!(org_name)
+    team = Map.put(team, "original", false)
 
     case Accounts.create_team(team, org) do
       {:ok, team} -> redirect(conn, to: organization_team_path(conn, :show, org, team))
