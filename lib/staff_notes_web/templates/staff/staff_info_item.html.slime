@@ -1,6 +1,6 @@
 = Primer.box_row class: "Box-row--hover-gray" do
   .TableObject
-    .TableObject-item.TableObject-item--primary
+    .TableObject-item.TableObject-item--primary.f3
       a href="#{user_path(@conn, :show, @user)}" class="Box-row-link"
         = @user.name
     .TableObject-item
