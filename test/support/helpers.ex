@@ -46,7 +46,11 @@ defmodule StaffNotes.Support.Helpers do
   @doc """
   Replaces characters in the string with their HTML-escaped versions.
   """
-  def escape(text), do: String.replace(text, "'", "&#39;", global: true)
+  def escape(text) do
+    {:safe, text} = Phoenix.HTML.html_escape(text)
+
+    text
+  end
 
   @doc """
   Creates `StaffNotes.Markdown` struct from a string.
