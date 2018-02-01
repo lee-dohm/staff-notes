@@ -5,51 +5,60 @@ defmodule StaffNotes.NotesTest do
   alias StaffNotes.Notes.Note
 
   describe "notes" do
-    setup [:setup_regular_note]
+    setup [:setup_regular_user, :setup_regular_org]
 
-    @tag :skip
+    setup(context) do
+      member = member_fixture(context.regular_org)
+      note = note_fixture(context.regular_user, member, context.regular_org)
+
+      {
+        :ok,
+        member: member,
+        note: note
+      }
+    end
+
     test "list_notes/1 returns all notes for an organization", context do
-      assert Notes.list_notes(context.regular_org) == [context.regular_note]
+      assert Notes.list_notes(context.regular_org) == [context.note]
     end
 
-    @tag :skip
     test "get_note!/1 returns the note with given id", context do
-      assert Notes.get_note!(context.regular_note.id) == context.regular_note
+      assert Notes.get_note!(context.note.id) == context.note
     end
 
-    @tag :skip
-    test "create_note/3 with valid data creates a note", context do
-      assert context.regular_note.text == markdown("some text")
+    test "create_note/4 with valid data creates a note", context do
+      assert context.note.text == markdown("some text")
     end
 
-    @tag :skip
-    test "create_note/3 with invalid data returns error changeset", context do
-      assert {:error, %Ecto.Changeset{}} =
-               Notes.create_note(%{text: nil}, context.author, context.regular_org)
+    test "create_note/4 with invalid data returns error changeset", context do
+      result = Notes.create_note(
+        %{text: nil},
+        context.regular_user,
+        context.member,
+        context.regular_org
+      )
+
+      assert {:error, %Ecto.Changeset{}} = result
     end
 
-    @tag :skip
     test "update_note/2 with valid data updates the note", context do
-      assert {:ok, note} = Notes.update_note(context.regular_note, %{text: "some updated text"})
+      assert {:ok, note} = Notes.update_note(context.note, %{text: "some updated text"})
       assert %Note{} = note
       assert note.text == markdown("some updated text", rendered: false)
     end
 
-    @tag :skip
     test "update_note/2 with invalid data returns error changeset", context do
-      assert {:error, %Ecto.Changeset{}} = Notes.update_note(context.regular_note, %{text: nil})
-      assert context.regular_note == Notes.get_note!(context.regular_note.id)
+      assert {:error, %Ecto.Changeset{}} = Notes.update_note(context.note, %{text: nil})
+      assert context.note == Notes.get_note!(context.note.id)
     end
 
-    @tag :skip
     test "delete_note/1 deletes the note", context do
-      assert {:ok, %Note{}} = Notes.delete_note(context.regular_note)
-      assert_raise Ecto.NoResultsError, fn -> Notes.get_note!(context.regular_note.id) end
+      assert {:ok, %Note{}} = Notes.delete_note(context.note)
+      assert_raise Ecto.NoResultsError, fn -> Notes.get_note!(context.note.id) end
     end
 
-    @tag :skip
     test "change_note/1 returns a note changeset", context do
-      assert %Ecto.Changeset{} = Notes.change_note(context.regular_note)
+      assert %Ecto.Changeset{} = Notes.change_note(context.note)
     end
   end
 end

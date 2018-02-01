@@ -27,6 +27,7 @@ defmodule StaffNotes.Support.Helpers do
   alias StaffNotes.Accounts.Organization
   alias StaffNotes.Markdown
   alias StaffNotes.Notes
+  alias StaffNotes.Notes.Member
   alias StaffNotes.Notes.Note
   alias StaffNotesWeb.ErrorView
 
@@ -66,13 +67,25 @@ defmodule StaffNotes.Support.Helpers do
   end
 
   @doc """
+  Inserts a new member into the database and returns it.
+  """
+  def member_fixture(attrs \\ %{}, %Organization{} = org) do
+    {:ok, member} =
+      attrs
+      |> Enum.into(member_attrs())
+      |> Notes.create_member(org)
+
+    member
+  end
+
+  @doc """
   Inserts a new note into the database and returns it.
   """
-  def note_fixture(attrs \\ %{}, %User{} = author, %Organization{} = org) do
+  def note_fixture(attrs \\ %{}, %User{} = author, %Member{} = member, %Organization{} = org) do
     {:ok, note} =
       attrs
       |> Enum.into(note_attrs())
-      |> Notes.create_note(author, org)
+      |> Notes.create_note(author, member, org)
 
     %Note{note | text: %Markdown{text: note.text.text, html: Markdown.to_html(note.text.text)}}
   end
@@ -98,22 +111,6 @@ defmodule StaffNotes.Support.Helpers do
 
   def rendered?(conn, module, template) do
     view_module(conn) == module && rendered?(conn, template)
-  end
-
-  @doc """
-  Creates a standard note, all of its prerequisites, and adds it to the context as `:regular_note`.
-  """
-  def setup_regular_note(_context) do
-    author = user_fixture()
-    org = org_fixture(author)
-
-    {
-      :ok,
-      author: author,
-      regular_note: note_fixture(author, org),
-      regular_org: org,
-      regular_user: author
-    }
   end
 
   @doc """
@@ -160,6 +157,7 @@ defmodule StaffNotes.Support.Helpers do
     user
   end
 
+  defp member_attrs, do: %{name: "member-name"}
   defp note_attrs, do: %{text: "some text"}
   defp org_attrs, do: %{name: "org-name"}
   defp team_attrs, do: %{name: "team-name", permission: :write, original: false}
