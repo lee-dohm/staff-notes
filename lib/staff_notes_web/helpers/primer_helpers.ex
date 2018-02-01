@@ -244,6 +244,12 @@ defmodule StaffNotesWeb.PrimerHelpers do
     content_tag(:textarea, "#{content}\n", opts)
   end
 
+  defp input(:permission_select, form, field, input_opts) do
+    selected = Form.input_value(form, field)
+
+    select(form, field, [:owner, :read, :write], selected: selected)
+  end
+
   defp input(type, form, field, input_opts) do
     apply(Form, type, [form, field, input_opts])
   end

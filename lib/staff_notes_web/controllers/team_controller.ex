@@ -8,13 +8,19 @@ defmodule StaffNotesWeb.TeamController do
   use StaffNotesWeb, :controller
 
   alias StaffNotes.Accounts
+  alias StaffNotes.Accounts.Team
   alias StaffNotes.Repo
 
   @doc """
   Receives parameters for creating a new team for an organization and stores it in the database.
   """
-  def create(conn, _params) do
-    conn
+  def create(conn, %{"organization_name" => org_name, "team" => team}) do
+    org = Accounts.get_org!(org_name)
+
+    case Accounts.create_team(team, org) do
+      {:ok, team} -> redirect(conn, to: organization_team_path(conn, :show, org, team))
+      {:error, changeset} -> render(conn, "new.html", changeset: changeset, org: org)
+    end
   end
 
   @doc """
@@ -43,8 +49,11 @@ defmodule StaffNotesWeb.TeamController do
   @doc """
   Renders a form for creating a new team for an organization.
   """
-  def new(conn, _params) do
-    conn
+  def new(conn, %{"organization_name" => name}) do
+    org = Accounts.get_org!(name)
+    changeset = Accounts.change_team(%Team{})
+
+    render(conn, "new.html", changeset: changeset, org: org)
   end
 
   @doc """
