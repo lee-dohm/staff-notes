@@ -86,8 +86,8 @@ defmodule StaffNotes.Accounts.TeamTest do
     end
   end
 
-  describe "list_teams/0" do
-    test "lists all teams", context do
+  describe "list_teams/1" do
+    test "lists all teams in the given org", context do
       original_team = Accounts.original_team(context.org.id)
       teams = Accounts.list_teams(context.org)
 
@@ -159,7 +159,7 @@ defmodule StaffNotes.Accounts.TeamTest do
       assert %{original: ["A team's original field cannot be changed"]} = errors_on(changeset)
     end
 
-    test "returns an error changeset when changiing permissions of original team", context do
+    test "returns an error changeset when changing permissions of original team", context do
       team = Accounts.original_team(context.org.id)
       {:error, changeset} = Accounts.update_team(team, %{permission: :read})
 
