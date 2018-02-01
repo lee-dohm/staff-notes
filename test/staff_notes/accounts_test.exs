@@ -31,7 +31,6 @@ defmodule StaffNotes.AccountsTest do
       assert context.other_org in user.organizations
     end
 
-    @tag :skip
     test "doesn't add the user to an org they're already in", context do
       {:ok, user} = Accounts.add_user_to_org(context.user, context.org)
       user = Repo.preload(user, :organizations)
@@ -48,6 +47,16 @@ defmodule StaffNotes.AccountsTest do
       user = Repo.preload(user, :teams)
 
       assert length(user.teams) == 2
+      assert team in user.teams
+    end
+
+    test "doesn't add the user to a team they're already in", context do
+      user = Repo.preload(context.user, :teams)
+      team = List.first(user.teams)
+      {:ok, user} = Accounts.add_user_to_team(user, team)
+      user = Repo.preload(user, :teams)
+
+      assert length(user.teams) == 1
       assert team in user.teams
     end
   end
