@@ -13,8 +13,7 @@ defmodule StaffNotes.NotesTest do
 
       {
         :ok,
-        member: member,
-        note: note
+        member: member, note: note
       }
     end
 
@@ -31,12 +30,13 @@ defmodule StaffNotes.NotesTest do
     end
 
     test "create_note/4 with invalid data returns error changeset", context do
-      result = Notes.create_note(
-        %{text: nil},
-        context.regular_user,
-        context.member,
-        context.regular_org
-      )
+      result =
+        Notes.create_note(
+          %{text: nil},
+          context.regular_user,
+          context.member,
+          context.regular_org
+        )
 
       assert {:error, %Ecto.Changeset{}} = result
     end

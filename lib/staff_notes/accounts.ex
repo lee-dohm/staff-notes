@@ -29,7 +29,9 @@ defmodule StaffNotes.Accounts do
   @spec add_user_to_org(User.t(), Organization.t()) :: {:ok, User.t()} | {:error, Changeset.t()}
   def add_user_to_org(%User{} = user, %Organization{} = org) do
     user
-    |> update_assoc_changeset(:organizations, &Accounts.change_user/1, fn orgs -> Enum.uniq([org | orgs]) end)
+    |> update_assoc_changeset(:organizations, &Accounts.change_user/1, fn orgs ->
+      Enum.uniq([org | orgs])
+    end)
     |> Repo.update()
   end
 
@@ -39,7 +41,9 @@ defmodule StaffNotes.Accounts do
   @spec add_user_to_team(User.t(), Team.t()) :: {:ok, User.t()} | {:error, Changeset.t()}
   def add_user_to_team(%User{} = user, %Team{} = team) do
     user
-    |> update_assoc_changeset(:teams, &Accounts.change_user/1, fn teams -> Enum.uniq([team | teams]) end)
+    |> update_assoc_changeset(:teams, &Accounts.change_user/1, fn teams ->
+      Enum.uniq([team | teams])
+    end)
     |> Repo.update()
   end
 
