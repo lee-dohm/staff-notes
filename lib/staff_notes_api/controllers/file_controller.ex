@@ -39,9 +39,9 @@ defmodule StaffNotesApi.FileController do
   {
     "reason": "An error happened"
   }
+  ```
 
   Returns status code 401 with no body when the supplied API token is invalid.
-  ```
   """
   def create(conn, %{"base64" => base64_data, "mimeType" => mime_type}) do
     result =
